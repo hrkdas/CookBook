@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">CookBook</string>
+    <string name="ingredients">500g skinless boneless chicken thighs\n\n
+-For the marinade\n
+1 lemon, juiced\n
+2 tsp ground cumin\n
+2 tsp paprika\n
+1-2 tsp hot chilli powder\n
+200g natural yogurt\n
+-For the curry\n\n
+2 tbsp vegetable oil\n
+1 large onion, chopped\n
+3 garlic cloves, crushed\n
+1 green chilli, deseeded and finely chopped (optional)\n
+thumb-sized piece ginger, grated\n
+1 tsp garam masala\n
+2 tsp ground fenugreek\n
+3 tbsp tomato purée\n
+300ml chicken stock\n
+50g flaked almonds, toasted\n
+-To serve (optional)\n\n
+cooked basmati rice\n
+naan bread\n
+mango chutney or lime pickle\n
+fresh coriander\n
+lime wedges\n</string>
+    <string name="method">STEP 1\n
+In a medium bowl, mix all the marinade ingredients with some seasoning. Chop the chicken into bite-sized pieces and toss with the marinade. Cover and chill in the fridge for 1 hr or overnight.
+\nSTEP 2\n
+In a large, heavy saucepan, heat the oil. Add the onion, garlic, green chilli, ginger and some seasoning. Fry on a medium heat for 10 mins or until soft.
+\nSTEP 3\n
+Add the spices with the tomato purée, cook for a further 2 mins until fragrant, then add the stock and marinated chicken. Cook for 15 mins, then add any remaining marinade left in the bowl. Simmer for 5 mins, then sprinkle with the toasted almonds. Serve with rice, naan bread, chutney, coriander and lime wedges, if you like.</string>
+    <string name="title_activity_start_cooking_screen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="s_slogan_name">The book of recipes</string>
+    <string name="s_home">Home</string>
+    <string name="s_search">Search</string>
+    <string name="s_contact">Contact</string>
+    <string name="s_login">Login</string>
+    <string name="s_profile">Profile</string>
+    <string name="s_logout">Logout</string>
+    <string name="s_share">Share</string>
+    <string name="s_rating">Rate Us</string>
+</resources>

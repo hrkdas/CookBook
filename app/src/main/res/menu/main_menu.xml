@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_dashboard_24"
+            android:title="@string/s_home" />
+
+        <item
+            android:id="@+id/search"
+            android:icon="@drawable/ic_baseline_search_24"
+            android:title="@string/s_search" />
+
+        <item
+            android:id="@+id/contact"
+            android:icon="@drawable/ic_baseline_contact_support_24"
+            android:title="@string/s_contact" />
+
+    </group>
+
+    <item android:title="@string/s_profile">
+        <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_login"
+                        android:icon="@drawable/ic_baseline_login_24"
+                        android:title="@string/s_login" />
+
+                    <item
+                        android:id="@+id/nav_profile"
+                        android:icon="@drawable/ic_baseline_person_24"
+                        android:title="@string/s_profile" />
+
+                    <item
+                        android:id="@+id/nav_logout"
+                        android:icon="@drawable/ic_baseline_power_settings_new_24"
+                        android:title="@string/s_logout" />
+
+                </group>
+
+        </menu>
+    </item>
+
+    <item android:title="@string/s_share">
+        <menu>
+                <group android:checkableBehavior="none">
+                    <item
+                        android:id="@+id/nav_share"
+                        android:icon="@drawable/ic_baseline_share_24"
+                        android:title="@string/s_share" />
+
+                    <item
+                        android:id="@+id/nav_rate"
+                        android:icon="@drawable/ic_baseline_rate_review_24"
+                        android:title="@string/s_rating" />
+
+                </group>
+
+        </menu>
+    </item>
+
+
+</menu >
