@@ -61,12 +61,12 @@
                 android:text="@string/s_slogan_name" />
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:onClick="go_to_wishlist"
-                android:src="@drawable/wishlist_icon" />
+                android:src="@drawable/profile_icon" />
 
         </RelativeLayout>
 

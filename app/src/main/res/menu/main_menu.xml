@@ -9,7 +9,7 @@
         <item
             android:id="@+id/wishlist"
             android:icon="@drawable/liked_icon"
-            android:title="@string/s_wishlist" />
+            android:title="Cooklist" />
 
 
     </group>
@@ -51,10 +51,6 @@
                         android:icon="@drawable/ic_baseline_rate_review_24"
                         android:title="@string/s_rating" />
 
-                    <item
-                        android:id="@+id/nav_help"
-                        android:icon="@drawable/about_icon"
-                        android:title="Help" />
 
                 </group>
 

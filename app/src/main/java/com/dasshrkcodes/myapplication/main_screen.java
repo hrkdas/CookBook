@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,16 +60,13 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        FirebaseUser currentUser  = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 //        updateUI(currentUser);
-        if(currentUser!=null){
+
+        if (signInAccount != null) {
             navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
-            if(signInAccount != null){
-                Toast.makeText(this, signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(this, signInAccount.getEmail(), Toast.LENGTH_SHORT).show();
-            }
-        }else{
-//            navigationView.getMenu().getItem(R.id.nav_login).setVisible(View.INVISIBLE);
+
+        } else {
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
         }
@@ -75,7 +75,8 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
     public void go_to_wishlist(View view) {
-        Intent intent = new Intent(main_screen.this, wishlist_screen.class);
+        Intent intent = new Intent(main_screen.this, profiles_n_wishlist_page.class);
+        intent.putExtra("profile_selected", true);
         startActivity(intent);
     }
 
@@ -140,42 +141,51 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.nav_home: break;
+            case R.id.nav_home:
+                break;
 
             case R.id.wishlist:
-                Intent intent = new Intent(main_screen.this, wishlist_screen.class);
+                Intent intent = new Intent(main_screen.this, profiles_n_wishlist_page.class);
                 startActivity(intent);
                 break;
 
             case R.id.nav_profile:
+                Intent intent_profile = new Intent(main_screen.this, profiles_n_wishlist_page.class);
+                intent_profile.putExtra("profile_selected", true);
+                startActivity(intent_profile);
                 break;
 
             case R.id.nav_login:
-                Intent intent_login = new Intent(getApplicationContext(),login_screen.class);
+                Intent intent_login = new Intent(getApplicationContext(), login_screen.class);
                 startActivity(intent_login);
                 finish();
                 break;
-            case R.id.nav_logout:{
+            case R.id.nav_logout: {
 
+                GoogleSignInOptions gso = new GoogleSignInOptions.
+                        Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                        build();
 
+                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+                googleSignInClient.signOut();
                 FirebaseAuth.getInstance().signOut();
-                Intent intent_logout = new Intent(getApplicationContext(),login_screen.class);
+
+                Intent intent_logout = new Intent(getApplicationContext(), login_screen.class);
                 startActivity(intent_logout);
                 finish();
                 break;
             }
 
-            case R.id.nav_share: Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show(); break;
+            case R.id.nav_share:
+                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
+                break;
 
             case R.id.nav_rate:
                 break;
 
-            case R.id.nav_help:
-                Intent intent_aboutscreen = new Intent(main_screen.this, about_screen.class);
-                startActivity(intent_aboutscreen);
-                break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 

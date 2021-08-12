@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -80,7 +78,7 @@ public class login_screen extends AppCompatActivity {
     }
 
     private void go_to_mainscreen(){
-        Intent intent = new Intent(getApplicationContext(),main_screen.class);
+        Intent intent = new Intent(getApplicationContext(), main_screen.class);
         startActivity(intent);
         finish();
     }
@@ -137,6 +135,8 @@ public class login_screen extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(getApplicationContext(),main_screen.class);
                             startActivity(intent);
+
+                            Toast.makeText(getApplicationContext(), "Welcome!", Toast.LENGTH_SHORT).show();
                             login_progressbar.setVisibility(View.INVISIBLE);
                             finish();
 //                            updateUI(user);

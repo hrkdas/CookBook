@@ -13,10 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookBook">
-        <activity android:name=".login_screen"></activity>
-        <activity android:name=".about_screen" />
+        <activity android:name=".profiles_n_wishlist_page"></activity>
+        <activity android:name=".login_screen" />
         <activity android:name=".app_info" />
-        <activity android:name=".wishlist_screen" />
         <activity android:name=".start_cooking_screen" />
         <activity android:name=".main_screen" />
         <activity android:name=".recipe_overview" />
