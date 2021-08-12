@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "797479164963",
+    "project_id": "cookbook-2752f",
+    "storage_bucket": "cookbook-2752f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797479164963:android:47db5408dd7c602ccde596",
+        "android_client_info": {
+          "package_name": "com.dasshrkcodes.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797479164963-7kap2jr43lm408s6an1d5sguk7qt5u89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTj279FIoqpkm1TDr-VDws4JbjX0aJ34o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797479164963-7kap2jr43lm408s6an1d5sguk7qt5u89.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

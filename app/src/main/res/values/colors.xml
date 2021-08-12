@@ -20,10 +20,11 @@
     <color name="banner_background_light">#EDE8D5</color>
     <color name="card1">#EDE8D5</color>
     <color name="featured_background_color">#FFF8DBB1</color>
+    <color name="theme_text_color">#FFC89352</color>
 
     <color name="grey">#AAAAAA</color>
+    <color name="darkgrey">#555555</color>
     <color name="mintgreen">#ADF8B4</color>
     <color name="colorPrimary">#FBC06A</color>
-    <color name="mint">#FFF8DBB1</color>
     <color name="theme_background">#C39C93</color>
 </resources>

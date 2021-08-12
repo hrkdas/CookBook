@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_brown"
+    tools:context=".about_screen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/popup_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:fontFamily="@font/autour_one"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="CookBook"
+            android:textColor="#6A4239"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/app_name"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/s_slogan_name"
+            android:textColor="#6A4239" />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/featured_background_color"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/enter_login_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                android:id="@+id/help_about_Button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginBottom="15dp"
+                                android:backgroundTint="@color/theme_text_color"
+                                android:onClick="app_info_about_ButtonClick"
+                                android:text="About"
+                                android:textAllCaps="false"
+                                android:textStyle="bold"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:id="@+id/help_page_aboutText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="20dp"
+                                android:fontFamily="@font/athiti_medium"
+                                android:onClick="app_info_about_ButtonClick"
+                                android:singleLine="false"
+                                android:text="@string/about_text"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                android:visibility="gone" />
+
+
+                            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                android:id="@+id/help_app_info_Button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginBottom="18dp"
+                                android:backgroundTint="@color/theme_text_color"
+                                android:onClick="go_to_appInfo"
+                                android:text="App info"
+                                android:textAllCaps="false"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/athiti_medium"
+                                android:text="• Questions? Need help?"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                android:id="@+id/help_contact_Button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginBottom="10dp"
+                                android:backgroundTint="#CF7301"
+                                android:onClick="help_contact_ButtonClick"
+                                android:text="Contact us"
+                                android:textAllCaps="false"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/help_page_contactText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="3dp"
+                                android:fontFamily="@font/athiti_semibold"
+                                android:text="@string/contact_text"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:visibility="invisible" />
+
+                            <TextView
+                                android:id="@+id/help_page_contactText3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="3dp"
+                                android:fontFamily="@font/athiti_semibold"
+                                android:onClick="go_to_webView"
+                                android:text="• Terms and Privacy Policy"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:visibility="invisible" />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

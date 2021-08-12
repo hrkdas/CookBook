@@ -11,10 +11,6 @@
             android:icon="@drawable/liked_icon"
             android:title="@string/s_wishlist" />
 
-        <item
-            android:id="@+id/contact"
-            android:icon="@drawable/ic_baseline_contact_support_24"
-            android:title="@string/s_contact" />
 
     </group>
 
@@ -56,9 +52,9 @@
                         android:title="@string/s_rating" />
 
                     <item
-                        android:id="@+id/nav_about"
+                        android:id="@+id/nav_help"
                         android:icon="@drawable/about_icon"
-                        android:title="@string/s_about" />
+                        android:title="Help" />
 
                 </group>
 

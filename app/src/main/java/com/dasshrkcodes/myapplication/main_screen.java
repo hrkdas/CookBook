@@ -16,8 +16,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class main_screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +54,22 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         contentView = findViewById(R.id.content);
 
         navigationDrawer();
+
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        FirebaseUser currentUser  = FirebaseAuth.getInstance().getCurrentUser();
+//        updateUI(currentUser);
+        if(currentUser!=null){
+            navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
+            if(signInAccount != null){
+                Toast.makeText(this, signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, signInAccount.getEmail(), Toast.LENGTH_SHORT).show();
+            }
+        }else{
+//            navigationView.getMenu().getItem(R.id.nav_login).setVisible(View.INVISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
+        }
 
 
     }
@@ -117,8 +138,44 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return true;
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home: break;
+
+            case R.id.wishlist:
+                Intent intent = new Intent(main_screen.this, wishlist_screen.class);
+                startActivity(intent);
+                break;
+
+            case R.id.nav_profile:
+                break;
+
+            case R.id.nav_login:
+                Intent intent_login = new Intent(getApplicationContext(),login_screen.class);
+                startActivity(intent_login);
+                finish();
+                break;
+            case R.id.nav_logout:{
+
+
+                FirebaseAuth.getInstance().signOut();
+                Intent intent_logout = new Intent(getApplicationContext(),login_screen.class);
+                startActivity(intent_logout);
+                finish();
+                break;
+            }
+
+            case R.id.nav_share: Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show(); break;
+
+            case R.id.nav_rate:
+                break;
+
+            case R.id.nav_help:
+                Intent intent_aboutscreen = new Intent(main_screen.this, about_screen.class);
+                startActivity(intent_aboutscreen);
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START); return true;
     }
 
 

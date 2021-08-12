@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/theme_brown</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/darkgrey</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
@@ -24,7 +24,7 @@
         <!--    Color of theme and icon when selected-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <!--        background color when selected-->
-        <item name="colorControlHighlight">@color/mint</item>
+        <item name="colorControlHighlight">@color/featured_background_color</item>
     </style>
 
 </resources>

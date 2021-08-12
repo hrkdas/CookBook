@@ -43,4 +43,8 @@ Add the spices with the tomato purée, cook for a further 2 mins until fragrant,
     <string name="s_logout">Logout</string>
     <string name="s_share">Share</string>
     <string name="s_rating">Rate Us</string>
+    <string name="about_text">About text In a large, heavy saucepan, heat the oil. Add the onion, garlic, green chilli, ginger and some seasoning. Fry on a medium heat for 10 mins or until soft.
+</string>
+    <string name="contact_text">• <a href="mailto:hashhrks@gmail.com">Contact by email</a></string>
+
 </resources>
