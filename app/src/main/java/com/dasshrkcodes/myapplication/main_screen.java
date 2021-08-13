@@ -65,10 +65,10 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
 
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView bigR_recyclerview,smallR_recyclerview;
     private List<Recipes> viewItems = new ArrayList<>();
 
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter recyclerAdapter,horizontalRecyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
 
@@ -110,13 +110,21 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
 
         //big_Recycler View
-        mRecyclerView = (RecyclerView) findViewById(R.id.bigR_recyclerview);
-        mRecyclerView.setHasFixedSize(true);
+        bigR_recyclerview = (RecyclerView) findViewById(R.id.bigR_recyclerview);
+        bigR_recyclerview.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
+        bigR_recyclerview.setLayoutManager(layoutManager);
 
-        mAdapter = new RecyclerAdapter(this, viewItems);
-        mRecyclerView.setAdapter(mAdapter);
+        smallR_recyclerview = (RecyclerView) findViewById(R.id.smallR_recyclerview);
+        smallR_recyclerview.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        smallR_recyclerview.setLayoutManager(linearLayoutManager);
+
+
+        recyclerAdapter = new RecyclerAdapter(this, viewItems);
+        bigR_recyclerview.setAdapter(recyclerAdapter);
+        horizontalRecyclerAdapter = new HorizontalRecyclerAdapter(this, viewItems);
+        smallR_recyclerview.setAdapter(horizontalRecyclerAdapter);
 
         addItemsFromJSON();
 //        addItemsFromDB();
@@ -140,7 +148,8 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
                 }
 
-                mAdapter.notifyDataSetChanged();
+                recyclerAdapter.notifyDataSetChanged();
+                horizontalRecyclerAdapter.notifyDataSetChanged();
 
             }
 
