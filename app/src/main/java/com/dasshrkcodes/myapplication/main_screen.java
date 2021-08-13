@@ -86,6 +86,12 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
 
+    public void go_to_searchscreen(View view) {
+        Intent intent = new Intent(main_screen.this, search_screen.class);
+        startActivity(intent);
+    }
+
+
     //Navigation Drawer Functions
     private void navigationDrawer() {
         //Navigation drawer

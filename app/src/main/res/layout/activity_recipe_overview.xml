@@ -42,12 +42,109 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/calligraffitti"
-                        android:text="Butter chicken"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="10dp"
+                        android:fontFamily="@font/athiti_bold"
+                        android:text="Masala Karela Recipe"
                         android:textColor="@color/black"
-                        android:textSize="28sp"
+                        android:textSize="26sp"
                         android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:scaleType="centerInside"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/nonveg_icon" />
+
+                    <RatingBar
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@color/black"
+                        android:progressTint="#FFCC80"
+                        android:rating="5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:text="("
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:text=")"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:adjustViewBounds="true"
+                        android:paddingBottom="0dp"
+                        android:background="#00ffffff"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/cuisine_icon" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:fontFamily="@font/athiti_bold"
+                        android:gravity="center"
+                        android:text="Cuisine : "
+                        android:textAllCaps="false"
+                        android:textColor="#00C0D8"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:fontFamily="@font/athiti"
+                        android:gravity="center"
+                        android:text="Indian"
+                        android:textAllCaps="false"
+                        android:textColor="#FF00C0D8"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                 </LinearLayout>
 
                 <RelativeLayout
@@ -148,36 +245,6 @@
                                         android:adjustViewBounds="true"
                                         android:fontFamily="@font/athiti"
                                         android:gravity="center"
-                                        android:text="Prep : "
-                                        android:textAllCaps="false"
-                                        android:textColor="@color/black"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:adjustViewBounds="true"
-                                        android:fontFamily="@font/athiti"
-                                        android:gravity="center"
-                                        android:text="15min"
-                                        android:textAllCaps="false"
-                                        android:textColor="@color/black"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:adjustViewBounds="true"
-                                        android:fontFamily="@font/athiti"
-                                        android:gravity="center"
                                         android:text="Cook : "
                                         android:textAllCaps="false"
                                         android:textColor="@color/black"
@@ -190,12 +257,13 @@
                                         android:adjustViewBounds="true"
                                         android:fontFamily="@font/athiti"
                                         android:gravity="center"
-                                        android:text="30min"
+                                        android:text="45min"
                                         android:textAllCaps="false"
                                         android:textColor="@color/black"
                                         android:textSize="14sp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
+
                             </LinearLayout>
 
                             <ImageView
@@ -305,6 +373,78 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:fontFamily="@font/athiti"
+                                android:gravity="center"
+                                android:text="Ingredients Count : "
+                                android:textAllCaps="false"
+                                android:textColor="#BF0041"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:fontFamily="@font/athiti"
+                                android:gravity="center"
+                                android:text="10"
+                                android:textAllCaps="false"
+                                android:textColor="#BF0041"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:fontFamily="@font/athiti"
+                            android:gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:text="Cleaned Ingredients : "
+                            android:textAllCaps="false"
+                            android:textColor="#BF0041"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/athiti"
+                            android:text="salt,amchur (dry mango powder),karela (bitter gourd pavakkai),red chilli powder,gram flour (besan),onion,cumin seeds (jeera),coriander powder,turmeric powder,sunflower oil"
+                            android:includeFontPadding="false"
+                            android:inputType="textMultiLine"
+                            android:lineSpacingExtra="0sp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:fontFamily="@font/athiti"
+                            android:gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:text="Basic Ingredients : "
+                            android:textAllCaps="false"
+                            android:textColor="#BF0041"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -333,8 +473,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -451,7 +591,8 @@
         android:onClick="play_yt_buttonClick"
         android:src="@android:drawable/ic_media_play"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/startcooking_button"

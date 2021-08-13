@@ -6,11 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:layout_margin="10dp"
-    android:backgroundTint="#E8FFFF"
+    android:backgroundTint="#FFFFFF"
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="10dp"
     app:cardElevation="8dp">
-
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
@@ -52,8 +51,6 @@
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -75,6 +72,34 @@
                 android:progressBackgroundTint="@color/black"
                 android:progressTint="#FFCC80"
                 android:rating="3.5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:gravity="center"
+                android:text="("
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:gravity="center"
+                android:text="1"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:gravity="center"
+                android:text=")"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -258,6 +283,5 @@
             android:textColor="#7A7979"
             android:textStyle="italic" />
     </LinearLayout>
-
 
 </com.google.android.material.card.MaterialCardView>

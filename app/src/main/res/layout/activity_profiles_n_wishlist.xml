@@ -8,7 +8,6 @@
     android:background="@color/lightWhite"
     tools:context=".profiles_n_wishlist_page">
 
-
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/bottom_nav_menu"
         android:layout_width="match_parent"
