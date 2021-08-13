@@ -27,7 +27,8 @@ public class recipe_overview extends AppCompatActivity {
         recipe_image=findViewById(R.id.recipe_image);
         startcooking_button=findViewById(R.id.startcooking_button);
 
-        Picasso.get().load("https://www.archanaskitchen.com/images/archanaskitchen/1-Author/Pooja_Thakur/Karela_Masala_Recipe-4_1600.jpg").into(this.recipe_image);
+        Picasso.get().load("https://www.archanaskitchen.com/images/archanaskitchen/1-Author" +
+                "/Pooja_Thakur/Karela_Masala_Recipe-4_1600.jpg").into(this.recipe_image);
     }
 
     public void start_cooking_click(View view) {

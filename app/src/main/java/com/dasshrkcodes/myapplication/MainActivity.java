@@ -13,6 +13,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView logoImage;
     TextView logoText,main_appInfo_curren_verion;
 
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         logoText = (TextView) findViewById(R.id.logoText);
         logoText.setAnimation(topAnim);
         logoImage.setAnimation(bottomAnim);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
         new Handler().postDelayed(new Runnable() {
