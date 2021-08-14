@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -126,8 +127,8 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         horizontalRecyclerAdapter = new HorizontalRecyclerAdapter(this, viewItems);
         smallR_recyclerview.setAdapter(horizontalRecyclerAdapter);
 
-        addItemsFromJSON();
-//        addItemsFromDB();
+//        addItemsFromJSON();
+        addItemsFromDB();
 
 //        databaseReference = FirebaseDatabase.getInstance().getReference();
 //        databaseReference.setValue(null);
@@ -135,47 +136,68 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void addItemsFromDB(){
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Recipes");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Recipes");
+//
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////
+////                if(dataSnapshot.exists()){
+////                    Toast.makeText(main_screen.this, "yo", Toast.LENGTH_SHORT).show();
+////                }
+////
+//                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+//
+////                    String name = itemSnapshot.child("name").getValue(String.class);
+////                    String ingredientsList = itemSnapshot.child("ingredientsList").getValue(String.class);
+////                    String totalTime = itemSnapshot.child("totalTime").getValue(String.class);
+////                    String cuisine = itemSnapshot.child("cuisine").getValue(String.class);
+////                    String instructions = itemSnapshot.child("instructions").getValue(String.class);
+////                    String cleanedIngredients = itemSnapshot.child("cleanedIngredients").getValue(String.class);
+////                    String imageUrl = itemSnapshot.child("imageUrl").getValue(String.class);
+////                    String ingredientCount = itemSnapshot.child("ingredientCount").getValue(String.class);
+////                    String rating = itemSnapshot.child("rating").getValue(String.class);
+////                    String ratingCount = itemSnapshot.child("ratingCount").getValue(String.class);
+//
+////                    Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount);
+//
+//                    Recipes recipes = itemSnapshot.getValue(Recipes.class);
+//                    viewItems.add(recipes);
+//
+//                }
+//
+//                recyclerAdapter.notifyDataSetChanged();
+//                horizontalRecyclerAdapter.notifyDataSetChanged();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//
+//            }
+//        });
+
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                if(dataSnapshot.exists()){
-//                    Toast.makeText(main_screen.this, "yo", Toast.LENGTH_SHORT).show();
-//                }
-//
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-
-//                    String name = itemSnapshot.child("5442").child("name").getValue(String.class);
-//                    String ingredientsList = itemSnapshot.child("5442").child("ingredientsList").getValue(String.class);
-//                    String totalTime = itemSnapshot.child("5442").child("totalTime").getValue(String.class);
-//                    String cuisine = itemSnapshot.child("5442").child("cuisine").getValue(String.class);
-//                    String instructions = itemSnapshot.child("5442").child("instructions").getValue(String.class);
-//                    String cleanedIngredients = itemSnapshot.child("5442").child("cleanedIngredients").getValue(String.class);
-//                    String imageUrl = itemSnapshot.child("5442").child("imageUrl").getValue(String.class);
-//                    String ingredientCount = itemSnapshot.child("5442").child("ingredientCount").getValue(String.class);
-//                    String rating = itemSnapshot.child("5442").child("rating").getValue(String.class);
-//                    String ratingCount = itemSnapshot.child("5442").child("ratingCount").getValue(String.class);
-
-//                    Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount);
-
-                    Recipes foodData = itemSnapshot.getValue(Recipes.class);
-                    viewItems.add(foodData);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Recipes recipes = ds.getValue(Recipes.class);
+                        viewItems.add(recipes);
+                    }
 
                 }
-
-                recyclerAdapter.notifyDataSetChanged();
-                horizontalRecyclerAdapter.notifyDataSetChanged();
 
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
             }
         });
+
     }
 
 
