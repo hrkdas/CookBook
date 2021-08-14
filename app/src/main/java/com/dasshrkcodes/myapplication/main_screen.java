@@ -129,19 +129,36 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         addItemsFromJSON();
 //        addItemsFromDB();
 
+//        databaseReference = FirebaseDatabase.getInstance().getReference();
+//        databaseReference.setValue(null);
+
     }
 
     private void addItemsFromDB(){
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("5442");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Recipes");
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()){
-                    Toast.makeText(main_screen.this, "yo", Toast.LENGTH_SHORT).show();
-                }
-
+//
+//                if(dataSnapshot.exists()){
+//                    Toast.makeText(main_screen.this, "yo", Toast.LENGTH_SHORT).show();
+//                }
+//
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+
+//                    String name = itemSnapshot.child("5442").child("name").getValue(String.class);
+//                    String ingredientsList = itemSnapshot.child("5442").child("ingredientsList").getValue(String.class);
+//                    String totalTime = itemSnapshot.child("5442").child("totalTime").getValue(String.class);
+//                    String cuisine = itemSnapshot.child("5442").child("cuisine").getValue(String.class);
+//                    String instructions = itemSnapshot.child("5442").child("instructions").getValue(String.class);
+//                    String cleanedIngredients = itemSnapshot.child("5442").child("cleanedIngredients").getValue(String.class);
+//                    String imageUrl = itemSnapshot.child("5442").child("imageUrl").getValue(String.class);
+//                    String ingredientCount = itemSnapshot.child("5442").child("ingredientCount").getValue(String.class);
+//                    String rating = itemSnapshot.child("5442").child("rating").getValue(String.class);
+//                    String ratingCount = itemSnapshot.child("5442").child("ratingCount").getValue(String.class);
+
+//                    Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount);
 
                     Recipes foodData = itemSnapshot.getValue(Recipes.class);
                     viewItems.add(foodData);
