@@ -1,34 +1,28 @@
 package com.dasshrkcodes.myapplication;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +31,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,9 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
 
 public class main_screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -65,15 +60,15 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     TextView test;
 
 
-
-    private RecyclerView bigR_recyclerview,smallR_recyclerview;
+    private RecyclerView bigR_recyclerview, smallR_recyclerview;
     private List<Recipes> viewItems = new ArrayList<>();
 
-    private RecyclerView.Adapter recyclerAdapter,horizontalRecyclerAdapter;
+    private RecyclerView.Adapter recyclerAdapter, horizontalRecyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
 
     private DatabaseReference databaseReference;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -107,9 +102,6 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
             navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
         }
 
-
-
-
         //big_Recycler View
         bigR_recyclerview = (RecyclerView) findViewById(R.id.bigR_recyclerview);
         bigR_recyclerview.setHasFixedSize(true);
@@ -135,71 +127,40 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
     }
 
-    private void addItemsFromDB(){
-        databaseReference = FirebaseDatabase.getInstance().getReference("Recipes");
-//
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////
-////                if(dataSnapshot.exists()){
-////                    Toast.makeText(main_screen.this, "yo", Toast.LENGTH_SHORT).show();
-////                }
-////
-//                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-//
-////                    String name = itemSnapshot.child("name").getValue(String.class);
-////                    String ingredientsList = itemSnapshot.child("ingredientsList").getValue(String.class);
-////                    String totalTime = itemSnapshot.child("totalTime").getValue(String.class);
-////                    String cuisine = itemSnapshot.child("cuisine").getValue(String.class);
-////                    String instructions = itemSnapshot.child("instructions").getValue(String.class);
-////                    String cleanedIngredients = itemSnapshot.child("cleanedIngredients").getValue(String.class);
-////                    String imageUrl = itemSnapshot.child("imageUrl").getValue(String.class);
-////                    String ingredientCount = itemSnapshot.child("ingredientCount").getValue(String.class);
-////                    String rating = itemSnapshot.child("rating").getValue(String.class);
-////                    String ratingCount = itemSnapshot.child("ratingCount").getValue(String.class);
-//
-////                    Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount);
-//
-//                    Recipes recipes = itemSnapshot.getValue(Recipes.class);
-//                    viewItems.add(recipes);
-//
-//                }
-//
-//                recyclerAdapter.notifyDataSetChanged();
-//                horizontalRecyclerAdapter.notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//
-//            }
-//        });
 
+    private void addItemsFromDB() {
+        db.collection("Recipes").whereEqualTo("id", "1")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot itemObj : task.getResult()) {
+                                String name = itemObj.getString("name");
+                                String ingredientsList = itemObj.getString("ingredientsList");
+                                String totalTime = itemObj.getString("totalTime");
+                                String cuisine = itemObj.getString("cuisine");
+                                String instructions = itemObj.getString("instructions");
+                                String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                                String imageUrl = itemObj.getString("imageUrl");
+                                String ingredientCount = itemObj.getString("ingredientCount");
+                                String rating = itemObj.getString("rating");
+                                String ratingCount = itemObj.getString("ratingCount");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        Recipes recipes = ds.getValue(Recipes.class);
-                        viewItems.add(recipes);
+                                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
+                                        cuisine, instructions, cleanedIngredients, imageUrl,
+                                        ingredientCount, rating, ratingCount);
+                                viewItems.add(recipes);
+
+                            }
+                            recyclerAdapter.notifyDataSetChanged();
+                            horizontalRecyclerAdapter.notifyDataSetChanged();
+                        } else {
+
+                        }
                     }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
-
+                });
     }
-
 
 
     private void addItemsFromJSON() {
@@ -208,7 +169,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
             String jsonDataString = readJSONDataFromFile();
             JSONArray jsonArray = new JSONArray(jsonDataString);
 
-            for (int i=0; i<jsonArray.length(); ++i) {
+            for (int i = 0; i < jsonArray.length(); ++i) {
 
                 JSONObject itemObj = jsonArray.getJSONObject(i);
 
@@ -255,19 +216,6 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         }
         return new String(builder);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public void go_to_wishlist(View view) {

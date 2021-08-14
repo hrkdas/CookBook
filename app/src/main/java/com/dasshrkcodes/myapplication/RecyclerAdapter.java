@@ -27,8 +27,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-
-
         ImageView imageView;
         TextView mTitle, mDescription, mTime;
 
