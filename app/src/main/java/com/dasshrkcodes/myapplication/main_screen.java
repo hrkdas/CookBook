@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -129,7 +130,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
 
     private void addItemsFromDB() {
-        db.collection("Recipes").whereEqualTo("id", "1")
+        db.collection("Recipes").orderBy("id").limit(50)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -138,14 +139,14 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
                             for (QueryDocumentSnapshot itemObj : task.getResult()) {
                                 String name = itemObj.getString("name");
                                 String ingredientsList = itemObj.getString("ingredientsList");
-                                String totalTime = itemObj.getString("totalTime");
+                                String totalTime = itemObj.getLong("totalTime").toString();
                                 String cuisine = itemObj.getString("cuisine");
                                 String instructions = itemObj.getString("instructions");
                                 String cleanedIngredients = itemObj.getString("cleanedIngredients");
                                 String imageUrl = itemObj.getString("imageUrl");
-                                String ingredientCount = itemObj.getString("ingredientCount");
-                                String rating = itemObj.getString("rating");
-                                String ratingCount = itemObj.getString("ratingCount");
+                                String ingredientCount = itemObj.getLong("ingredientCount").toString();
+                                String rating = itemObj.getLong("rating").toString();
+                                String ratingCount = itemObj.getLong("ratingCount").toString();
 
                                 Recipes recipes = new Recipes(name, ingredientsList, totalTime,
                                         cuisine, instructions, cleanedIngredients, imageUrl,
