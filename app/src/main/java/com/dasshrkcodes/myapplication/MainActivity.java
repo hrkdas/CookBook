@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Animation bottomAnim,topAnim;
     ImageView logoImage;
     TextView logoText,main_appInfo_curren_verion;
-    FirebaseFirestore db;
+//    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         logoText.setAnimation(topAnim);
         logoImage.setAnimation(bottomAnim);
 
-        db = FirebaseFirestore.getInstance();
-        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(10)
-                .get();
+//        db = FirebaseFirestore.getInstance();
+//        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(10)
+//                .get();
 
 
         new Handler().postDelayed(new Runnable() {

@@ -127,13 +127,15 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
 
     private void addItemsFromDB() {
-        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(50)
+        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(5)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot itemObj : task.getResult()) {
+
+                                String id = itemObj.getLong("id").toString();
                                 String name = itemObj.getString("name");
                                 String ingredientsList = itemObj.getString("ingredientsList");
                                 String totalTime = itemObj.getLong("totalTime").toString();
@@ -147,7 +149,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
                                 Recipes recipes = new Recipes(name, ingredientsList, totalTime,
                                         cuisine, instructions, cleanedIngredients, imageUrl,
-                                        ingredientCount, rating, ratingCount);
+                                        ingredientCount, rating, ratingCount,id);
                                 viewItems.add(recipes);
 
                             }
@@ -167,10 +169,14 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         startActivity(intent);
     }
 
-    public void show_recipe(View view) {
+    public void go_to_recipe_overview(View view) {
+        String id= view.getTag().toString();
+        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(main_screen.this, recipe_overview.class);
+        intent.putExtra("id_recipe_overview", id);
         startActivity(intent);
     }
+
 
 
     public void go_to_searchscreen(View view) {

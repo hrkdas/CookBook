@@ -12,8 +12,10 @@ public class Recipes {
     private final String ingredientCount;
     private final String rating;
     private final String ratingCount;
+    private final String id;
 
-    public Recipes(String name, String ingredientsList, String totalTime, String cuisine, String instructions, String cleanedIngredients, String imgUrl, String ingredientCount, String rating, String ratingCount) {
+    public Recipes(String name, String ingredientsList, String totalTime, String cuisine, String instructions, String cleanedIngredients,
+                   String imgUrl, String ingredientCount, String rating, String ratingCount,String id) {
         this.name = name;
         this.ingredientsList = ingredientsList;
         this.totalTime = totalTime;
@@ -24,6 +26,7 @@ public class Recipes {
         this.ingredientCount = ingredientCount;
         this.rating = rating;
         this.ratingCount = ratingCount;
+        this.id = id;
     }
 
     public String getRName(){ return name;}
@@ -36,6 +39,7 @@ public class Recipes {
     public String getIngredientCount(){ return ingredientCount;}
     public String getRating(){ return rating;}
     public String getRatingCount(){ return ratingCount;}
+    public String getId(){ return id;}
 }
 
 

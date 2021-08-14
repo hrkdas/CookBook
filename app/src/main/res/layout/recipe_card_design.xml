@@ -7,6 +7,8 @@
     android:layout_margin="10dp"
     android:backgroundTint="#FFFFFF"
     app:cardBackgroundColor="#FFFFFF"
+    android:id="@+id/big_card"
+    android:onClick="go_to_recipe_overview"
     app:cardCornerRadius="10dp"
     app:cardElevation="8dp">
 
