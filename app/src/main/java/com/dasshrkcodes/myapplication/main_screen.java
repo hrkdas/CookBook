@@ -120,17 +120,14 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         horizontalRecyclerAdapter = new HorizontalRecyclerAdapter(this, viewItems);
         smallR_recyclerview.setAdapter(horizontalRecyclerAdapter);
 
-//        addItemsFromJSON();
         addItemsFromDB();
 
-//        databaseReference = FirebaseDatabase.getInstance().getReference();
-//        databaseReference.setValue(null);
 
     }
 
 
     private void addItemsFromDB() {
-        db.collection("Recipes").orderBy("id").limit(50)
+        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(50)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -161,61 +158,6 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
                         }
                     }
                 });
-    }
-
-
-    private void addItemsFromJSON() {
-        try {
-
-            String jsonDataString = readJSONDataFromFile();
-            JSONArray jsonArray = new JSONArray(jsonDataString);
-
-            for (int i = 0; i < jsonArray.length(); ++i) {
-
-                JSONObject itemObj = jsonArray.getJSONObject(i);
-
-                String name = itemObj.getString("name");
-                String ingredientsList = itemObj.getString("ingredientsList");
-                String totalTime = itemObj.getString("totalTime");
-                String cuisine = itemObj.getString("cuisine");
-                String instructions = itemObj.getString("instructions");
-                String cleanedIngredients = itemObj.getString("cleanedIngredients");
-                String imageUrl = itemObj.getString("imageUrl");
-                String ingredientCount = itemObj.getString("ingredientCount");
-                String rating = itemObj.getString("rating");
-                String ratingCount = itemObj.getString("ratingCount");
-
-
-                Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount);
-                viewItems.add(recipes);
-            }
-
-        } catch (JSONException | IOException e) {
-        }
-    }
-
-    private String readJSONDataFromFile() throws IOException {
-
-        InputStream inputStream = null;
-        StringBuilder builder = new StringBuilder();
-
-        try {
-
-            String jsonString = null;
-            inputStream = getResources().openRawResource(R.raw.recipes);
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(inputStream, "UTF-8"));
-
-            while ((jsonString = bufferedReader.readLine()) != null) {
-                builder.append(jsonString);
-            }
-
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return new String(builder);
     }
 
 

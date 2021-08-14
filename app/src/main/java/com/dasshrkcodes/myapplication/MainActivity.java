@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Animation bottomAnim,topAnim;
     ImageView logoImage;
     TextView logoText,main_appInfo_curren_verion;
-
-    private DatabaseReference databaseReference;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         logoText.setAnimation(topAnim);
         logoImage.setAnimation(bottomAnim);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        db = FirebaseFirestore.getInstance();
+        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(10)
+                .get();
 
 
         new Handler().postDelayed(new Runnable() {
