@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private static final int TYPE = 1;
     private final Context context;
     private final List<Recipes> listRecyclerItem;
+
+
 
     public HorizontalRecyclerAdapter(Context context, List<Recipes> listRecyclerItem) {
         this.context = context;
@@ -31,6 +34,8 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         ImageView imageView;
         TextView mTitle, mDescription;
+        MaterialCardView small_card;
+
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -38,6 +43,8 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             imageView = itemView.findViewById(R.id.smallR_featured_image);
             mTitle = itemView.findViewById(R.id.smallR_featured_title);
             mDescription = itemView.findViewById(R.id.smallR_featured_desc);
+            small_card = itemView.findViewById(R.id.small_card);
+
         }
     }
 
@@ -71,6 +78,8 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
                     itemViewHolder.mTitle.setText(recipes.getRName());
                     itemViewHolder.mDescription.setText(recipes.getInstructions());
+                    itemViewHolder.small_card.setTag(recipes.getId());
+
                     Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
 
         }

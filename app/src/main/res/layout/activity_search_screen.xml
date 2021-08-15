@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/theme_brown"
     android:layout_height="match_parent"
+    android:background="@color/theme_brown"
     tools:context=".search_screen">
 
     <LinearLayout
@@ -79,159 +79,136 @@
             android:scaleType="centerInside"
             android:src="@drawable/searchscreen_banner" />
 
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:columnCount="3"
-            android:padding="10dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="20dp"
-                android:clickable="true"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="10dp">
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnCount="3"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_1" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="160dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:onClick="card1_clicked"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp">
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                app:cardElevation="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/searchscreen_image_1" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_2" />
+                </com.google.android.material.card.MaterialCardView>
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                android:layout_marginRight="20dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                app:cardElevation="10dp">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="160dp"
+                    android:layout_margin="5dp"
+                    android:onClick="card2_clicked"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_3" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/searchscreen_image_2" />
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                android:layout_marginLeft="20dp"
-                app:cardElevation="10dp">
+                </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_4" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="160dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginRight="20dp"
+                    android:onClick="card3_clicked"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp">
 
-            </com.google.android.material.card.MaterialCardView>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/searchscreen_image_3" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                app:cardElevation="10dp">
+                </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_5" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="160dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:onClick="card4_clicked"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp">
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                android:layout_marginRight="20dp"
-                app:cardElevation="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/searchscreen_image_4" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_6" />
+                </com.google.android.material.card.MaterialCardView>
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="20dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                app:cardElevation="10dp">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="160dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginBottom="30dp"
+                    android:onClick="card5_clicked"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_7" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/searchscreen_image_5" />
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                app:cardElevation="10dp">
+                </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_8" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="160dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:onClick="card6_clicked"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp">
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="15dp"
-                android:clickable="true"
-                android:layout_marginRight="20dp"
-                app:cardElevation="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/searchscreen_image_6" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/searchscreen_image_9" />
+                </com.google.android.material.card.MaterialCardView>
 
-            </com.google.android.material.card.MaterialCardView>
+            </GridLayout>
+        </ScrollView>
 
+        <ProgressBar
+            android:id="@+id/searchscreen_progressbar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff"
+            android:indeterminate="true"
+            android:indeterminateTint="#90CAF9"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:visibility="invisible" />
 
-        </GridLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

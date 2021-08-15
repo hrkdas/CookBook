@@ -1,6 +1,8 @@
 package com.dasshrkcodes.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +23,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +49,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class main_screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -63,6 +71,8 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
     private RecyclerView bigR_recyclerview, smallR_recyclerview;
     private List<Recipes> viewItems = new ArrayList<>();
+    private List<Recipes> viewItemsCopy = new ArrayList<>();
+    private List<Recipes> viewItemsEmpty = new ArrayList<>();
 
     private RecyclerView.Adapter recyclerAdapter, horizontalRecyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -70,7 +80,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
     private DatabaseReference databaseReference;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,14 +131,101 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         smallR_recyclerview.setAdapter(horizontalRecyclerAdapter);
 
         addItemsFromDB();
+//        addItemsFromJSON();
 
+
+
+
+        mPrefs = getPreferences(MODE_PRIVATE);
+//        viewItemsEmpty.clear();
+//        saveObjectToSharedPreference(getApplicationContext(),"LikedRecipeList",
+//                "LikedRecipeList",viewItemsEmpty);
+//        viewItemsCopy=getSavedObjectFromPreference(getApplicationContext(),"LikedRecipeList",
+//                "LikedRecipeList",viewItems);
 
     }
 
+    public static void saveObjectToSharedPreference(Context context, String preferenceFileName,
+                                                    String serializedObjectKey, List<Recipes> object) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+        final Gson gson = new Gson();
+        String serializedObject = gson.toJson(object);
+        sharedPreferencesEditor.putString(serializedObjectKey, serializedObject);
+        sharedPreferencesEditor.apply();
+    }
+
+    public List<Recipes> getSavedObjectFromPreference(Context context, String preferenceFileName
+            , String preferenceKey, List<Recipes> classType) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
+        if (sharedPreferences.contains(preferenceKey)) {
+            final Gson gson = new Gson();
+            Type collectionType = new TypeToken<List<Recipes>>(){}.getType();
+            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""),collectionType);
+        }
+        return null;
+    }
+
+
+
+    private void addItemsFromJSON() {
+        try {
+
+            String jsonDataString = readJSONDataFromFile();
+            JSONArray jsonArray = new JSONArray(jsonDataString);
+
+            for (int i = 0; i < jsonArray.length(); ++i) {
+
+                JSONObject itemObj = jsonArray.getJSONObject(i);
+
+                String name = itemObj.getString("name");
+                String ingredientsList = itemObj.getString("ingredientsList");
+                String totalTime = itemObj.getString("totalTime");
+                String cuisine = itemObj.getString("cuisine");
+                String instructions = itemObj.getString("instructions");
+                String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                String imageUrl = itemObj.getString("imageUrl");
+                String ingredientCount = itemObj.getString("ingredientCount");
+                String rating = itemObj.getString("rating");
+                String ratingCount = itemObj.getString("ratingCount");
+                String id = itemObj.getString("id");
+
+
+                Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount,id);
+                viewItems.add(recipes);
+            }
+
+        } catch (JSONException | IOException e) {
+        }
+    }
+    private String readJSONDataFromFile() throws IOException {
+
+        InputStream inputStream = null;
+        StringBuilder builder = new StringBuilder();
+
+        try {
+
+            String jsonString = null;
+            inputStream = getResources().openRawResource(R.raw.recipes);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(inputStream, "UTF-8"));
+
+            while ((jsonString = bufferedReader.readLine()) != null) {
+                builder.append(jsonString);
+            }
+
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return new String(builder);
+    }
+
+
 
     private void addItemsFromDB() {
-        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(5)
-                .get()
+        db.collection("Recipes").orderBy("id").limit(5).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -151,12 +248,11 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
                                         cuisine, instructions, cleanedIngredients, imageUrl,
                                         ingredientCount, rating, ratingCount,id);
                                 viewItems.add(recipes);
-
                             }
                             recyclerAdapter.notifyDataSetChanged();
                             horizontalRecyclerAdapter.notifyDataSetChanged();
                         } else {
-
+                           Toast.makeText(main_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -171,10 +267,12 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
     public void go_to_recipe_overview(View view) {
         String id= view.getTag().toString();
-        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(main_screen.this, recipe_overview.class);
+        Intent intent = new Intent(getApplicationContext(), recipe_overview.class);
         intent.putExtra("id_recipe_overview", id);
         startActivity(intent);
+//        Toast.makeText(this, getSavedObjectFromPreference(getApplicationContext(),"LikedRecipeList",
+//                "LikedRecipeList",viewItems).size()+"", Toast.LENGTH_SHORT).show();
+
     }
 
 

@@ -1,7 +1,8 @@
 package com.dasshrkcodes.myapplication;
 
-public class Recipes {
+import java.io.Serializable;
 
+public class Recipes implements Serializable {
     private final String name;
     private final String ingredientsList;
     private final String totalTime;

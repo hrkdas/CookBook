@@ -2,13 +2,13 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/big_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:backgroundTint="#FFFFFF"
-    app:cardBackgroundColor="#FFFFFF"
-    android:id="@+id/big_card"
     android:onClick="go_to_recipe_overview"
+    app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="10dp"
     app:cardElevation="8dp">
 
@@ -261,11 +261,15 @@
                         android:layout_weight="5"
                         android:gravity="right">
 
-                        <ImageView
+                        <com.like.LikeButton
+                            android:id="@+id/bigR_likebutton"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/liked_icon" />
+                            android:onClick="toggleLiked"
+                            android:padding="2dp"
+                            app:icon_size="25dp"
+                            app:icon_type="heart" />
+
                     </RelativeLayout>
 
                 </LinearLayout>

@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     Animation bottomAnim,topAnim;
     ImageView logoImage;
     TextView logoText,main_appInfo_curren_verion;
-//    FirebaseFirestore db;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +36,14 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        db.collection("Recipes").orderBy("id").limit(2).get();
+
         topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
         bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
         logoImage = (ImageView) findViewById(R.id.logoImage);
         logoText = (TextView) findViewById(R.id.logoText);
         logoText.setAnimation(topAnim);
         logoImage.setAnimation(bottomAnim);
-
-//        db = FirebaseFirestore.getInstance();
-//        db.collection("Recipes").whereEqualTo("cuisine","North Indian Recipes").limit(10)
-//                .get();
 
 
         new Handler().postDelayed(new Runnable() {
