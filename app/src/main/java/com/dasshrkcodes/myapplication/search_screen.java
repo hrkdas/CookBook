@@ -72,8 +72,6 @@ public class search_screen extends AppCompatActivity {
 
     }
 
-    public class MyObject implements Serializable {
-    }
 
     private void checkItems(String[] cardtype) {
         db.collection("Recipes").orderBy("id").limit(10).get()

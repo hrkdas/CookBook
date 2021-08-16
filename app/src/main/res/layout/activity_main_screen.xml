@@ -19,7 +19,6 @@
         app:headerLayout="@layout/menu_header"
         app:menu="@menu/main_menu" />
 
-
     <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
@@ -121,26 +120,25 @@
 
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="400dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@color/featured_background_color"
                     app:cardCornerRadius="10dp">
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/featured_background_color">
+                            android:layout_height="wrap_content">
 
                             <LinearLayout
-                                android:id="@+id/featured_background"
-                                android:layout_width="190dp"
+                                android:id="@+id/featured_background_1"
+                                android:layout_width="wrap_content"
                                 android:layout_height="300dp"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginLeft="10dp"
@@ -148,35 +146,39 @@
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginBottom="10dp"
-                                android:background="@color/banner_background_light"
+                                android:background="@color/white"
                                 android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginTop="50dp"
-                                    android:fontFamily="@font/bungee_inline"
-                                    android:text="Featured Recipes"
-                                    android:textAllCaps="true"
-                                    android:textColor="#FBC06A"
-                                    android:textSize="25sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="10dp"
-                                    android:fontFamily="@font/actor"
-                                    android:text="In The Spotlight"
-                                    android:textColor="@color/black" />
-
-                                <ImageView
-                                    android:layout_width="60dp"
-                                    android:layout_height="60dp"
-                                    android:layout_gravity="start"
-                                    android:layout_marginLeft="10dp"
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="120dp"
+                                    android:layout_height="210dp"
+                                    android:layout_margin="5dp"
                                     android:padding="5dp"
-                                    android:src="@drawable/spotlight_icon" />
+                                    android:layout_marginLeft="20dp"
+                                    app:cardCornerRadius="15dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/searchscreen_image_1" />
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="5dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:text="View All"
+                                    android:textAlignment="center"
+                                    app:icon="@drawable/next_icon"
+                                    app:iconGravity="end"
+                                    tools:ignore="RtlCompat"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold" />
+
 
                             </LinearLayout>
 
@@ -184,8 +186,83 @@
                                 android:id="@+id/smallR_recyclerview"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_toRightOf="@id/featured_background"
-                                android:background="@color/banner_background_light" />
+                                android:layout_toRightOf="@id/featured_background_1"
+                                android:background="@color/white" />
+
+                        </RelativeLayout>
+
+                    </HorizontalScrollView>
+
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/featured_background_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="300dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@color/white"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="120dp"
+                                    android:layout_height="210dp"
+                                    android:layout_margin="5dp"
+                                    android:padding="5dp"
+                                    android:layout_marginLeft="20dp"
+                                    app:cardCornerRadius="15dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/searchscreen_image_1" />
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="5dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:text="View All"
+                                    android:textAlignment="center"
+                                    app:icon="@drawable/next_icon"
+                                    app:iconGravity="end"
+                                    tools:ignore="RtlCompat"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/smallR_recyclerview_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_toRightOf="@id/featured_background_2"
+                                android:background="@color/white" />
 
                         </RelativeLayout>
 
@@ -198,7 +275,6 @@
                     android:id="@+id/bigR_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/featured_background"
                     android:background="@color/banner_background_light" />
 
 

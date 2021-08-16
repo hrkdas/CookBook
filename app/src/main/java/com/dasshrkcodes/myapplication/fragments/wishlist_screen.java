@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,8 +88,9 @@ public class wishlist_screen extends Fragment {
 
         smallR_recyclerview_wishlistScreen = (RecyclerView) myInflatedView.findViewById(R.id.smallR_recyclerview_wishlistScreen);
         smallR_recyclerview_wishlistScreen.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
-        smallR_recyclerview_wishlistScreen.setLayoutManager(linearLayoutManager);
+        smallR_recyclerview_wishlistScreen.setLayoutManager(new GridLayoutManager(getContext(), 2));
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL, false);
+//        smallR_recyclerview_wishlistScreen.setLayoutManager(linearLayoutManager);
 
         viewItems=getSavedObjectFromPreference(getContext(),"LikedRecipeList",
                 "LikedRecipeList",viewItems);

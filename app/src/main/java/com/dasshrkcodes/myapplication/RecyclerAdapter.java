@@ -37,7 +37,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final List<Recipes> listRecyclerItem;
 
 
-
     public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem) {
         this.context = context;
         this.listRecyclerItem = listRecyclerItem;
@@ -107,7 +106,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
         int viewType = getItemViewType(i);
-        List<Recipes> LikedRecipeList;
 
         switch (viewType) {
             case TYPE:
@@ -123,13 +121,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     itemViewHolder.bigR_likebutton.setTag(recipes.getId());
                     Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
 
-                    LikedRecipeList =getSavedObjectFromPreference(context,"LikedRecipeList",
-                            "LikedRecipeList",listRecyclerItem);
+//                    LikedRecipeList =getSavedObjectFromPreference(context,"LikedRecipeList",
+//                            "LikedRecipeList",listRecyclerItem);
 
                     itemViewHolder.bigR_likebutton.setOnLikeListener(new OnLikeListener() {
                         @Override
                         public void liked(LikeButton likeButton) {
                             Toast.makeText(context, "liked"+i, Toast.LENGTH_SHORT).show();
+
+                            List<Recipes> LikedRecipeList=getSavedObjectFromPreference(context,"LikedRecipeList",
+                                    "LikedRecipeList",listRecyclerItem);
                             LikedRecipeList.add(listRecyclerItem.get(i));
 
                             saveObjectToSharedPreference(context,"LikedRecipeList",
@@ -138,8 +139,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                         @Override
                         public void unLiked(LikeButton likeButton) {
-                            Toast.makeText(context, "disliked"+i, Toast.LENGTH_SHORT).show();
-                            LikedRecipeList.remove(listRecyclerItem.get(i));
+                             List<Recipes>LikedRecipeList=getSavedObjectFromPreference(context,"LikedRecipeList",
+                                    "LikedRecipeList",listRecyclerItem);
+//                            Toast.makeText(context, "disliked"+LikedRecipeList.indexOf(listRecyclerItem.get(i)), Toast.LENGTH_SHORT).show();
+
+                            LikedRecipeList.remove(LikedRecipeList.indexOf(listRecyclerItem.get(i)));
                             saveObjectToSharedPreference(context,"LikedRecipeList",
                                     "LikedRecipeList",LikedRecipeList);
                         }

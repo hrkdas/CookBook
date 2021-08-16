@@ -51,6 +51,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -249,6 +250,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
                                         ingredientCount, rating, ratingCount,id);
                                 viewItems.add(recipes);
                             }
+                            Collections.shuffle(viewItems);
                             recyclerAdapter.notifyDataSetChanged();
                             horizontalRecyclerAdapter.notifyDataSetChanged();
                         } else {
