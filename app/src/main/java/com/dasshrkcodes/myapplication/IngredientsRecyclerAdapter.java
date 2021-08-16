@@ -1,6 +1,7 @@
 package com.dasshrkcodes.myapplication;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,28 +11,33 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class IngredientsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE = 1;
     private final Context context;
-    private final List<Recipes> listRecyclerItem;
+    private final List<String> Ing_nameList;
+    private final List<String> Ing_imageList;
 
-    public IngredientsAdapter(Context context, List<Recipes> listRecyclerItem) {
+
+    public IngredientsRecyclerAdapter(Context context, List<String> Ing_nameList, List<String> Ing_imageList) {
         this.context = context;
-        this.listRecyclerItem = listRecyclerItem;
+        this.Ing_nameList = Ing_nameList;
+        this.Ing_imageList = Ing_imageList;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
+
+
         ImageView imageView;
         TextView mTitle;
 
-        public ItemViewHolder(@NonNull @NotNull View itemView) {
+
+        public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.ing_image);
@@ -45,6 +51,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         switch (i) {
             case TYPE:
+
             default:
 
                 View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(
@@ -52,10 +59,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 return new ItemViewHolder((layoutView));
         }
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
         int viewType = getItemViewType(i);
 
@@ -63,17 +71,19 @@ public class IngredientsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case TYPE:
             default:
 
-                RecyclerAdapter.ItemViewHolder itemViewHolder = (RecyclerAdapter.ItemViewHolder) viewHolder;
-                Recipes recipes = (Recipes) listRecyclerItem.get(i);
+                ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
 
-                itemViewHolder.mTitle.setText(recipes.getRName());
-                Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
+                itemViewHolder.mTitle.setText(Ing_nameList.get(i));
+                int res = context.getResources().getIdentifier(Ing_imageList.get(i), "drawable",
+                        context.getPackageName());
+                itemViewHolder.imageView.setImageResource(res);
+
         }
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return Ing_nameList.size();
     }
 }

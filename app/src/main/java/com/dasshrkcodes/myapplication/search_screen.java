@@ -3,6 +3,8 @@ package com.dasshrkcodes.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class search_screen extends AppCompatActivity {
@@ -30,8 +33,17 @@ public class search_screen extends AppCompatActivity {
     LinearLayout searchscreen_layout;
 
     ProgressBar searchscreen_progressbar;
+    List<String> Ing_nameList=new ArrayList<>();
+    List<String> Ing_imageList=new ArrayList<>();
+
+     RecyclerView ingList_recyclerview;
+     RecyclerView.Adapter recyclerAdapter;
 
 
+    public void makeList(){
+        Collections.addAll(Ing_nameList, "Bread","Broccoli");
+        Collections.addAll(Ing_imageList, "ing_bread","ing_broccoli");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +55,14 @@ public class search_screen extends AppCompatActivity {
         searchscreen_layout = findViewById(R.id.searchscreen_layout);
         searchscreen_layout.setAnimation(searchscreen_anim);
 
+        makeList();
+        ingList_recyclerview = findViewById(R.id.ingList_recyclerview);
+        ingList_recyclerview.setLayoutManager(new GridLayoutManager(search_screen.this, 5));
+        recyclerAdapter = new IngredientsRecyclerAdapter(getApplicationContext(),Ing_nameList,Ing_imageList);
+        ingList_recyclerview.setAdapter(recyclerAdapter);
         searchscreen_progressbar = findViewById(R.id.searchscreen_progressbar);
 
     }
+
 
 }

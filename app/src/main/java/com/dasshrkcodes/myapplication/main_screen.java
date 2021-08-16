@@ -120,8 +120,6 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         navigationDrawer();
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        updateUI(currentUser);
 
         if (signInAccount != null) {
             navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
@@ -187,7 +185,6 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         mainscreen_progressbar.setVisibility(View.VISIBLE);
         addItemsFromDB();
         checkItems();
-
 
         mPrefs = getPreferences(MODE_PRIVATE);
 //        viewItemsEmpty.clear();
@@ -273,6 +270,12 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
                                 }
 
                             }
+                            Collections.shuffle(smallR_recyclerviewItems_1);
+                            Collections.shuffle(smallR_recyclerviewItems_2);
+                            Collections.shuffle(smallR_recyclerviewItems_3);
+                            Collections.shuffle(smallR_recyclerviewItems_4);
+                            Collections.shuffle(smallR_recyclerviewItems_5);
+                            Collections.shuffle(smallR_recyclerviewItems_6);
                             horizontalRecyclerAdapter_1.notifyDataSetChanged();
                             horizontalRecyclerAdapter_2.notifyDataSetChanged();
                             horizontalRecyclerAdapter_3.notifyDataSetChanged();
