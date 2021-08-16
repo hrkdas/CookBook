@@ -10,14 +10,14 @@
     tools:openDrawer="start">
 
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:theme="@style/navigationTheme"
-        app:headerLayout="@layout/menu_header"
-        app:menu="@menu/main_menu" />
+<!--    <com.google.android.material.navigation.NavigationView-->
+<!--        android:id="@+id/navigation_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:theme="@style/navigationTheme"-->
+<!--        app:headerLayout="@layout/menu_header"-->
+<!--        app:menu="@menu/main_menu" />-->
 
     <LinearLayout
         android:id="@+id/content"
@@ -79,7 +79,6 @@
                 android:layout_marginLeft="35dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="35dp"
-                android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/white"
                 android:onClick="go_to_searchscreen"
                 android:transitionName="searchbar_transition"
@@ -108,6 +107,18 @@
 
         </RelativeLayout>
 
+        <ProgressBar
+            android:id="@+id/mainscreen_progressbar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff"
+            android:indeterminate="true"
+            android:indeterminateTint="#90CAF9"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:visibility="invisible" />
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -117,10 +128,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
-
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="400dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
@@ -172,6 +181,7 @@
                                     android:layout_marginTop="5dp"
                                     android:backgroundTint="#FFFFFF"
                                     android:text="View All"
+                                    android:onClick="card_1_clicked"
                                     android:textAlignment="center"
                                     app:icon="@drawable/next_icon"
                                     app:iconGravity="end"
@@ -183,7 +193,7 @@
                             </LinearLayout>
 
                             <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/smallR_recyclerview"
+                                android:id="@+id/smallR_recyclerview_1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_toRightOf="@id/featured_background_1"
@@ -195,7 +205,7 @@
 
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="400dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
@@ -236,7 +246,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/searchscreen_image_1" />
+                                        android:src="@drawable/searchscreen_image_2" />
 
                                 </com.google.android.material.card.MaterialCardView>
 
@@ -247,6 +257,7 @@
                                     android:layout_marginTop="5dp"
                                     android:backgroundTint="#FFFFFF"
                                     android:text="View All"
+                                    android:onClick="card_2_clicked"
                                     android:textAlignment="center"
                                     app:icon="@drawable/next_icon"
                                     app:iconGravity="end"
@@ -269,7 +280,310 @@
                     </HorizontalScrollView>
 
                 </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp">
 
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/featured_background_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="300dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@color/white"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="120dp"
+                                    android:layout_height="210dp"
+                                    android:layout_margin="5dp"
+                                    android:padding="5dp"
+                                    android:layout_marginLeft="20dp"
+                                    app:cardCornerRadius="15dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/searchscreen_image_3" />
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="5dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:onClick="card_3_clicked"
+                                    android:text="View All"
+                                    android:textAlignment="center"
+                                    app:icon="@drawable/next_icon"
+                                    app:iconGravity="end"
+                                    tools:ignore="RtlCompat"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/smallR_recyclerview_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_toRightOf="@id/featured_background_3"
+                                android:background="@color/white" />
+
+                        </RelativeLayout>
+
+                    </HorizontalScrollView>
+
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/featured_background_4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="300dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@color/white"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="120dp"
+                                    android:layout_height="210dp"
+                                    android:layout_margin="5dp"
+                                    android:padding="5dp"
+                                    android:layout_marginLeft="20dp"
+                                    app:cardCornerRadius="15dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/searchscreen_image_4" />
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="5dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:onClick="card_4_clicked"
+                                    android:text="View All"
+                                    android:textAlignment="center"
+                                    app:icon="@drawable/next_icon"
+                                    app:iconGravity="end"
+                                    tools:ignore="RtlCompat"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/smallR_recyclerview_4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_toRightOf="@id/featured_background_4"
+                                android:background="@color/white" />
+
+                        </RelativeLayout>
+
+                    </HorizontalScrollView>
+
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/featured_background_5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="300dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@color/white"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="120dp"
+                                    android:layout_height="210dp"
+                                    android:layout_margin="5dp"
+                                    android:padding="5dp"
+                                    android:layout_marginLeft="20dp"
+                                    app:cardCornerRadius="15dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/searchscreen_image_5" />
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="5dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:onClick="card_5_clicked"
+                                    android:text="View All"
+                                    android:textAlignment="center"
+                                    app:icon="@drawable/next_icon"
+                                    app:iconGravity="end"
+                                    tools:ignore="RtlCompat"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/smallR_recyclerview_5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_toRightOf="@id/featured_background_5"
+                                android:background="@color/white" />
+
+                        </RelativeLayout>
+
+                    </HorizontalScrollView>
+
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/featured_background_6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="300dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@color/white"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="120dp"
+                                    android:layout_height="210dp"
+                                    android:layout_margin="5dp"
+                                    android:padding="5dp"
+                                    android:layout_marginLeft="20dp"
+                                    app:cardCornerRadius="15dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/searchscreen_image_6" />
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="5dp"
+                                    android:backgroundTint="#FFFFFF"
+                                    android:onClick="card_6_clicked"
+                                    android:text="View All"
+                                    android:textAlignment="center"
+                                    app:icon="@drawable/next_icon"
+                                    app:iconGravity="end"
+                                    tools:ignore="RtlCompat"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/smallR_recyclerview_6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_toRightOf="@id/featured_background_6"
+                                android:background="@color/white" />
+
+                        </RelativeLayout>
+
+                    </HorizontalScrollView>
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/bigR_recyclerview"

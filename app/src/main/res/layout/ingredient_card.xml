@@ -16,12 +16,14 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/ing_image"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/chocolate_pic" />
 
         <TextView
+            android:id="@+id/ing_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
