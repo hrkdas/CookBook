@@ -70,7 +70,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         makeList();
         ingList_recyclerview = findViewById(R.id.ingList_recyclerview);
         ingList_recyclerview.setLayoutManager(new GridLayoutManager(search_screen.this, 5));
-        recyclerAdapter = new IngredientsRecyclerAdapter(getApplicationContext(), Ing_nameList, Ing_imageList, this);
+        recyclerAdapter = new IngredientsRecyclerAdapter(getApplicationContext(), Ing_nameList, Ing_imageList
+                , this);
         ingList_recyclerview.setAdapter(recyclerAdapter);
         searchscreen_progressbar = findViewById(R.id.searchscreen_progressbar);
         selected_ingList_TextView = findViewById(R.id.selected_ingList_TextView);

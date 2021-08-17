@@ -90,8 +90,6 @@ public class wishlist_screen extends Fragment {
         smallR_recyclerview_wishlistScreen.setHasFixedSize(true);
         smallR_recyclerview_wishlistScreen.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-
-
         viewItems=getSavedObjectFromPreference(getContext(),"LikedRecipeList",
                 "LikedRecipeList",viewItems);
 

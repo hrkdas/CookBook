@@ -35,13 +35,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE = 1;
     private final Context context;
     private final List<Recipes> listRecyclerItem;
+    private  List<Recipes> wishlistRecipeList;
     private Liked_click_RecyclerView mCallback;
 
 
-    public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem) {
+    public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem,Liked_click_RecyclerView mCallback,List<Recipes> wishlistRecipeList) {
         this.context = context;
         this.listRecyclerItem = listRecyclerItem;
-//        this.mCallback = mCallback;
+        this.mCallback = mCallback;
+        this.wishlistRecipeList = wishlistRecipeList;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -120,28 +122,27 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     itemViewHolder.mTime.setText(recipes.getTotalTime()+"min");
                     itemViewHolder.mDescription.setText(recipes.getInstructions());
                     itemViewHolder.big_card.setTag(recipes.getId());
-                    itemViewHolder.bigR_likebutton.setTag(recipes.getId());
+//                    itemViewHolder.bigR_likebutton.setTag(recipes.getId());
                     Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
 
-//                    LikedRecipeList =getSavedObjectFromPreference(context,"LikedRecipeList",
-//                            "LikedRecipeList",listRecyclerItem);
+
+                    if (wishlistRecipeList.contains(listRecyclerItem.get(i))) {
+                        itemViewHolder.bigR_likebutton.setLiked(true);
+
+                    } else {
+                        itemViewHolder.bigR_likebutton.setLiked(false);
+                    }
+
 
                     itemViewHolder.bigR_likebutton.setOnLikeListener(new OnLikeListener() {
                         @Override
                         public void liked(LikeButton likeButton) {
-                            Toast.makeText(context, "liked"+i, Toast.LENGTH_SHORT).show();
-
-//
-//                            LikedRecipeList.add(listRecyclerItem.get(i));
-//
-//                            mCallback.onClick(Ing_nameList.get(i));
-
+//                            Toast.makeText(context, "liked"+i, Toast.LENGTH_SHORT).show();
+                            mCallback.onClick(listRecyclerItem.get(i));
                         }
                         @Override
                         public void unLiked(LikeButton likeButton) {
-//                            Toast.makeText(context, "disliked"+LikedRecipeList.indexOf(listRecyclerItem.get(i)), Toast.LENGTH_SHORT).show();
-
-//                            LikedRecipeList.remove(LikedRecipeList.indexOf(listRecyclerItem.get(i)));
+                            mCallback.onClick(listRecyclerItem.get(i));
                         }
                     });
 

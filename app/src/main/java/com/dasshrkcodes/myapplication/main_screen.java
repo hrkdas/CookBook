@@ -58,7 +58,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class main_screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class main_screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView {
 
     //    Variables
     ImageView menuIcon;
@@ -71,8 +71,8 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     LinearLayout contentView;
 
 
-    private RecyclerView bigR_recyclerview, smallR_recyclerview_1,smallR_recyclerview_2,
-            smallR_recyclerview_3,smallR_recyclerview_4,smallR_recyclerview_5,smallR_recyclerview_6;
+    private RecyclerView bigR_recyclerview, smallR_recyclerview_1, smallR_recyclerview_2,
+            smallR_recyclerview_3, smallR_recyclerview_4, smallR_recyclerview_5, smallR_recyclerview_6;
     private List<Recipes> viewItems = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_1 = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_2 = new ArrayList<>();
@@ -89,12 +89,12 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
     private List<Recipes> viewItemsCopy = new ArrayList<>();
     private List<Recipes> viewItemsEmpty = new ArrayList<>();
+    private List<Recipes> wishlistRecipeList = new ArrayList<>();
 
-    private RecyclerView.Adapter recyclerAdapter, horizontalRecyclerAdapter_1,horizontalRecyclerAdapter_2,
-            horizontalRecyclerAdapter_3,horizontalRecyclerAdapter_4,horizontalRecyclerAdapter_5,horizontalRecyclerAdapter_6;
+    private RecyclerView.Adapter recyclerAdapter, horizontalRecyclerAdapter_1, horizontalRecyclerAdapter_2,
+            horizontalRecyclerAdapter_3, horizontalRecyclerAdapter_4, horizontalRecyclerAdapter_5, horizontalRecyclerAdapter_6;
     private RecyclerView.LayoutManager layoutManager;
     ProgressBar mainscreen_progressbar;
-
 
 
     private DatabaseReference databaseReference;
@@ -179,7 +179,10 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         smallR_recyclerview_6.setLayoutManager(linearLayoutManager_6);
         smallR_recyclerview_6.setAdapter(horizontalRecyclerAdapter_6);
 
-        recyclerAdapter = new RecyclerAdapter(this, viewItems);
+        wishlistRecipeList.clear();
+        wishlistRecipeList=getSavedObjectFromPreference(getApplicationContext(),"LikedRecipeList",
+                "LikedRecipeList",wishlistRecipeList);
+        recyclerAdapter = new RecyclerAdapter(this, viewItems, this,wishlistRecipeList);
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
         mainscreen_progressbar.setVisibility(View.VISIBLE);
@@ -188,10 +191,11 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
         mPrefs = getPreferences(MODE_PRIVATE);
 //        viewItemsEmpty.clear();
-//        saveObjectToSharedPreference(getApplicationContext(),"LikedRecipeList",
-//                "LikedRecipeList",viewItemsEmpty);
+//        saveObjectToSharedPreference(getApplicationContext(), "LikedRecipeList",
+//                "LikedRecipeList", viewItemsEmpty);
 //        viewItemsCopy=getSavedObjectFromPreference(getApplicationContext(),"LikedRecipeList",
 //                "LikedRecipeList",viewItems);
+
 
     }
 
@@ -282,33 +286,36 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_1);
         startActivity(intent);
     }
+
     public void card_2_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_2);
         startActivity(intent);
     }
+
     public void card_3_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_3);
         startActivity(intent);
     }
+
     public void card_4_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_4);
         startActivity(intent);
     }
+
     public void card_5_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_5);
         startActivity(intent);
     }
+
     public void card_6_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_6);
         startActivity(intent);
     }
-
-
 
 
     public static void saveObjectToSharedPreference(Context context, String preferenceFileName,
@@ -326,14 +333,12 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
         if (sharedPreferences.contains(preferenceKey)) {
             final Gson gson = new Gson();
-            Type collectionType = new TypeToken<List<Recipes>>(){}.getType();
-            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""),collectionType);
+            Type collectionType = new TypeToken<List<Recipes>>() {
+            }.getType();
+            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), collectionType);
         }
         return null;
     }
-
-
-
 
 
     private void addItemsFromDB() {
@@ -358,13 +363,13 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
                                 Recipes recipes = new Recipes(name, ingredientsList, totalTime,
                                         cuisine, instructions, cleanedIngredients, imageUrl,
-                                        ingredientCount, rating, ratingCount,id);
+                                        ingredientCount, rating, ratingCount, id);
                                 viewItems.add(recipes);
                             }
                             Collections.shuffle(viewItems);
                             recyclerAdapter.notifyDataSetChanged();
                         } else {
-                           Toast.makeText(main_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(main_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -378,7 +383,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
     public void go_to_recipe_overview(View view) {
-        String id= view.getTag().toString();
+        String id = view.getTag().toString();
         Intent intent = new Intent(getApplicationContext(), recipe_overview.class);
         intent.putExtra("id_recipe_overview", id);
         startActivity(intent);
@@ -386,7 +391,6 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 //                "LikedRecipeList",viewItems).size()+"", Toast.LENGTH_SHORT).show();
 
     }
-
 
 
     public void go_to_searchscreen(View view) {
@@ -498,5 +502,14 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
 
+    @Override
+    public void onClick(Recipes likedRecipe) {
+        if (wishlistRecipeList.contains(likedRecipe)) {
+            wishlistRecipeList.remove(likedRecipe);
+        } else
+            wishlistRecipeList.add(likedRecipe);
+        saveObjectToSharedPreference(getApplicationContext(), "LikedRecipeList",
+                "LikedRecipeList", wishlistRecipeList);
+    }
 
 }
