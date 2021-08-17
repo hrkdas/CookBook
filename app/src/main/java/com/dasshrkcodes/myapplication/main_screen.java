@@ -213,7 +213,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void checkItems() {
-        db.collection("Recipes").orderBy("id").limit(100).get()
+        db.collection("Recipes").orderBy("id").limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -231,41 +231,25 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
                                 String ingredientCount = itemObj.getLong("ingredientCount").toString();
                                 String rating = itemObj.getLong("rating").toString();
                                 String ratingCount = itemObj.getLong("ratingCount").toString();
-
+                                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
+                                        cuisine, instructions, cleanedIngredients, imageUrl,
+                                        ingredientCount, rating, ratingCount, id);
                                 if (checkIngredients(cleanedIngredients, card1)) {
-                                    Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                            cuisine, instructions, cleanedIngredients, imageUrl,
-                                            ingredientCount, rating, ratingCount, id);
                                     smallR_recyclerviewItems_1.add(recipes);
                                 }
                                 if (checkIngredients(cleanedIngredients, card2)) {
-                                    Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                            cuisine, instructions, cleanedIngredients, imageUrl,
-                                            ingredientCount, rating, ratingCount, id);
                                     smallR_recyclerviewItems_2.add(recipes);
                                 }
                                 if (checkIngredients(cleanedIngredients, card3)) {
-                                    Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                            cuisine, instructions, cleanedIngredients, imageUrl,
-                                            ingredientCount, rating, ratingCount, id);
                                     smallR_recyclerviewItems_3.add(recipes);
                                 }
                                 if (checkIngredients(cleanedIngredients, card4)) {
-                                    Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                            cuisine, instructions, cleanedIngredients, imageUrl,
-                                            ingredientCount, rating, ratingCount, id);
                                     smallR_recyclerviewItems_4.add(recipes);
                                 }
                                 if (checkIngredients(cleanedIngredients, card5)) {
-                                    Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                            cuisine, instructions, cleanedIngredients, imageUrl,
-                                            ingredientCount, rating, ratingCount, id);
                                     smallR_recyclerviewItems_5.add(recipes);
                                 }
                                 if (checkIngredients(cleanedIngredients, card6)) {
-                                    Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                            cuisine, instructions, cleanedIngredients, imageUrl,
-                                            ingredientCount, rating, ratingCount, id);
                                     smallR_recyclerviewItems_6.add(recipes);
                                 }
 

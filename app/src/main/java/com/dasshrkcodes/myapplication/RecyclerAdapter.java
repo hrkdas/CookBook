@@ -35,11 +35,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE = 1;
     private final Context context;
     private final List<Recipes> listRecyclerItem;
+    private Liked_click_RecyclerView mCallback;
 
 
     public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem) {
         this.context = context;
         this.listRecyclerItem = listRecyclerItem;
+//        this.mCallback = mCallback;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -129,23 +131,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         public void liked(LikeButton likeButton) {
                             Toast.makeText(context, "liked"+i, Toast.LENGTH_SHORT).show();
 
-                            List<Recipes> LikedRecipeList=getSavedObjectFromPreference(context,"LikedRecipeList",
-                                    "LikedRecipeList",listRecyclerItem);
-                            LikedRecipeList.add(listRecyclerItem.get(i));
-
-                            saveObjectToSharedPreference(context,"LikedRecipeList",
-                                    "LikedRecipeList",LikedRecipeList);
+//
+//                            LikedRecipeList.add(listRecyclerItem.get(i));
+//
+//                            mCallback.onClick(Ing_nameList.get(i));
 
                         }
                         @Override
                         public void unLiked(LikeButton likeButton) {
-                             List<Recipes>LikedRecipeList=getSavedObjectFromPreference(context,"LikedRecipeList",
-                                    "LikedRecipeList",listRecyclerItem);
 //                            Toast.makeText(context, "disliked"+LikedRecipeList.indexOf(listRecyclerItem.get(i)), Toast.LENGTH_SHORT).show();
 
-                            LikedRecipeList.remove(LikedRecipeList.indexOf(listRecyclerItem.get(i)));
-                            saveObjectToSharedPreference(context,"LikedRecipeList",
-                                    "LikedRecipeList",LikedRecipeList);
+//                            LikedRecipeList.remove(LikedRecipeList.indexOf(listRecyclerItem.get(i)));
                         }
                     });
 

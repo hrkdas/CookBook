@@ -40,6 +40,7 @@ public class searchby_cardtype extends AppCompatActivity {
         bigR_recyclerview_searchbytype.setAdapter(recyclerAdapter);
     }
 
+
     public void go_to_recipe_overview(View view) {
         String id = view.getTag().toString();
         Intent intent = new Intent(searchby_cardtype.this, recipe_overview.class);
