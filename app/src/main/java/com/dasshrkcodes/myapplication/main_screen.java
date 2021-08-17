@@ -342,7 +342,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
 
 
     private void addItemsFromDB() {
-        db.collection("Recipes").orderBy("id").limit(5).get()
+        db.collection("Recipes").orderBy("id").limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

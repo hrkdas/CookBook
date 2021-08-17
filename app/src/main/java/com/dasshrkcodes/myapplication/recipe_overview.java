@@ -25,9 +25,11 @@ public class recipe_overview extends AppCompatActivity {
     ImageView recipe_overview_recipe_image;
     ExtendedFloatingActionButton startcooking_button;
     TextView recipe_overview_name, recipe_overview_cuisine, recipe_overview_totalTime, recipe_overview_ingredientCount,
-            recipe_overview_cleanedIngredients, recipe_overview_ingredientsList, recipe_overview_instructions,recipe_overview_rating_count;
+             recipe_overview_ingredientsList, recipe_overview_instructions,recipe_overview_rating_count;
     RatingBar recipe_overview_rating_display, recipe_overview_rating;
     String id_recipe_overview;
+    TextView recipe_overview_difficulty;
+    ImageView recipe_ov_veg_icon,recipe_ov_nonveg_icon;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String id, name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients,
@@ -48,12 +50,14 @@ public class recipe_overview extends AppCompatActivity {
         recipe_overview_cuisine = findViewById(R.id.recipe_overview_cuisine);
         recipe_overview_totalTime = findViewById(R.id.recipe_overview_totalTime);
         recipe_overview_ingredientCount = findViewById(R.id.recipe_overview_ingredientCount);
-        recipe_overview_cleanedIngredients = findViewById(R.id.recipe_overview_cleanedIngredients);
         recipe_overview_ingredientsList = findViewById(R.id.recipe_overview_ingredientsList);
         recipe_overview_instructions = findViewById(R.id.recipe_overview_instructions);
         recipe_overview_rating_count = findViewById(R.id.recipe_overview_rating_count);
         recipe_overview_rating_display = findViewById(R.id.recipe_overview_rating_display);
         recipe_overview_rating = findViewById(R.id.recipe_overview_rating);
+        recipe_overview_difficulty = findViewById(R.id.recipe_overview_difficulty);
+        recipe_ov_veg_icon = findViewById(R.id.recipe_ov_veg_icon);
+        recipe_ov_nonveg_icon = findViewById(R.id.recipe_ov_nonveg_icon);
 
         id_recipe_overview = getIntent().getStringExtra("id_recipe_overview");
         displayRecipeFromDB();
@@ -93,6 +97,15 @@ public class recipe_overview extends AppCompatActivity {
                 });
     }
 
+    public static String split(String s){
+        String s1 = s.replace(',', '\n');
+        return s1;
+    }
+
+    public static String[] toArray(String string){
+        String lines[] = string.split("\\r?\\n");
+        return lines;
+    }
 
     private void setValues() {
 
@@ -100,10 +113,29 @@ public class recipe_overview extends AppCompatActivity {
         recipe_overview_cuisine.setText(cuisine);
         recipe_overview_totalTime.setText(totalTime+"min");
         recipe_overview_ingredientCount.setText(ingredientCount);
-        recipe_overview_cleanedIngredients.setText(cleanedIngredients);
-        recipe_overview_ingredientsList.setText(ingredientsList);
+        recipe_overview_ingredientsList.setText(split(ingredientsList));
         recipe_overview_instructions.setText(instructions);
         recipe_overview_rating_count.setText(ratingCount);
+        if(instructions.length()<750){//easy
+            recipe_overview_difficulty.setText("Easy");
+
+        }else if(instructions.length()>1400){//hard
+            recipe_overview_difficulty.setText("Hard");
+        }else{
+            recipe_overview_difficulty.setText("Medium");
+        }
+
+        String s = ingredientsList + cleanedIngredients ;
+        String[] card1 = {"chicken", "egg", "mutton", "fish", "shrimp", "prawns", "pomphret",
+                "surmai", "beef", "goat"};
+
+        if (IsNonveg(s.toLowerCase(), card1)) {
+            recipe_ov_nonveg_icon.setVisibility(View.VISIBLE);
+            recipe_ov_veg_icon.setVisibility(View.GONE);
+        } else {
+            recipe_ov_veg_icon.setVisibility(View.VISIBLE);
+            recipe_ov_nonveg_icon.setVisibility(View.GONE);
+        }
 
 
         recipe_overview_rating.setRating(Float.parseFloat(rating));
@@ -111,9 +143,22 @@ public class recipe_overview extends AppCompatActivity {
         Picasso.get().load(imageUrl).into(this.recipe_overview_recipe_image);
     }
 
+    private boolean IsNonveg(String cleanedIngredients, String[] cardtype) {
+        boolean result = false;
+        int n = cardtype.length;
+        for (int i = 0; i < n; i++) {
+            result = cleanedIngredients.contains(cardtype[i]);
+            if (result) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void start_cooking_click(View view) {
         Intent intent = new Intent(recipe_overview.this, start_cooking_screen.class);
+        String[] myStrings = toArray(instructions);
+        intent.putExtra("instructions_StringArray", myStrings);
         startActivity(intent);
     }
 
