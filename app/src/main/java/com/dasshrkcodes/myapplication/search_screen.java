@@ -4,26 +4,39 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +46,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     Animation searchscreen_anim;
     LinearLayout searchscreen_layout;
     TextView selected_ingList_TextView;
+    EditText searchBox;
 
     ProgressBar searchscreen_progressbar;
     List<String> Ing_nameList = new ArrayList<>();
@@ -41,8 +55,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     List<Recipes> found_recipesList = new ArrayList<Recipes>();
     Boolean search_by_ingInBtn_click = false;
 
-    RecyclerView ingList_recyclerview;
-    RecyclerView.Adapter recyclerAdapter;
+    RecyclerView ingList_recyclerview,search_recyclerview;
+    RecyclerView.Adapter recyclerAdapter,Search_Adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -75,7 +89,37 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         ingList_recyclerview.setAdapter(recyclerAdapter);
         searchscreen_progressbar = findViewById(R.id.searchscreen_progressbar);
         selected_ingList_TextView = findViewById(R.id.selected_ingList_TextView);
+        search_recyclerview = findViewById(R.id.search_recyclerview);
 
+        searchBox = findViewById(R.id.searchBox);
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//Leave blank do not delete
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//Leave blank do not delete
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.d("TAG", "Search box has changed to: " + editable.toString());
+                Query query = db.collection("Recipes")
+                        .whereEqualTo("name", editable.toString())
+                        .orderBy("id");
+                FirestoreRecyclerOptions<Recipes> recipes = new FirestoreRecyclerOptions.Builder<Recipes>()
+                        .setQuery(query, Recipes.class)
+                        .build();
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(search_screen.this,
+                        RecyclerView.VERTICAL, false);
+                Search_Adapter = new search_rAdapter(recipes);
+                search_recyclerview.setLayoutManager(linearLayoutManager);
+                search_recyclerview.setAdapter(Search_Adapter);
+
+            }
+        });
     }
 
 
@@ -136,6 +180,18 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     }
 
 
+    public List<Recipes> getSavedObjectFromPreference(Context context, String preferenceFileName
+            , String preferenceKey, List<Recipes> classType) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
+        if (sharedPreferences.contains(preferenceKey)) {
+            final Gson gson = new Gson();
+            Type collectionType = new TypeToken<List<Recipes>>() {
+            }.getType();
+            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), collectionType);
+        }
+        return null;
+    }
+
     private boolean checkIngredients(String cleanedIngredients, String[] cardtype, Boolean search_by_ingInBtn_click) {
         boolean result = false;
         int count = 0;
@@ -155,7 +211,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
     }
 
-    private void checkItems(String[] cardtype,Boolean search_by_ingInBtn_click) {
+    private void checkItems(String[] cardtype, Boolean search_by_ingInBtn_click) {
         db.collection("Recipes").orderBy("id").limit(100).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -177,7 +233,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                                 Recipes recipes = new Recipes(name, ingredientsList, totalTime,
                                         cuisine, instructions, cleanedIngredients, imageUrl,
                                         ingredientCount, rating, ratingCount, id);
-                                if (checkIngredients(cleanedIngredients, cardtype,search_by_ingInBtn_click)) {
+                                if (checkIngredients(cleanedIngredients, cardtype, search_by_ingInBtn_click)) {
                                     found_recipesList.add(recipes);
                                 }
 
@@ -204,7 +260,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         searchscreen_progressbar.setVisibility(View.VISIBLE);
         String[] stringArray = Selected_Ing_List.toArray(new String[0]);
         found_recipesList.clear();
-        checkItems(stringArray,search_by_ingInBtn_click);
+        checkItems(stringArray, search_by_ingInBtn_click);
     }
 
     public void search_by_ingExBtn_clicked(View view) {
@@ -212,7 +268,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         searchscreen_progressbar.setVisibility(View.VISIBLE);
         String[] stringArray = Selected_Ing_List.toArray(new String[0]);
         found_recipesList.clear();
-        checkItems(stringArray,search_by_ingInBtn_click);
+        checkItems(stringArray, search_by_ingInBtn_click);
     }
+
 
 }
