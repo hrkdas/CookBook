@@ -96,12 +96,12 @@
                     android:textSize="16sp" />
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="end|center"
                     android:layout_marginRight="15dp"
                     android:padding="5dp"
-                    android:src="@drawable/search_icon" />
+                    android:src="@android:drawable/ic_menu_search" />
 
             </com.google.android.material.card.MaterialCardView>
 

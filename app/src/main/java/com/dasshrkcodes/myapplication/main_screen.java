@@ -58,14 +58,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class main_screen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView {
+public class main_screen extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView {
 
     //    Variables
     ImageView menuIcon;
     static final float END_SCALE = 0.7f;
 
     //Drawer Menu
-
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     LinearLayout contentView;
@@ -200,6 +200,8 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
 
+
+
     private boolean checkIngredients(String cleanedIngredients, String[] cardtype) {
         boolean result = false;
         int count = 0;
@@ -217,7 +219,7 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void checkItems() {
-        db.collection("Recipes").orderBy("id").limit(10).get()
+        db.collection("Recipes").orderBy("id").limit(100).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -443,12 +445,17 @@ public class main_screen extends AppCompatActivity implements NavigationView.OnN
         });
     }
 
+    private long mBackPressed;
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else
+        } else if (this.mBackPressed + 2000 > System.currentTimeMillis()) {
             super.onBackPressed();
+        } else {
+            Toast.makeText(getBaseContext(), "Press again to exit", Toast.LENGTH_SHORT).show();
+            this.mBackPressed = System.currentTimeMillis();
+        }
     }
 
     @Override

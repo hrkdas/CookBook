@@ -6,35 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.common.reflect.TypeToken;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -56,8 +42,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         ImageView imageView, bigR_veg_icon, bigR_nonveg_icon;
         LikeButton bigR_likebutton;
-        TextView mTitle, mDescription, mTime,bigR_difficulty;
+        TextView mTitle, mDescription, mTime,bigR_difficulty,bigR_ratingcount;
         MaterialCardView big_card;
+        RatingBar bigR_ratingbar;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,6 +58,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             bigR_veg_icon = itemView.findViewById(R.id.bigR_veg_icon);
             bigR_nonveg_icon = itemView.findViewById(R.id.bigR_nonveg_icon);
             bigR_difficulty = itemView.findViewById(R.id.bigR_difficulty);
+            bigR_ratingbar = itemView.findViewById(R.id.bigR_ratingbar);
+            bigR_ratingcount = itemView.findViewById(R.id.bigR_ratingcount);
 
         }
     }
@@ -117,6 +106,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -132,7 +122,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemViewHolder.mTitle.setText(recipes.getRName());
                 itemViewHolder.mTime.setText(recipes.getTotalTime() + "min");
                 itemViewHolder.mDescription.setText(recipes.getInstructions());
+                itemViewHolder.bigR_ratingcount.setText(recipes.getRatingCount()+"");
                 itemViewHolder.big_card.setTag(recipes.getId());
+                itemViewHolder.bigR_ratingbar.setRating(Float.parseFloat(recipes.getRating()));
+
 //                    itemViewHolder.bigR_likebutton.setTag(recipes.getId());
                 Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
 
@@ -161,6 +154,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     itemViewHolder.bigR_veg_icon.setVisibility(View.VISIBLE);
                     itemViewHolder.bigR_nonveg_icon.setVisibility(View.GONE);
                 }
+
 
                 wishlistRecipeList = getSavedObjectFromPreference(context, "LikedRecipeList",
                         "LikedRecipeList", wishlistRecipeList);

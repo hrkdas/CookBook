@@ -1,5 +1,21 @@
 package com.dasshrkcodes.myapplication;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,33 +23,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -41,23 +38,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView {
+public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView, Liked_click_RecyclerView {
 
     Animation searchscreen_anim;
     LinearLayout searchscreen_layout;
     TextView selected_ingList_TextView;
     EditText searchBox;
+    LinearLayout searchscreen_selectIng_layout;
 
-    ProgressBar searchscreen_progressbar;
+    ProgressBar searchscreen_progressbar, searching_progressbar;
     List<String> Ing_nameList = new ArrayList<>();
     List<String> Ing_imageList = new ArrayList<>();
     List<String> Selected_Ing_List = new ArrayList<>();
     List<Recipes> found_recipesList = new ArrayList<Recipes>();
+    List<Recipes> search_found_recipesList = new ArrayList<Recipes>();
+    List<Recipes> wishlistRecipeList = new ArrayList<Recipes>();
     Boolean search_by_ingInBtn_click = false;
 
-    RecyclerView ingList_recyclerview,search_recyclerview;
-    RecyclerView.Adapter recyclerAdapter,Search_Adapter;
+    RecyclerView ingList_recyclerview, search_recyclerview;
+    RecyclerView.Adapter recyclerAdapter, Search_Adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private static final String TAG = "FirestoreSearchActivity";
 
 
     public void makeList() {
@@ -88,38 +90,134 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                 , this);
         ingList_recyclerview.setAdapter(recyclerAdapter);
         searchscreen_progressbar = findViewById(R.id.searchscreen_progressbar);
+        searching_progressbar = findViewById(R.id.searching_progressbar);
         selected_ingList_TextView = findViewById(R.id.selected_ingList_TextView);
         search_recyclerview = findViewById(R.id.search_recyclerview);
+        searchscreen_selectIng_layout = findViewById(R.id.searchscreen_selectIng_layout);
+
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(search_screen.this,
+                RecyclerView.VERTICAL, false);
+        search_recyclerview.setLayoutManager(linearLayoutManager);
+
+//        Query query = db.collection("Recipes").orderBy("id",Query.Direction.ASCENDING);
+//        FirestoreRecyclerOptions<Recipes> recipes = new FirestoreRecyclerOptions.Builder<Recipes>()
+//                .setQuery(query, Recipes.class)
+//                .build();
+//        Search_Adapter = new search_rAdapter(recipes);
+        wishlistRecipeList.clear();
+        wishlistRecipeList = getSavedObjectFromPreference(getApplicationContext(), "LikedRecipeList",
+                "LikedRecipeList", wishlistRecipeList);
+        Search_Adapter = new RecyclerAdapter(getApplicationContext(), search_found_recipesList,
+                this, wishlistRecipeList);
+        search_recyclerview.setAdapter(Search_Adapter);
+
 
         searchBox = findViewById(R.id.searchBox);
         searchBox.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//Leave blank do not delete
+                search_found_recipesList.clear();
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//Leave blank do not delete
+                search_found_recipesList.clear();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                Log.d("TAG", "Search box has changed to: " + editable.toString());
-                Query query = db.collection("Recipes")
-                        .whereEqualTo("name", editable.toString())
-                        .orderBy("id");
-                FirestoreRecyclerOptions<Recipes> recipes = new FirestoreRecyclerOptions.Builder<Recipes>()
-                        .setQuery(query, Recipes.class)
-                        .build();
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(search_screen.this,
-                        RecyclerView.VERTICAL, false);
-                Search_Adapter = new search_rAdapter(recipes);
-                search_recyclerview.setLayoutManager(linearLayoutManager);
-                search_recyclerview.setAdapter(Search_Adapter);
+                search_found_recipesList.clear();
+
+                if (!editable.toString().trim().equals("")) {
+                    searchscreen_selectIng_layout.setVisibility(View.GONE);
+                    search_found_recipesList.clear();
+                    searching_progressbar.setVisibility(View.VISIBLE);
+                    db.collection("Recipes").orderBy("id").limit(1000).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot itemObj : task.getResult()) {
+
+                                            String id = itemObj.getLong("id").toString();
+                                            String name = itemObj.getString("name");
+                                            String ingredientsList = itemObj.getString("ingredientsList");
+                                            String totalTime = itemObj.getLong("totalTime").toString();
+                                            String cuisine = itemObj.getString("cuisine");
+                                            String instructions = itemObj.getString("instructions");
+                                            String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                                            String imageUrl = itemObj.getString("imageUrl");
+                                            String ingredientCount = itemObj.getLong("ingredientCount").toString();
+                                            String rating = itemObj.getLong("rating").toString();
+                                            String ratingCount = itemObj.getLong("ratingCount").toString();
+                                            Recipes recipes = new Recipes(name, ingredientsList, totalTime,
+                                                    cuisine, instructions, cleanedIngredients, imageUrl,
+                                                    ingredientCount, rating, ratingCount, id);
+
+                                            if (name.toLowerCase().contains(editable.toString().toLowerCase().trim())) {
+                                                search_found_recipesList.add(recipes);
+                                            }
+
+                                            if (editable.toString().trim().equals("")) {
+                                                search_found_recipesList.clear();
+                                                break;
+                                            }
+
+                                        }
+                                        Search_Adapter.notifyDataSetChanged();
+                                        searching_progressbar.setVisibility(View.INVISIBLE);
+
+                                    } else {
+                                        Toast.makeText(search_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+
+
+
+                } else {
+                    searching_progressbar.setVisibility(View.INVISIBLE);
+                    View view = search_screen.this.getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        searchscreen_selectIng_layout.setVisibility(View.VISIBLE);
+                    }
+                    searchBox.clearFocus();
+
+                }
 
             }
         });
+    }
+
+    public void search_recyclerview_refresh(View view) {
+        Toast.makeText(this, "yo", Toast.LENGTH_SHORT).show();
+        List<Recipes> new_search_found_recipesList=new ArrayList<>();
+        for (Recipes element : search_found_recipesList) {
+            if (!new_search_found_recipesList.contains(element)) {
+                new_search_found_recipesList.add(element);
+            }
+        }
+        search_found_recipesList=new_search_found_recipesList;
+        new_search_found_recipesList.clear();
+        Search_Adapter.notifyDataSetChanged();
+    }
+
+    public void clearFocus_search(View view) {
+        searchBox.clearFocus();
+
+    }
+
+    public void go_to_recipe_overview(View view) {
+        String id = view.getTag().toString();
+        Intent intent = new Intent(getApplicationContext(), recipe_overview.class);
+        intent.putExtra("id_recipe_overview", id);
+        startActivity(intent);
+
     }
 
 
@@ -270,6 +368,14 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         found_recipesList.clear();
         checkItems(stringArray, search_by_ingInBtn_click);
     }
+
+
+    @Override
+    public void onClick(Recipes value) {
+        Toast.makeText(this, value.getRName(), Toast.LENGTH_SHORT).show();
+
+    }
+
 
 
 }

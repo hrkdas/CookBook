@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,9 +33,10 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
 
 
-        ImageView imageView;
-        TextView mTitle, mDescription;
+        ImageView imageView,smallR_nonveg_icon,smallR_veg_icon;
+        TextView mTitle, mDescription,smallR_ratingcount;
         MaterialCardView small_card;
+        RatingBar smallR_ratingbar;
 
 
         public ItemViewHolder(@NonNull View itemView) {
@@ -44,6 +46,12 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             mTitle = itemView.findViewById(R.id.smallR_featured_title);
             mDescription = itemView.findViewById(R.id.smallR_featured_desc);
             small_card = itemView.findViewById(R.id.small_card);
+
+            smallR_nonveg_icon = itemView.findViewById(R.id.smallR_nonveg_icon);
+            smallR_veg_icon = itemView.findViewById(R.id.smallR_veg_icon);
+            smallR_ratingbar = itemView.findViewById(R.id.smallR_ratingbar);
+            smallR_ratingcount = itemView.findViewById(R.id.smallR_ratingcount);
+
 
         }
     }
@@ -64,6 +72,18 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     }
 
+    private boolean IsNonveg(String cleanedIngredients, String[] cardtype) {
+        boolean result = false;
+        int n = cardtype.length;
+        for (int i = 0; i < n; i++) {
+            result = cleanedIngredients.contains(cardtype[i]);
+            if (result) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -81,6 +101,25 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                     itemViewHolder.small_card.setTag(recipes.getId());
 
                     Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
+
+                    itemViewHolder.smallR_ratingbar.setRating(Float.parseFloat(recipes.getRating()));
+
+                    String ingredientsList = recipes.getIngredientsList();
+                    String cleanedIngredients = recipes.getCleanedIngredients();
+                    String s = ingredientsList + cleanedIngredients ;
+                    String[] card1 = {"chicken", "egg", "mutton", "fish", "shrimp", "prawns", "pomphret",
+                            "surmai", "beef", "goat"};
+
+
+                    if (IsNonveg(s.toLowerCase(), card1)) {
+                        itemViewHolder.smallR_nonveg_icon.setVisibility(View.VISIBLE);
+                        itemViewHolder.smallR_veg_icon.setVisibility(View.GONE);
+                    } else {
+                        itemViewHolder.smallR_veg_icon.setVisibility(View.VISIBLE);
+                        itemViewHolder.smallR_nonveg_icon.setVisibility(View.GONE);
+                    }
+
+
 
         }
 

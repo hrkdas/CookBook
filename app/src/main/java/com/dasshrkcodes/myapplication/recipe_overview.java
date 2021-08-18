@@ -101,6 +101,10 @@ public class recipe_overview extends AppCompatActivity {
         String s1 = s.replace(',', '\n');
         return s1;
     }
+    public static String doublenextLine(String s){
+        String s1 = s.replace('\n', '\n');
+        return s1;
+    }
 
     public static String[] toArray(String string){
         String lines[] = string.split("\\r?\\n");
