@@ -52,7 +52,6 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     List<String> Selected_Ing_List = new ArrayList<>();
     List<Recipes> found_recipesList = new ArrayList<Recipes>();
     List<Recipes> search_found_recipesList = new ArrayList<Recipes>();
-    List<Recipes> wishlistRecipeList = new ArrayList<Recipes>();
     Boolean search_by_ingInBtn_click = false;
 
     RecyclerView ingList_recyclerview, search_recyclerview;
@@ -105,11 +104,9 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 //                .setQuery(query, Recipes.class)
 //                .build();
 //        Search_Adapter = new search_rAdapter(recipes);
-        wishlistRecipeList.clear();
-        wishlistRecipeList = getSavedObjectFromPreference(getApplicationContext(), "LikedRecipeList",
-                "LikedRecipeList", wishlistRecipeList);
+
         Search_Adapter = new RecyclerAdapter(getApplicationContext(), search_found_recipesList,
-                this, wishlistRecipeList);
+                this);
         search_recyclerview.setAdapter(Search_Adapter);
 
 

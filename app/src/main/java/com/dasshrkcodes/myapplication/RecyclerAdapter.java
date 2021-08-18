@@ -27,15 +27,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE = 1;
     private final Context context;
     private final List<Recipes> listRecyclerItem;
-    private List<Recipes> wishlistRecipeList;
     private Liked_click_RecyclerView mCallback;
 
 
-    public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem, Liked_click_RecyclerView mCallback, List<Recipes> wishlistRecipeList) {
+    public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem, Liked_click_RecyclerView mCallback) {
         this.context = context;
         this.listRecyclerItem = listRecyclerItem;
         this.mCallback = mCallback;
-        this.wishlistRecipeList = wishlistRecipeList;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -154,15 +152,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     itemViewHolder.bigR_veg_icon.setVisibility(View.VISIBLE);
                     itemViewHolder.bigR_nonveg_icon.setVisibility(View.GONE);
                 }
-
-
-                wishlistRecipeList = getSavedObjectFromPreference(context, "LikedRecipeList",
-                        "LikedRecipeList", wishlistRecipeList);
-                if (wishlistRecipeList.contains(listRecyclerItem.get(i))) {
-                    itemViewHolder.bigR_likebutton.setLiked(true);
-                } else {
-                    itemViewHolder.bigR_likebutton.setLiked(false);
-                }
+                itemViewHolder.bigR_likebutton.setLiked(true);
 
 
                 itemViewHolder.bigR_likebutton.setOnLikeListener(new OnLikeListener() {

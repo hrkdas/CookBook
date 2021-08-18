@@ -89,7 +89,6 @@ public class main_screen extends AppCompatActivity implements
 
     private List<Recipes> viewItemsCopy = new ArrayList<>();
     private List<Recipes> viewItemsEmpty = new ArrayList<>();
-    private List<Recipes> wishlistRecipeList = new ArrayList<>();
 
     private RecyclerView.Adapter recyclerAdapter, horizontalRecyclerAdapter_1, horizontalRecyclerAdapter_2,
             horizontalRecyclerAdapter_3, horizontalRecyclerAdapter_4, horizontalRecyclerAdapter_5, horizontalRecyclerAdapter_6;
@@ -179,10 +178,8 @@ public class main_screen extends AppCompatActivity implements
         smallR_recyclerview_6.setLayoutManager(linearLayoutManager_6);
         smallR_recyclerview_6.setAdapter(horizontalRecyclerAdapter_6);
 
-        wishlistRecipeList.clear();
-        wishlistRecipeList=getSavedObjectFromPreference(getApplicationContext(),"LikedRecipeList",
-                "LikedRecipeList",wishlistRecipeList);
-        recyclerAdapter = new RecyclerAdapter(this, viewItems, this,wishlistRecipeList);
+
+        recyclerAdapter = new RecyclerAdapter(this, viewItems, this);
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
         mainscreen_progressbar.setVisibility(View.VISIBLE);
@@ -511,12 +508,7 @@ public class main_screen extends AppCompatActivity implements
 
     @Override
     public void onClick(Recipes likedRecipe) {
-        if (wishlistRecipeList.contains(likedRecipe)) {
-            wishlistRecipeList.remove(likedRecipe);
-        } else
-            wishlistRecipeList.add(likedRecipe);
-        saveObjectToSharedPreference(getApplicationContext(), "LikedRecipeList",
-                "LikedRecipeList", wishlistRecipeList);
+
     }
 
 }

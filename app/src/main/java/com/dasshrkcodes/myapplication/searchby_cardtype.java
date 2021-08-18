@@ -24,7 +24,6 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
     private List<Recipes> viewItems = new ArrayList<>();
-    private List<Recipes> wishlistRecipeList = new ArrayList<>();
 
 
     @Override
@@ -43,10 +42,8 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
         viewItems = (List<Recipes>) i.getSerializableExtra("selected_recipes");
 
 
-        wishlistRecipeList=getSavedObjectFromPreference(getApplicationContext(),"LikedRecipeList",
-                "LikedRecipeList",viewItems);
 
-        recyclerAdapter = new RecyclerAdapter(this, viewItems,this,wishlistRecipeList);
+        recyclerAdapter = new RecyclerAdapter(this, viewItems,this);
         bigR_recyclerview_searchbytype.setAdapter(recyclerAdapter);
     }
 
