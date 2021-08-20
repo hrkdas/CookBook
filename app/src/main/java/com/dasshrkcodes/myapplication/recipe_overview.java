@@ -8,17 +8,28 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.mlkit.common.model.DownloadConditions;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.squareup.picasso.Picasso;
 
 public class recipe_overview extends AppCompatActivity {
@@ -35,6 +46,9 @@ public class recipe_overview extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String id, name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients,
             imageUrl, ingredientCount, rating, ratingCount;
+    Spinner recipe_overview_lang_spinner;
+    Translator selectedTranslator;
+    DownloadConditions conditions;
 
 
     @Override
@@ -62,6 +76,86 @@ public class recipe_overview extends AppCompatActivity {
 
         id_recipe_overview = getIntent().getStringExtra("id_recipe_overview");
         displayRecipeFromDB();
+
+        recipe_overview_lang_spinner = findViewById(R.id.recipe_overview_lang_spinner);
+        String[] items = new String[]{"English","Hindi", "Marathi", "Gujarati","Bengali", "Telugu", "Malayalam"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, items);
+        recipe_overview_lang_spinner.setAdapter(adapter);
+//        recipe_overview_lang_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                switch (position) {
+//                    case 0://English
+////                        recipe_overview_instructions.setText(instructions);
+//                        break;
+//                    case 1://Hindi
+//                        selectedTranslator= Translation.getClient(new TranslatorOptions.Builder()
+//                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+//                                .setTargetLanguage(TranslateLanguage.HINDI)
+//                                .build());
+//                        break;
+//                    case 2://Marathi
+//                        selectedTranslator= Translation.getClient(new TranslatorOptions.Builder()
+//                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+//                                .setTargetLanguage(TranslateLanguage.MARATHI)
+//                                .build());
+//                        break;
+//                    case 3://Gujarati
+//                        selectedTranslator= Translation.getClient(new TranslatorOptions.Builder()
+//                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+//                                .setTargetLanguage(TranslateLanguage.GUJARATI)
+//                                .build());
+//                        break;
+//                    case 4://Bengali
+//                        selectedTranslator= Translation.getClient(new TranslatorOptions.Builder()
+//                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+//                                .setTargetLanguage(TranslateLanguage.BENGALI)
+//                                .build());
+//                        break;
+//                    case 5://Telugu
+//                        selectedTranslator= Translation.getClient(new TranslatorOptions.Builder()
+//                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+//                                .setTargetLanguage(TranslateLanguage.TELUGU)
+//                                .build());
+//                        break;
+//                    case 6://Malayalam
+//                        selectedTranslator= Translation.getClient(new TranslatorOptions.Builder()
+//                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+//                                .setTargetLanguage(TranslateLanguage.MALAY)
+//                                .build());
+//                        break;
+//
+//                }
+//
+//
+//                 conditions = new DownloadConditions.Builder()
+//                        .requireWifi()
+//                        .build();
+//                selectedTranslator.downloadModelIfNeeded(conditions)
+//                        .addOnSuccessListener(
+//                                new OnSuccessListener() {
+//
+//                                    @Override
+//                                    public void onSuccess(Object o) {
+//                                Toast.makeText(recipe_overview.this, "Language Downloading...", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                })
+//                        .addOnFailureListener(
+//                                new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        // Model couldn’t be downloaded or other internal error.
+//                                        // ...
+//                                    }
+//                                });
+//
+//
+//            }
+//        });
+
+
     }
 
     private void displayRecipeFromDB() {
@@ -177,5 +271,36 @@ public class recipe_overview extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), image_overview.class);
         intent.putExtra("image_url_overview", imageUrl);
         startActivity(intent);
+    }
+
+    public void translate_buttonClick(View view) {
+
+        selectedTranslator= Translation.getClient(new TranslatorOptions.Builder()
+                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+                                .setTargetLanguage(TranslateLanguage.HINDI)
+                                .build());
+        final Translator Translator=selectedTranslator;
+
+
+        Translator.translate(instructions)
+                .addOnSuccessListener(
+                        new OnSuccessListener() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                String translated_instructions=o.toString();
+                                recipe_overview_instructions.setText(translated_instructions);
+                                Translator.close();
+                            }
+
+                        })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Error.
+                                // ...
+                            }
+                        });
+
     }
 }

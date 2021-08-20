@@ -154,7 +154,7 @@
                             <LinearLayout
                                 android:id="@+id/featured_background_1"
                                 android:layout_width="wrap_content"
-                                android:layout_height="300dp"
+                                android:layout_height="280dp"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="10dp"
@@ -194,7 +194,6 @@
                                     tools:ignore="RtlCompat"
                                     android:textAllCaps="false"
                                     android:textStyle="bold" />
-
 
                             </LinearLayout>
 

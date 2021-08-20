@@ -152,7 +152,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     itemViewHolder.bigR_veg_icon.setVisibility(View.VISIBLE);
                     itemViewHolder.bigR_nonveg_icon.setVisibility(View.GONE);
                 }
-                itemViewHolder.bigR_likebutton.setLiked(true);
+//                itemViewHolder.bigR_likebutton.setLiked(true);
 
 
                 itemViewHolder.bigR_likebutton.setOnLikeListener(new OnLikeListener() {

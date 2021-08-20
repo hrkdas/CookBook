@@ -183,100 +183,117 @@
                 android:layout_marginRight="26dp"
                 android:orientation="horizontal">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="2dp"
+                        android:adjustViewBounds="true"
+                        android:background="#00ffffff"
+                        android:padding="3dp"
+                        android:scaleType="centerInside"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:srcCompat="@drawable/prep_icon" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginBottom="2dp"
-                            android:adjustViewBounds="true"
-                            android:background="#00ffffff"
-                            android:padding="3dp"
-                            android:scaleType="centerInside"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/prep_icon" />
-
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:adjustViewBounds="true"
-                                    android:fontFamily="@font/athiti"
-                                    android:gravity="center"
-                                    android:text="Cook : "
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/recipe_overview_totalTime"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:adjustViewBounds="true"
-                                    android:fontFamily="@font/athiti"
-                                    android:gravity="center"
-                                    android:text="45min"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginBottom="2dp"
                             android:adjustViewBounds="true"
-                            android:background="#00ffffff"
-                            android:padding="3dp"
-                            android:scaleType="centerInside"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/difficulty_icon" />
+                            android:fontFamily="@font/athiti"
+                            android:gravity="center"
+                            android:text="Cook : "
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/recipe_overview_totalTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:adjustViewBounds="true"
+                            android:fontFamily="@font/athiti"
+                            android:gravity="center"
+                            android:text="45min"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/recipe_overview_difficulty"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:fontFamily="@font/athiti"
-                                android:gravity="center"
-                                android:text="Easy"
-                                android:textAllCaps="false"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="2dp"
+                        android:adjustViewBounds="true"
+                        android:background="#00ffffff"
+                        android:padding="3dp"
+                        android:scaleType="centerInside"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:srcCompat="@drawable/difficulty_icon" />
 
-                        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:id="@+id/recipe_overview_difficulty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:fontFamily="@font/athiti"
+                            android:gravity="center"
+                            android:text="Easy"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
-                </RelativeLayout>
 
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:fontFamily="@font/athiti"
+                    android:gravity="center"
+                    android:text="Select Language : "
+                    android:textAllCaps="false"
+                    android:textColor="#4BC4FF"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/recipe_overview_lang_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown" />
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
@@ -357,9 +374,9 @@
                         android:id="@+id/recipe_overview_ingredientsList"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:editable="false"
                         android:fontFamily="@font/athiti"
                         android:includeFontPadding="false"
-                        android:editable="false"
                         android:lineSpacingExtra="0sp"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
@@ -415,9 +432,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="15dp"
+                        android:editable="false"
                         android:fontFamily="@font/athiti"
                         android:includeFontPadding="false"
-                        android:editable="false"
                         android:lineSpacingExtra="0sp"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
@@ -493,12 +510,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginLeft="50dp"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="#c4302b"
-        android:onClick="play_yt_buttonClick"
-        android:src="@android:drawable/ic_media_play"
-        android:visibility="gone"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="#4BC4FF"
+        android:onClick="translate_buttonClick"
+        android:src="@drawable/ic_baseline_g_translate_24"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
