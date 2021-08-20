@@ -45,7 +45,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-core:16.0.1'
 
-    compile 'com.github.jd-alexander:LikeButton:0.2.3'
+    implementation "com.airbnb.android:lottie:4.1.0"
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.zolad:zoominimageview:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'

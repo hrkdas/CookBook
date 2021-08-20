@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -168,6 +169,13 @@ public class recipe_overview extends AppCompatActivity {
 
     public void play_yt_buttonClick(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dlw-PG5EFIE"));
+        startActivity(intent);
+    }
+
+    public void go_to_imageOverview(View view) {
+
+        Intent intent = new Intent(getApplicationContext(), image_overview.class);
+        intent.putExtra("image_url_overview", imageUrl);
         startActivity(intent);
     }
 }

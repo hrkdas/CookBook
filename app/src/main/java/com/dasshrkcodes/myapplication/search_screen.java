@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -46,7 +47,9 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     EditText searchBox;
     LinearLayout searchscreen_selectIng_layout;
 
-    ProgressBar searchscreen_progressbar, searching_progressbar;
+    ProgressBar searchscreen_progressbar;
+    LottieAnimationView searchscreen_progressbar_animationView;
+
     List<String> Ing_nameList = new ArrayList<>();
     List<String> Ing_imageList = new ArrayList<>();
     List<String> Selected_Ing_List = new ArrayList<>();
@@ -63,7 +66,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
     public void makeList() {
         Collections.addAll(Ing_nameList, "Bread", "Broccoli", "Carrot", "Cheese", "Chicken", "Chilli", "Corn",
-                "Dal", "Egg", "Fish", "Ladyfinger", "Mushroom", "Noodles", "Onion", "Paneer", "Potato", "Rice", "Shrimp",
+                "Dal", "Egg", "Fish", "Bhindi", "Mushroom", "Noodles", "Onion", "Paneer", "Potato", "Rice", "Prawn",
                 "Tomato");
         Collections.addAll(Ing_imageList, "ing_bread", "ing_broccoli", "ing_carrot", "ing_cheese", "ing_chicken",
                 "ing_chilli", "ing_corn", "ing_dal", "ing_eggs", "ing_fish", "ing_ladyfinger", "ing_mushroom", "ing_noodles",
@@ -84,12 +87,12 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
         makeList();
         ingList_recyclerview = findViewById(R.id.ingList_recyclerview);
-        ingList_recyclerview.setLayoutManager(new GridLayoutManager(search_screen.this, 5));
+        ingList_recyclerview.setLayoutManager(new GridLayoutManager(search_screen.this, 4));
         recyclerAdapter = new IngredientsRecyclerAdapter(getApplicationContext(), Ing_nameList, Ing_imageList
                 , this);
         ingList_recyclerview.setAdapter(recyclerAdapter);
         searchscreen_progressbar = findViewById(R.id.searchscreen_progressbar);
-        searching_progressbar = findViewById(R.id.searching_progressbar);
+        searchscreen_progressbar_animationView = findViewById(R.id.searchscreen_progressbar_animationView);
         selected_ingList_TextView = findViewById(R.id.selected_ingList_TextView);
         search_recyclerview = findViewById(R.id.search_recyclerview);
         searchscreen_selectIng_layout = findViewById(R.id.searchscreen_selectIng_layout);
@@ -130,8 +133,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                 if (!editable.toString().trim().equals("")) {
                     searchscreen_selectIng_layout.setVisibility(View.GONE);
                     search_found_recipesList.clear();
-                    searching_progressbar.setVisibility(View.VISIBLE);
-                    db.collection("Recipes").orderBy("id").limit(1000).get()
+                    searchscreen_progressbar_animationView.setVisibility(View.VISIBLE);
+                    db.collection("Recipes").orderBy("id").limit(2000).get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -164,7 +167,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
                                         }
                                         Search_Adapter.notifyDataSetChanged();
-                                        searching_progressbar.setVisibility(View.INVISIBLE);
+                                        searchscreen_progressbar_animationView.setVisibility(View.GONE);
 
                                     } else {
                                         Toast.makeText(search_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
@@ -176,7 +179,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
 
                 } else {
-                    searching_progressbar.setVisibility(View.INVISIBLE);
+                    searchscreen_progressbar_animationView.setVisibility(View.GONE);
                     View view = search_screen.this.getCurrentFocus();
                     if (view != null) {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -275,17 +278,6 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     }
 
 
-    public List<Recipes> getSavedObjectFromPreference(Context context, String preferenceFileName
-            , String preferenceKey, List<Recipes> classType) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
-        if (sharedPreferences.contains(preferenceKey)) {
-            final Gson gson = new Gson();
-            Type collectionType = new TypeToken<List<Recipes>>() {
-            }.getType();
-            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), collectionType);
-        }
-        return null;
-    }
 
     private boolean checkIngredients(String cleanedIngredients, String[] cardtype, Boolean search_by_ingInBtn_click) {
         boolean result = false;
@@ -307,7 +299,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     }
 
     private void checkItems(String[] cardtype, Boolean search_by_ingInBtn_click) {
-        db.collection("Recipes").orderBy("id").limit(100).get()
+        db.collection("Recipes").orderBy("id").limit(400).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

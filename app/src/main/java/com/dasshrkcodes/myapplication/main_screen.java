@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,7 +64,7 @@ public class main_screen extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView {
 
     //    Variables
-    ImageView menuIcon;
+    LottieAnimationView menuIcon,profile_icon;
     static final float END_SCALE = 0.7f;
 
     //Drawer Menu
@@ -74,12 +76,20 @@ public class main_screen extends AppCompatActivity implements
     private RecyclerView bigR_recyclerview, smallR_recyclerview_1, smallR_recyclerview_2,
             smallR_recyclerview_3, smallR_recyclerview_4, smallR_recyclerview_5, smallR_recyclerview_6;
     private List<Recipes> viewItems = new ArrayList<>();
+    private List<Recipes> viewItems_10 = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_1 = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_2 = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_3 = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_4 = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_5 = new ArrayList<>();
     private List<Recipes> smallR_recyclerviewItems_6 = new ArrayList<>();
+
+    private List<Recipes> smallR_recyclerviewItems_1_10 = new ArrayList<>();
+    private List<Recipes> smallR_recyclerviewItems_2_10 = new ArrayList<>();
+    private List<Recipes> smallR_recyclerviewItems_3_10 = new ArrayList<>();
+    private List<Recipes> smallR_recyclerviewItems_4_10 = new ArrayList<>();
+    private List<Recipes> smallR_recyclerviewItems_5_10 = new ArrayList<>();
+    private List<Recipes> smallR_recyclerviewItems_6_10 = new ArrayList<>();
     String[] card1 = {"rice"};
     String[] card2 = {"sugar", "baking"};
     String[] card3 = {"chicken"};
@@ -93,7 +103,7 @@ public class main_screen extends AppCompatActivity implements
     private RecyclerView.Adapter recyclerAdapter, horizontalRecyclerAdapter_1, horizontalRecyclerAdapter_2,
             horizontalRecyclerAdapter_3, horizontalRecyclerAdapter_4, horizontalRecyclerAdapter_5, horizontalRecyclerAdapter_6;
     private RecyclerView.LayoutManager layoutManager;
-    ProgressBar mainscreen_progressbar;
+    LottieAnimationView mainscreen_progressbar_animationView;
 
 
     private DatabaseReference databaseReference;
@@ -109,12 +119,13 @@ public class main_screen extends AppCompatActivity implements
 
         //Hooks
         menuIcon = findViewById(R.id.menu_icon);
+        profile_icon = findViewById(R.id.profile_icon);
 
         //Menu Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         contentView = findViewById(R.id.content);
-        mainscreen_progressbar = findViewById(R.id.mainscreen_progressbar);
+        mainscreen_progressbar_animationView = findViewById(R.id.mainscreen_progressbar_animationView);
 
         navigationDrawer();
 
@@ -135,12 +146,12 @@ public class main_screen extends AppCompatActivity implements
         bigR_recyclerview.setLayoutManager(layoutManager);
 
 
-        horizontalRecyclerAdapter_1 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_1);
-        horizontalRecyclerAdapter_2 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_2);
-        horizontalRecyclerAdapter_3 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_3);
-        horizontalRecyclerAdapter_4 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_4);
-        horizontalRecyclerAdapter_5 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_5);
-        horizontalRecyclerAdapter_6 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_6);
+        horizontalRecyclerAdapter_1 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_1_10);
+        horizontalRecyclerAdapter_2 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_2_10);
+        horizontalRecyclerAdapter_3 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_3_10);
+        horizontalRecyclerAdapter_4 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_4_10);
+        horizontalRecyclerAdapter_5 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_5_10);
+        horizontalRecyclerAdapter_6 = new HorizontalRecyclerAdapter(this, smallR_recyclerviewItems_6_10);
         //Small recyclerviews
         smallR_recyclerview_1 = (RecyclerView) findViewById(R.id.smallR_recyclerview_1);
         smallR_recyclerview_1.setHasFixedSize(true);
@@ -179,11 +190,10 @@ public class main_screen extends AppCompatActivity implements
         smallR_recyclerview_6.setAdapter(horizontalRecyclerAdapter_6);
 
 
-        recyclerAdapter = new RecyclerAdapter(this, viewItems, this);
+        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this);
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
-        mainscreen_progressbar.setVisibility(View.VISIBLE);
-        addItemsFromDB();
+        mainscreen_progressbar_animationView.setVisibility(View.VISIBLE);
         checkItems();
 
         mPrefs = getPreferences(MODE_PRIVATE);
@@ -195,8 +205,6 @@ public class main_screen extends AppCompatActivity implements
 
 
     }
-
-
 
 
     private boolean checkIngredients(String cleanedIngredients, String[] cardtype) {
@@ -216,7 +224,7 @@ public class main_screen extends AppCompatActivity implements
     }
 
     private void checkItems() {
-        db.collection("Recipes").orderBy("id").limit(100).get()
+        db.collection("Recipes").orderBy("id").limit(1000).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -256,6 +264,10 @@ public class main_screen extends AppCompatActivity implements
                                     smallR_recyclerviewItems_6.add(recipes);
                                 }
 
+
+                                viewItems.add(recipes);
+
+
                             }
                             Collections.shuffle(smallR_recyclerviewItems_1);
                             Collections.shuffle(smallR_recyclerviewItems_2);
@@ -263,6 +275,30 @@ public class main_screen extends AppCompatActivity implements
                             Collections.shuffle(smallR_recyclerviewItems_4);
                             Collections.shuffle(smallR_recyclerviewItems_5);
                             Collections.shuffle(smallR_recyclerviewItems_6);
+
+                            for (int i = 0; i < 10; i++) {
+                                if (smallR_recyclerviewItems_1.size() > i)
+                                    smallR_recyclerviewItems_1_10.add(smallR_recyclerviewItems_1.get(i));
+                                if (smallR_recyclerviewItems_2.size() > i)
+                                    smallR_recyclerviewItems_2_10.add(smallR_recyclerviewItems_2.get(i));
+                                if (smallR_recyclerviewItems_3.size() > i)
+                                    smallR_recyclerviewItems_3_10.add(smallR_recyclerviewItems_3.get(i));
+                                if (smallR_recyclerviewItems_4.size() > i)
+                                    smallR_recyclerviewItems_4_10.add(smallR_recyclerviewItems_4.get(i));
+                                if (smallR_recyclerviewItems_5.size() > i)
+                                    smallR_recyclerviewItems_5_10.add(smallR_recyclerviewItems_5.get(i));
+                                if (smallR_recyclerviewItems_6.size() > i)
+                                    smallR_recyclerviewItems_6_10.add(smallR_recyclerviewItems_6.get(i));
+                            }
+
+                            Collections.shuffle(viewItems);
+                            for (int i = 0; i < 10; i++) {
+                                if (viewItems.size() > i)
+                                    viewItems_10.add(viewItems.get(i));
+                            }
+                            recyclerAdapter.notifyDataSetChanged();
+
+
                             horizontalRecyclerAdapter_1.notifyDataSetChanged();
                             horizontalRecyclerAdapter_2.notifyDataSetChanged();
                             horizontalRecyclerAdapter_3.notifyDataSetChanged();
@@ -270,12 +306,15 @@ public class main_screen extends AppCompatActivity implements
                             horizontalRecyclerAdapter_5.notifyDataSetChanged();
                             horizontalRecyclerAdapter_6.notifyDataSetChanged();
 //                            Toast.makeText(search_screen.this, selected_recipes.size()+"", Toast.LENGTH_SHORT).show();
-                            mainscreen_progressbar.setVisibility(View.INVISIBLE);
 
+                        }
 
-                        } else {
+                          else {
                             Toast.makeText(main_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
                         }
+                        mainscreen_progressbar_animationView.setVisibility(View.GONE);
+                        menuIcon.playAnimation();
+                        profile_icon.playAnimation();
                     }
                 });
     }
@@ -317,61 +356,21 @@ public class main_screen extends AppCompatActivity implements
     }
 
 
-    public static void saveObjectToSharedPreference(Context context, String preferenceFileName,
-                                                    String serializedObjectKey, List<Recipes> object) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
-        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-        final Gson gson = new Gson();
-        String serializedObject = gson.toJson(object);
-        sharedPreferencesEditor.putString(serializedObjectKey, serializedObject);
-        sharedPreferencesEditor.apply();
-    }
 
-    public List<Recipes> getSavedObjectFromPreference(Context context, String preferenceFileName
-            , String preferenceKey, List<Recipes> classType) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
-        if (sharedPreferences.contains(preferenceKey)) {
-            final Gson gson = new Gson();
-            Type collectionType = new TypeToken<List<Recipes>>() {
-            }.getType();
-            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), collectionType);
+
+    Integer n=10;
+    public void view_more_recipes(View view) {
+        for (int i = n; i < n+10; i++) {
+            if (viewItems.size() > i)
+                viewItems_10.add(viewItems.get(i));
+            else {
+                MaterialCardView view_more_recipes_mainscreen_btn=findViewById(R.id.view_more_recipes_mainscreen_btn);
+                view_more_recipes_mainscreen_btn.setVisibility(View.INVISIBLE);
+            }
         }
-        return null;
-    }
+        n=n+10;
+        recyclerAdapter.notifyDataSetChanged();
 
-
-    private void addItemsFromDB() {
-        db.collection("Recipes").orderBy("id").limit(10).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot itemObj : task.getResult()) {
-
-                                String id = itemObj.getLong("id").toString();
-                                String name = itemObj.getString("name");
-                                String ingredientsList = itemObj.getString("ingredientsList");
-                                String totalTime = itemObj.getLong("totalTime").toString();
-                                String cuisine = itemObj.getString("cuisine");
-                                String instructions = itemObj.getString("instructions");
-                                String cleanedIngredients = itemObj.getString("cleanedIngredients");
-                                String imageUrl = itemObj.getString("imageUrl");
-                                String ingredientCount = itemObj.getLong("ingredientCount").toString();
-                                String rating = itemObj.getLong("rating").toString();
-                                String ratingCount = itemObj.getLong("ratingCount").toString();
-
-                                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                        cuisine, instructions, cleanedIngredients, imageUrl,
-                                        ingredientCount, rating, ratingCount, id);
-                                viewItems.add(recipes);
-                            }
-                            Collections.shuffle(viewItems);
-                            recyclerAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(main_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
 
@@ -404,6 +403,7 @@ public class main_screen extends AppCompatActivity implements
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
+
 
         menuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -443,6 +443,7 @@ public class main_screen extends AppCompatActivity implements
     }
 
     private long mBackPressed;
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
@@ -510,5 +511,6 @@ public class main_screen extends AppCompatActivity implements
     public void onClick(Recipes likedRecipe) {
 
     }
+
 
 }

@@ -16,17 +16,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
+
+            <com.airbnb.lottie.LottieAnimationView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="70dp"
-                android:paddingRight="50dp"
-                android:paddingTop="50dp"
-                android:onClick="logo_doodle"
-                android:paddingBottom="50dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/logo" />
+                android:onClick="logo_doodle"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/signup_screen_foodtoss" />
 
             <TextView
                 android:id="@+id/help_app_info_logoText"

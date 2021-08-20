@@ -13,7 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class start_cooking_screen extends AppCompatActivity {
 
-    TextView instructions_text_cooking_screen, stepcount_cooking_screen,Totalstepcount_cooking_screen;
+    TextView instructions_text_cooking_screen, stepcount_cooking_screen, Totalstepcount_cooking_screen;
     String[] instructions_StringArray;
     Integer step = 0;
     FloatingActionButton next_page_btn, previous_page_btn;
@@ -36,9 +36,9 @@ public class start_cooking_screen extends AppCompatActivity {
         instructions_StringArray = intent.getStringArrayExtra("instructions_StringArray");
 
         previous_page_btn.setVisibility(View.INVISIBLE);
-        stepcount_cooking_screen.setText("Steps "+(step+1)+"");
+        stepcount_cooking_screen.setText("Steps " + (step + 1) + "");
         instructions_text_cooking_screen.setText(instructions_StringArray[step]);
-        Totalstepcount_cooking_screen.setText("/"+instructions_StringArray.length+"");
+        Totalstepcount_cooking_screen.setText("/" + instructions_StringArray.length + "");
 
     }
 
@@ -47,24 +47,32 @@ public class start_cooking_screen extends AppCompatActivity {
         if (step == instructions_StringArray.length) {
             next_page_btn.setVisibility(View.INVISIBLE);
         } else {
+            next_page_btn.setVisibility(View.VISIBLE);
             instructions_text_cooking_screen.setText(instructions_StringArray[step]);
-            stepcount_cooking_screen.setText("Steps "+(step+1));
+            stepcount_cooking_screen.setText("Steps " + (step + 1));
         }
         if (step != 0) {
             previous_page_btn.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             previous_page_btn.setVisibility(View.INVISIBLE);
+        }
+
+        if (step+1 == instructions_StringArray.length) {
+            next_page_btn.setVisibility(View.INVISIBLE);
         }
 
     }
 
     public void previous_page_btnClick(View view) {
-//        step--;
-//        if (step == 0) {
-//            previous_page_btn.setVisibility(View.INVISIBLE);
-//        } else {
-//            instructions_text_cooking_screen.setText(instructions_StringArray[step]);
-//            stepcount_cooking_screen.setText("Steps "+(step-1));
-//        }
+        step--;
+        if (step == 0) {
+            next_page_btn.setVisibility(View.VISIBLE);
+            previous_page_btn.setVisibility(View.INVISIBLE);
+            instructions_text_cooking_screen.setText(instructions_StringArray[step]);
+            stepcount_cooking_screen.setText("Steps " + (step+1));
+        }else {
+            instructions_text_cooking_screen.setText(instructions_StringArray[step]);
+            stepcount_cooking_screen.setText("Steps " + (step+1));
+        }
     }
 }

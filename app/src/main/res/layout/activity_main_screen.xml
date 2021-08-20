@@ -23,7 +23,7 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/popup_bg"
+        android:background="@drawable/overview_bg"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -31,12 +31,15 @@
             android:layout_height="wrap_content"
             android:padding="20dp">
 
-            <ImageView
+
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/menu_icon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/menu_icon" />
+                app:lottie_rawRes="@raw/burger_menu_icon"
+                app:lottie_loop="true"/>
 
             <TextView
                 android:id="@+id/app_name"
@@ -59,13 +62,16 @@
                 android:text="@string/s_slogan_name"
                 android:textColor="#6A4239" />
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/profile_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:onClick="go_to_wishlist"
-                android:src="@drawable/profile_icon" />
+                app:lottie_rawRes="@raw/profile_icon"
+                app:lottie_loop="true"/>
 
         </RelativeLayout>
 
@@ -79,10 +85,11 @@
                 android:layout_marginLeft="35dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="35dp"
-                android:backgroundTint="@color/white"
+                android:layout_marginBottom="5dp"
+                android:backgroundTint="#F1F1F1"
+                android:elevation="30dp"
                 android:onClick="go_to_searchscreen"
                 android:transitionName="searchbar_transition"
-                android:elevation="30dp"
                 app:cardCornerRadius="30dp">
 
                 <TextView
@@ -107,17 +114,16 @@
 
         </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/mainscreen_progressbar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/mainscreen_progressbar_animationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#00ffffff"
-            android:indeterminate="true"
-            android:indeterminateTint="#90CAF9"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:visibility="invisible" />
+            app:lottie_rawRes="@raw/cooking_main_screen"
+            app:lottie_autoPlay="true"
+            android:visibility="visible"
+            app:lottie_loop="true"/>
+
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -588,9 +594,41 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/bigR_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/banner_background_light" />
+                    android:layout_height="wrap_content"/>
 
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/view_more_recipes_mainscreen_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="35dp"
+                        android:layout_marginBottom="20dp"
+                        android:backgroundTint="#F1F1F1"
+                        android:clickable="true"
+                        app:rippleColor="@color/grey"
+                        android:onClick="view_more_recipes"
+                        android:elevation="30dp"
+                        app:cardCornerRadius="30dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:text="View more"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </RelativeLayout>
 
             </LinearLayout>
 

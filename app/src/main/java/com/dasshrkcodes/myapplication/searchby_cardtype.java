@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -24,6 +25,8 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
     private List<Recipes> viewItems = new ArrayList<>();
+    private List<Recipes> viewItems_10 = new ArrayList<>();
+    MaterialCardView view_more_btn_search;
 
 
     @Override
@@ -38,26 +41,25 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
         layoutManager = new LinearLayoutManager(this);
         bigR_recyclerview_searchbytype.setLayoutManager(layoutManager);
 
-        Intent i = getIntent();
-        viewItems = (List<Recipes>) i.getSerializableExtra("selected_recipes");
+        view_more_btn_search = findViewById(R.id.view_more_btn_search);
 
+        Intent intent = getIntent();
+        viewItems = (List<Recipes>) intent.getSerializableExtra("selected_recipes");
 
-
-        recyclerAdapter = new RecyclerAdapter(this, viewItems,this);
-        bigR_recyclerview_searchbytype.setAdapter(recyclerAdapter);
-    }
-
-    public List<Recipes> getSavedObjectFromPreference(Context context, String preferenceFileName
-            , String preferenceKey, List<Recipes> classType) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
-        if (sharedPreferences.contains(preferenceKey)) {
-            final Gson gson = new Gson();
-            Type collectionType = new TypeToken<List<Recipes>>() {
-            }.getType();
-            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), collectionType);
+        for (int j = 0; j < 10; j++) {
+            if (viewItems.size() > j)
+                viewItems_10.add(viewItems.get(j));
+            else {
+                view_more_btn_search.setVisibility(View.INVISIBLE);
+            }
         }
-        return null;
+
+        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this);
+        bigR_recyclerview_searchbytype.setAdapter(recyclerAdapter);
+
+
     }
+
 
     public void go_to_recipe_overview(View view) {
         String id = view.getTag().toString();
@@ -68,6 +70,21 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
 
     @Override
     public void onClick(Recipes value) {
+
+    }
+
+    Integer n = 10;
+
+    public void view_more_recipes(View view) {
+        for (int i = n; i < n + 10; i++) {
+            if (viewItems.size() > i)
+                viewItems_10.add(viewItems.get(i));
+            else {
+                view_more_btn_search.setVisibility(View.INVISIBLE);
+            }
+        }
+        n = n + 10;
+        recyclerAdapter.notifyDataSetChanged();
 
     }
 }

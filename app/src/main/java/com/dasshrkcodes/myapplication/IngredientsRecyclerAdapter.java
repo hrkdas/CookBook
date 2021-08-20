@@ -103,6 +103,20 @@ public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     }
                 });
 
+                itemViewHolder.ing_card.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (itemViewHolder.ing_card.getStrokeWidth() > 0) {
+                            itemViewHolder.ing_card.setStrokeWidth(0);
+                        } else {
+                            itemViewHolder.ing_card.setStrokeWidth(5);
+                        }
+                        mCallback.onClick(Ing_nameList.get(i));
+
+                    }
+                });
+
         }
 
     }

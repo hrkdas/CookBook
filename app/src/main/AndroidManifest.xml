@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookBook">
-        <activity android:name=".searchby_cardtype"></activity>
+        <activity android:name=".image_overview"></activity>
+        <activity android:name=".searchby_cardtype" />
         <activity android:name=".search_screen" />
         <activity android:name=".profiles_n_wishlist_page" />
         <activity android:name=".login_screen" />

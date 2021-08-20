@@ -20,9 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int SPLASH_SCREEN = 1000;
+    private static int SPLASH_SCREEN = 700;
     Animation bottomAnim,topAnim;
-    ImageView logoImage;
     TextView logoText,main_appInfo_curren_verion;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -36,14 +35,12 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        db.collection("Recipes").orderBy("id").limit(2).get();
+        db.collection("Recipes").orderBy("id").limit(1000).get();
 
         topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
         bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
-        logoImage = (ImageView) findViewById(R.id.logoImage);
         logoText = (TextView) findViewById(R.id.logoText);
         logoText.setAnimation(topAnim);
-        logoImage.setAnimation(bottomAnim);
 
 
         new Handler().postDelayed(new Runnable() {

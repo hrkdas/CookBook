@@ -5,12 +5,14 @@
     android:id="@+id/big_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:backgroundTint="#FFFFFF"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:backgroundTint="#F8F8F8"
     android:onClick="go_to_recipe_overview"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="8dp">
+    app:cardCornerRadius="10dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -58,145 +60,97 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/bigR_nonveg_icon"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginRight="5dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/nonveg_icon" />
-            <ImageView
-                android:id="@+id/bigR_veg_icon"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginRight="5dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/veg_icon" />
-
-            <RatingBar
-                android:id="@+id/bigR_ratingbar"
-                style="@style/Widget.AppCompat.RatingBar.Small"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:progressBackgroundTint="@color/black"
-                android:progressTint="#FFCC80"
-                android:rating="3.5" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:gravity="center"
-                android:text="("
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/bigR_ratingcount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:gravity="center"
-                android:text="1"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:gravity="center"
-                android:text=")"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/bigR_nonveg_icon"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/nonveg_icon" />
+
+                    <ImageView
+                        android:id="@+id/bigR_veg_icon"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/veg_icon" />
+
+                    <RatingBar
+                        android:id="@+id/bigR_ratingbar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@color/black"
+                        android:progressTint="#FFCC80"
+                        android:rating="3.5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:text="("
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/bigR_ratingcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:text=")"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
+
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginBottom="2dp"
+                        android:adjustViewBounds="true"
+                        android:background="#00ffffff"
+                        android:padding="3dp"
+                        android:scaleType="centerInside"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:srcCompat="@drawable/prep_icon" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                        android:orientation="vertical">
 
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginBottom="2dp"
-                            android:adjustViewBounds="true"
-                            android:background="#00ffffff"
-                            android:padding="3dp"
-                            android:scaleType="centerInside"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/prep_icon" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:adjustViewBounds="true"
-                                    android:fontFamily="@font/athiti"
-                                    android:gravity="center"
-                                    android:text="Cook Time : "
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/bigR_cooktime"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:adjustViewBounds="true"
-                                    android:fontFamily="@font/athiti"
-                                    android:gravity="center"
-                                    android:text="30min"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginBottom="2dp"
-                            android:adjustViewBounds="true"
-                            android:background="#00ffffff"
-                            android:padding="3dp"
-                            android:scaleType="centerInside"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/difficulty_icon" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -204,44 +158,88 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/bigR_difficulty"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
                                 android:fontFamily="@font/athiti"
                                 android:gravity="center"
-                                android:text="Easy"
+                                android:text="Cook Time : "
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
 
+                            <TextView
+                                android:id="@+id/bigR_cooktime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:fontFamily="@font/athiti"
+                                android:gravity="center"
+                                android:text="30min"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
                         </LinearLayout>
+                    </LinearLayout>
 
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="2dp"
+                        android:adjustViewBounds="true"
+                        android:background="#00ffffff"
+                        android:padding="3dp"
+                        android:scaleType="centerInside"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:srcCompat="@drawable/difficulty_icon" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/bigR_difficulty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:fontFamily="@font/athiti"
+                            android:gravity="center"
+                            android:text="Easy"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:layout_weight="5"
-                        android:gravity="right">
-
-                        <com.like.LikeButton
-                            android:id="@+id/bigR_likebutton"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:onClick="toggleLiked"
-                            android:padding="2dp"
-                            app:icon_size="25dp"
-                            app:icon_type="heart" />
-
-                    </RelativeLayout>
 
                 </LinearLayout>
-            </RelativeLayout>
 
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_weight="5"
+                android:gravity="right">
+
+                <com.like.LikeButton
+                    android:id="@+id/bigR_likebutton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:onClick="toggleLiked"
+                    android:padding="2dp"
+                    app:icon_size="25dp"
+                    app:icon_type="heart" />
+
+            </RelativeLayout>
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/bigR_featured_desc"
@@ -251,6 +249,7 @@
             android:maxLines="1"
             android:text="asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"
             android:textColor="#7A7979"
+            android:visibility="gone"
             android:textStyle="italic" />
     </LinearLayout>
 
