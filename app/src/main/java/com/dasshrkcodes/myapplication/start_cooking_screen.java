@@ -1,5 +1,6 @@
 package com.dasshrkcodes.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,7 +10,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.mlkit.nl.translate.Translator;
 
 public class start_cooking_screen extends AppCompatActivity {
 
@@ -41,6 +45,27 @@ public class start_cooking_screen extends AppCompatActivity {
         Totalstepcount_cooking_screen.setText("/" + instructions_StringArray.length + "");
 
     }
+
+//    public void translate(String s){
+//        Translator.translate(s)
+//                .addOnSuccessListener(
+//                        new OnSuccessListener() {
+//                            @Override
+//                            public void onSuccess(Object o) {
+//                                String translated_s = o.toString();
+////                                recipe_overview_instructions.setText(translated_instructions);
+//                            }
+//
+//                        })
+//                .addOnFailureListener(
+//                        new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                // Error.
+//                                // ...
+//                            }
+//                        });
+//    }
 
     public void next_page_btnClick(View view) {
         step++;

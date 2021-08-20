@@ -514,8 +514,9 @@
         android:layout_marginBottom="30dp"
         android:backgroundTint="#4BC4FF"
         android:onClick="translate_buttonClick"
-        android:src="@drawable/ic_baseline_g_translate_24"
-        android:visibility="visible"
+        android:id="@+id/google_translate_btn"
+        android:src="@drawable/google_translate_icon"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
