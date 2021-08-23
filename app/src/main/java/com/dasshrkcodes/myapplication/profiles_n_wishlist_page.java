@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 
+import com.dasshrkcodes.myapplication.fragments.history_screen;
 import com.dasshrkcodes.myapplication.fragments.profile_screen;
 import com.dasshrkcodes.myapplication.fragments.wishlist_screen;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
@@ -53,6 +54,11 @@ public class profiles_n_wishlist_page extends AppCompatActivity {
                     case R.id.bottom_nav_wishlist:
                         fragment = new wishlist_screen();
                         break;
+
+                    case R.id.bottom_nav_history:
+                        fragment = new history_screen();
+                        break;
+
                     case R.id.bottom_nav_profile:
                         fragment = new profile_screen();
                         break;

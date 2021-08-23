@@ -8,6 +8,11 @@
         android:title="Cooklist" />
 
     <item
+        android:id="@+id/bottom_nav_history"
+        android:icon="@drawable/history_icon"
+        android:title="History" />
+
+    <item
         android:id="@+id/bottom_nav_profile"
         android:icon="@drawable/bottom_nav_profile_icon"
         android:title="Profile" />

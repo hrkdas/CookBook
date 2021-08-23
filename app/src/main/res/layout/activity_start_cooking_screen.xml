@@ -13,59 +13,93 @@
         android:layout_margin="15dp"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:gravity="right">
+            android:gravity="start"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
 
-            <LinearLayout
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:background="#00ffffff"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/steps_icon" />
+
+            <TextView
+                android:id="@+id/stepcount_cooking_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/actor"
+                android:text="Steps 1"
+                android:textColor="#007E05"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/Totalstepcount_cooking_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/actor"
+                android:text="5"
+                android:textColor="#007E05"
+                android:textSize="35sp" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:gravity="start"
-                android:orientation="horizontal">
+                android:gravity="right">
 
-
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="#00ffffff"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/steps_icon" />
-
-                <TextView
-                    android:id="@+id/stepcount_cooking_screen"
+                <LinearLayout
+                    android:id="@+id/Speaker_layout"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/actor"
-                    android:layout_marginLeft="10dp"
-                    android:text="Steps 1"
-                    android:textColor="#007E05"
-                    android:textSize="35sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/Totalstepcount_cooking_screen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/actor"
-                    android:text="5"
-                    android:textColor="#007E05"
-                    android:textSize="35sp" />
+                    <ImageView
+                        android:id="@+id/speaker_on_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="5dp"
+                        android:background="#00ffffff"
+                        android:scaleType="centerInside"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/speaker_icon" />
+
+                    <ImageView
+                        android:id="@+id/speaker_off_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="5dp"
+                        android:background="#00ffffff"
+                        android:scaleType="centerInside"
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/mute_icon" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/speaker_toggle_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="10dp"
+                        android:checked="false" />
+
+                </LinearLayout>
+            </RelativeLayout>
 
 
-
-            </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ADF8B4"
+            android:elevation="5dp"
             android:padding="15dp"
             app:cardBackgroundColor="#ADFBB4"
-            android:elevation="5dp"
             app:cardCornerRadius="15dp"
             app:rippleColor="@color/white">
 
@@ -77,10 +111,11 @@
                     android:id="@+id/instructions_text_cooking_screen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1"
+                    android:editable="false"
                     android:fontFamily="@font/athiti"
                     android:gravity="center"
-                    android:inputType="textMultiLine"
                     android:lineSpacingExtra="0sp"
                     android:textColor="@color/black"
                     android:textSize="26sp"

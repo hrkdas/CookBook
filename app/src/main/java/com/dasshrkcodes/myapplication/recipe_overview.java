@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,9 +50,8 @@ public class recipe_overview extends AppCompatActivity {
             imageUrl, ingredientCount, rating, ratingCount;
     Spinner recipe_overview_lang_spinner;
     Translator selectedTranslator;
-    DownloadConditions conditions;
     FloatingActionButton google_translate_btn;
-    String translated_ingredientsList,translated_instructions;
+    String translated_ingredientsList, translated_instructions,selectedLang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +80,27 @@ public class recipe_overview extends AppCompatActivity {
         id_recipe_overview = getIntent().getStringExtra("id_recipe_overview");
         displayRecipeFromDB();
 
+        selectedLang= PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getString("selecteLang","English" );
         recipe_overview_lang_spinner = findViewById(R.id.recipe_overview_lang_spinner);
         String[] items = new String[]{"English", "Hindi", "Marathi", "Gujarati", "Bengali", "Telugu", "Malayalam"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, items);
         recipe_overview_lang_spinner.setAdapter(adapter);
+        for(int i=0;i<items.length;i++){
+            if(items[i].toUpperCase().equals(selectedLang.toUpperCase())){
+                recipe_overview_lang_spinner.setSelection(i);
+            }
+        }
         recipe_overview_lang_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-
                 switch (position) {
-                    case 0://English
-                        google_translate_btn.setVisibility(View.INVISIBLE);
-                        break;
+
                     case 1://Hindi
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                                .putString("selecteLang","Hindi" ).apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -102,6 +108,8 @@ public class recipe_overview extends AppCompatActivity {
                                 .build());
                         break;
                     case 2://Marathi
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                                .putString("selecteLang","Marathi" ).apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -109,6 +117,8 @@ public class recipe_overview extends AppCompatActivity {
                                 .build());
                         break;
                     case 3://Gujarati
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                                .putString("selecteLang","Gujarati" ).apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -116,6 +126,8 @@ public class recipe_overview extends AppCompatActivity {
                                 .build());
                         break;
                     case 4://Bengali
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                                .putString("selecteLang","Bengali" ).apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -123,6 +135,8 @@ public class recipe_overview extends AppCompatActivity {
                                 .build());
                         break;
                     case 5://Telugu
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                                .putString("selecteLang","Telugu" ).apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -130,18 +144,24 @@ public class recipe_overview extends AppCompatActivity {
                                 .build());
                         break;
                     case 6://Malayalam
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                                .putString("selecteLang","Malayalam" ).apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
                                 .setTargetLanguage(TranslateLanguage.MALAY)
                                 .build());
                         break;
-                    default:
+                    default://English
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                                .putString("selecteLang","English" ).apply();
+                        google_translate_btn.setVisibility(View.VISIBLE);
+                        selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
+                                .setSourceLanguage(TranslateLanguage.ENGLISH)
+                                .setTargetLanguage(TranslateLanguage.ENGLISH)
+                                .build());
                         break;
                 }
-
-
-
             }
 
             @Override
@@ -189,11 +209,6 @@ public class recipe_overview extends AppCompatActivity {
 
     public static String split(String s) {
         String s1 = s.replace(',', '\n');
-        return s1;
-    }
-
-    public static String doublenextLine(String s) {
-        String s1 = s.replace('\n', '\n');
         return s1;
     }
 
@@ -254,6 +269,9 @@ public class recipe_overview extends AppCompatActivity {
         Intent intent = new Intent(recipe_overview.this, start_cooking_screen.class);
         String[] myStrings = toArray(instructions);
         intent.putExtra("instructions_StringArray", myStrings);
+
+        intent.putExtra("selectedLanguage",  PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getString("selecteLang","English" ));
         startActivity(intent);
     }
 
@@ -270,10 +288,12 @@ public class recipe_overview extends AppCompatActivity {
     }
 
     public void translate_buttonClick(View view) {
+        translate();
+    }
 
+    public void translate() {
         final Translator Translator = selectedTranslator;
-
-        conditions = new DownloadConditions.Builder()
+        DownloadConditions conditions = new DownloadConditions.Builder()
                 .requireWifi()
                 .build();
         Translator.downloadModelIfNeeded(conditions)
@@ -282,7 +302,8 @@ public class recipe_overview extends AppCompatActivity {
 
                             @Override
                             public void onSuccess(Object o) {
-//                                Toast.makeText(recipe_overview.this, "Language Downloading...", Toast.LENGTH_SHORT).show();
+
+//                                Toast.makeText(recipe_overview.this, "Language will be Downloaded", Toast.LENGTH_SHORT).show();
                             }
                         })
                 .addOnFailureListener(

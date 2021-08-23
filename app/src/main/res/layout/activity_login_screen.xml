@@ -14,41 +14,7 @@
         android:background="@drawable/overview_bg"
         android:orientation="vertical">
 
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            app:lottie_rawRes="@raw/signup_screen_foodtoss"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"/>
-
-        <TextView
-            android:id="@+id/app_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/autour_one"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:text="CookBook"
-            android:textColor="#6A4239"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/app_name"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="@string/s_slogan_name"
-            android:textColor="#6A4239" />
-
-
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp">
@@ -58,7 +24,42 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/signup_screen_foodtoss" />
+
+                <TextView
+                    android:id="@+id/app_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/autour_one"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:text="CookBook"
+                    android:textColor="#6A4239"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/app_name"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="@string/s_slogan_name"
+                    android:textColor="#6A4239" />
+
+
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/signUp_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -71,7 +72,7 @@
                     app:cardElevation="5dp">
 
                     <LinearLayout
-                        android:id="@+id/enter_login_layout"
+                        android:id="@+id/enter_signup_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -89,8 +90,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_marginBottom="30dp"
                                 android:layout_marginLeft="30dp"
+                                android:layout_marginBottom="30dp"
                                 android:fontFamily="@font/baloo"
                                 android:text="Sign Up"
                                 android:textColor="@color/black"
@@ -140,8 +141,143 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/selectLang_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/baloo"
+                            android:text="Select Language"
+                            android:textColor="@color/black"
+                            android:textSize="26sp"
+                            android:visibility="visible" />
+
+
+                        <Spinner
+                            android:id="@+id/login_screen_lang_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="30dp"
+                            android:background="@android:drawable/btn_dropdown"
+                            android:spinnerMode="dropdown" />
+
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/select_cuisine_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/black"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/select_cuisine_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:fontFamily="@font/baloo"
+                                android:text="Select Cuisine"
+                                android:textColor="@color/white"
+                                android:textSize="30sp"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:layout_marginBottom="20dp"
+                                android:text="Select atleast 4 cuisine which you like"
+                                android:textColor="@color/white" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/cuisineList_recyclerview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="600dp"
+                                android:layout_gravity="center" />
+
+                            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                                android:id="@+id/selecte_cuisine_done_Btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginLeft="35dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginBottom="30dp"
+                                android:backgroundTint="#FFFFFF"
+                                android:shadowColor="@color/white"
+                                android:text="Done"
+                                android:onClick="done_BtnClicked"
+                                android:textAlignment="center"
+                                android:textAllCaps="false"
+                                android:textStyle="bold"
+                                tools:ignore="RtlCompat" />
+
+                            <ProgressBar
+                                android:id="@+id/select_cuisine_progressbar"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#00ffffff"
+                                android:indeterminate="true"
+                                android:indeterminateTint="#90CAF9"
+                                android:paddingLeft="40dp"
+                                android:paddingRight="40dp"
+                                android:visibility="visible" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_brown"
-    tools:context=".fragments.wishlist_screen">
+    tools:context=".fragments.history_screen">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:background="@drawable/overview_bg">
 
         <RelativeLayout
-            android:id="@+id/wishlist_header"
+            android:id="@+id/history_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
@@ -22,12 +22,11 @@
 
 
             <TextView
-                android:id="@+id/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:fontFamily="@font/calligraffitti"
-                android:text="My Cooklist"
+                android:text="History "
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -47,7 +46,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wishlist_header"
+            app:layout_constraintTop_toBottomOf="@+id/history_header"
             tools:layout_editor_absoluteY="80dp">
 
             <ScrollView
@@ -63,7 +62,7 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/smallR_recyclerview_wishlistScreen"
+                        android:id="@+id/recyclerview_historyScreen"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent" />
 
@@ -71,4 +70,5 @@
             </ScrollView>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
