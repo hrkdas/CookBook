@@ -1,25 +1,33 @@
 package com.dasshrkcodes.myapplication;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class searchby_cardtype extends AppCompatActivity implements Liked_click_RecyclerView {
+public class searchby_cardtype extends AppCompatActivity implements Liked_click_RecyclerView, UnLiked_click_RecyclerView {
 
     private RecyclerView bigR_recyclerview_searchbytype;
     private RecyclerView.LayoutManager layoutManager;
@@ -54,7 +62,7 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
             }
         }
 
-        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this);
+        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this,this);
         bigR_recyclerview_searchbytype.setAdapter(recyclerAdapter);
 
 
@@ -68,10 +76,6 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
         startActivity(intent);
     }
 
-    @Override
-    public void onClick(Recipes value) {
-
-    }
 
     Integer n = 10;
 
@@ -85,6 +89,26 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
         }
         n = n + 10;
         recyclerAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void LikeonClick(Recipes value) {
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+        docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
+
+    }
+
+    @Override
+    public void UnLikeonClick(Recipes value) {
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+        docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
 
     }
 }

@@ -23,9 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView, Liked_click_RecyclerView {
+public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView, Liked_click_RecyclerView, UnLiked_click_RecyclerView {
 
     Animation searchscreen_anim;
     LinearLayout searchscreen_layout;
@@ -105,7 +109,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 //        Search_Adapter = new search_rAdapter(recipes);
 
         Search_Adapter = new RecyclerAdapter(getApplicationContext(), search_found_recipesList,
-                this);
+                this,this);
         search_recyclerview.setAdapter(Search_Adapter);
 
 
@@ -356,11 +360,22 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
 
     @Override
-    public void onClick(Recipes value) {
-        Toast.makeText(this, value.getRName(), Toast.LENGTH_SHORT).show();
+    public void LikeonClick(Recipes value) {
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+        docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
 
     }
 
+    @Override
+    public void UnLikeonClick(Recipes value) {
 
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
+        docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
+
+    }
 }

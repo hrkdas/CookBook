@@ -39,6 +39,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -61,7 +63,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class main_screen extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView {
+        NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView, UnLiked_click_RecyclerView {
 
     //    Variables
     LottieAnimationView menuIcon,profile_icon;
@@ -190,7 +192,7 @@ public class main_screen extends AppCompatActivity implements
         smallR_recyclerview_6.setAdapter(horizontalRecyclerAdapter_6);
 
 
-        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this);
+        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this,this);
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
         mainscreen_progressbar_animationView.setVisibility(View.VISIBLE);
@@ -506,11 +508,23 @@ public class main_screen extends AppCompatActivity implements
         return true;
     }
 
-
     @Override
-    public void onClick(Recipes likedRecipe) {
+    public void LikeonClick(Recipes value) {
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+        docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
 
     }
 
+    @Override
+    public void UnLikeonClick(Recipes value) {
 
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+        docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
+
+    }
 }

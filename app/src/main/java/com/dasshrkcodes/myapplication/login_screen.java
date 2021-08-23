@@ -56,7 +56,7 @@ public class login_screen extends AppCompatActivity implements ingredients_click
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
-    ProgressBar login_progressbar;
+    ProgressBar login_progressbar,select_cuisine_progressbar;
     RecyclerView cuisineList_recyclerview;
     RecyclerView.Adapter recyclerAdapter;
     List<String> Cuisine_nameList = new ArrayList<>();
@@ -73,12 +73,11 @@ public class login_screen extends AppCompatActivity implements ingredients_click
 
 
     public void makeList() {
-        Collections.addAll(Cuisine_nameList, "Bread", "Broccoli", "Carrot", "Cheese", "Chicken", "Chilli", "Corn",
-                "Dal", "Egg", "Fish", "Bhindi", "Mushroom", "Noodles", "Onion", "Paneer", "Potato", "Rice", "Prawn",
-                "Tomato");
-        Collections.addAll(Cuisine_imageList, "ing_bread", "ing_broccoli", "ing_carrot", "ing_cheese", "ing_chicken",
-                "ing_chilli", "ing_corn", "ing_dal", "ing_eggs", "ing_fish", "ing_ladyfinger", "ing_mushroom", "ing_noodles",
-                "ing_onion", "ing_paneer", "ing_potato", "ing_rice", "ing_shrimp", "ing_tomato");
+        Collections.addAll(Cuisine_nameList, "Bengali", "Punjabi", "Maharashtrian","Gujarati",
+                "South Indian", "Hyderabadi", "Goan", "Chinese", "Himachali", "Bihari", "North Eastern", "Continental");
+        Collections.addAll(Cuisine_imageList, "cuisine_bengali", "cuisine_punjabi", "cuisine_maharashtrian",
+                "cuisine_gujarati","cuisine_south_indian", "cuisine_hyderabadi", "cuisine_goan", "cuisine_chinese",
+                "cuisine_himachali", "cuisine_bihari", "cuisine_north_eastern", "cuisine_continental");
     }
 
 
@@ -100,11 +99,13 @@ public class login_screen extends AppCompatActivity implements ingredients_click
         actionBar.hide();
 
         login_progressbar = findViewById(R.id.login_progressbar);
+        select_cuisine_progressbar = findViewById(R.id.select_cuisine_progressbar);
         selecte_cuisine_done_Btn = findViewById(R.id.selecte_cuisine_done_Btn);
         signUp_card = findViewById(R.id.signUp_card);
         selectLang_card = findViewById(R.id.selectLang_card);
         select_cuisine_card = findViewById(R.id.select_cuisine_card);
         login_progressbar.setVisibility(View.INVISIBLE);
+        select_cuisine_progressbar.setVisibility(View.INVISIBLE);
 
         mAuth = FirebaseAuth.getInstance();
         createRequest();
@@ -129,8 +130,7 @@ public class login_screen extends AppCompatActivity implements ingredients_click
         findViewById(R.id.skip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                go_to_mainscreen();
-
+                go_to_mainscreen();
 
             }
         });
@@ -343,6 +343,7 @@ public class login_screen extends AppCompatActivity implements ingredients_click
     }
 
     public void done_BtnClicked(View view) {
+        select_cuisine_progressbar.setVisibility(View.VISIBLE);
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         String username, email;
         username = signInAccount.getDisplayName();
@@ -358,6 +359,7 @@ public class login_screen extends AppCompatActivity implements ingredients_click
                 .set(u).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                select_cuisine_progressbar.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(getApplicationContext(), main_screen.class);
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
                         .putBoolean("isSetupComplete", true).apply();

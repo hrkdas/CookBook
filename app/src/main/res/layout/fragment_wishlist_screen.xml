@@ -54,20 +54,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <GridLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:columnCount="2"
-                    android:orientation="horizontal"
-                    android:paddingBottom="200dp">
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/smallR_recyclerview_wishlistScreen"
+                        android:id="@+id/recyclerview_wishlistScreen"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent" />
 
-                </GridLayout>
             </ScrollView>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

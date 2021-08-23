@@ -239,7 +239,7 @@
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/cuisineList_recyclerview"
                                 android:layout_width="wrap_content"
-                                android:layout_height="600dp"
+                                android:layout_height="570dp"
                                 android:layout_gravity="center" />
 
                             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -248,7 +248,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
                                 android:layout_marginLeft="35dp"
-                                android:layout_marginTop="20dp"
                                 android:layout_marginBottom="30dp"
                                 android:backgroundTint="#FFFFFF"
                                 android:shadowColor="@color/white"

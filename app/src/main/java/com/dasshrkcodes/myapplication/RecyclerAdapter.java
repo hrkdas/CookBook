@@ -27,13 +27,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE = 1;
     private final Context context;
     private final List<Recipes> listRecyclerItem;
-    private Liked_click_RecyclerView mCallback;
+    private Liked_click_RecyclerView liked_mCallback;
+    private UnLiked_click_RecyclerView unliked_mCallback;
 
 
-    public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem, Liked_click_RecyclerView mCallback) {
+    public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem,
+                           Liked_click_RecyclerView liked_mCallback,UnLiked_click_RecyclerView unliked_mCallback) {
         this.context = context;
         this.listRecyclerItem = listRecyclerItem;
-        this.mCallback = mCallback;
+        this.liked_mCallback = liked_mCallback;
+        this.unliked_mCallback = unliked_mCallback;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -90,17 +93,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    public List<Recipes> getSavedObjectFromPreference(Context context, String preferenceFileName
-            , String preferenceKey, List<Recipes> classType) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
-        if (sharedPreferences.contains(preferenceKey)) {
-            final Gson gson = new Gson();
-            Type collectionType = new TypeToken<List<Recipes>>() {
-            }.getType();
-            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), collectionType);
-        }
-        return null;
-    }
 
 
 
@@ -159,12 +151,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void liked(LikeButton likeButton) {
 //                            Toast.makeText(context, "liked"+i, Toast.LENGTH_SHORT).show();
-                        mCallback.onClick(listRecyclerItem.get(i));
+                        liked_mCallback.LikeonClick(listRecyclerItem.get(i));
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
-                        mCallback.onClick(listRecyclerItem.get(i));
+                        unliked_mCallback.UnLikeonClick(listRecyclerItem.get(i));
                     }
                 });
 
