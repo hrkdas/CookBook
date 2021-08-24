@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#70473D"
-    tools:context=".recipe_overview">
+    tools:context=".recipe_screen_activities.recipe_overview">
 
 
     <androidx.core.widget.NestedScrollView
@@ -146,6 +146,24 @@
                     android:textColor="#FF00C0D8"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="5"
+                    android:gravity="right">
+
+                    <com.like.LikeButton
+                        android:id="@+id/recipe_overview_likebutton"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:padding="2dp"
+                        app:icon_size="25dp"
+                        app:icon_type="heart" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 

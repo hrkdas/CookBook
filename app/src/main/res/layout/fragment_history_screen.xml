@@ -25,9 +25,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="@font/calligraffitti"
+                android:fontFamily="@font/autour_one"
                 android:text="History "
-                android:textColor="@color/black"
+                android:textColor="#6A4239"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 

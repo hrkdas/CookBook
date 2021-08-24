@@ -1,15 +1,12 @@
 package com.dasshrkcodes.myapplication;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,25 +18,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.dasshrkcodes.myapplication.Classes.Recipes;
+import com.dasshrkcodes.myapplication.OtherRecyclerViews_adapters.HorizontalRecyclerAdapter;
+import com.dasshrkcodes.myapplication.RecyclerCard.Liked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.OnItem_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.RecyclerAdapter;
+import com.dasshrkcodes.myapplication.RecyclerCard.UnLiked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.recipe_screen_activities.recipe_overview;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -55,15 +54,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 public class main_screen extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView, UnLiked_click_RecyclerView {
+        NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
 
     //    Variables
     LottieAnimationView menuIcon,profile_icon;
@@ -108,7 +104,6 @@ public class main_screen extends AppCompatActivity implements
     LottieAnimationView mainscreen_progressbar_animationView;
 
 
-    private DatabaseReference databaseReference;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     SharedPreferences mPrefs;
 
@@ -192,19 +187,15 @@ public class main_screen extends AppCompatActivity implements
         smallR_recyclerview_6.setAdapter(horizontalRecyclerAdapter_6);
 
 
-        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this,this);
+        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this,
+                this,this);
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
         mainscreen_progressbar_animationView.setVisibility(View.VISIBLE);
         addItemsFromJSON();
 
         mPrefs = getPreferences(MODE_PRIVATE);
-//        viewItemsEmpty.clear();
-//        saveObjectToSharedPreference(getApplicationContext(), "LikedRecipeList",
-//                "LikedRecipeList", viewItemsEmpty);
-//        viewItemsCopy=getSavedObjectFromPreference(getApplicationContext(),"LikedRecipeList",
-//                "LikedRecipeList",viewItems);
-
+        saveLikedRecipeFromDB();
 
     }
 
@@ -388,9 +379,7 @@ public class main_screen extends AppCompatActivity implements
                                     smallR_recyclerviewItems_6.add(recipes);
                                 }
 
-
                                 viewItems.add(recipes);
-
 
                             }
                             Collections.shuffle(smallR_recyclerviewItems_1);
@@ -443,11 +432,45 @@ public class main_screen extends AppCompatActivity implements
                 });
     }
 
+
+    public void saveLikedRecipeList(List<String> list, String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+
+    }
+    public void saveLikedRecipeFromDB() {
+
+        GoogleSignInAccount signInAccount= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
+        db.collection("users").document(signInAccount.getEmail()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
+                        saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+    Integer maxListSize=150;
     public void card_1_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_1.size()>300) {
-            for (int i = 0; i < 300; i++) {
+        if(smallR_recyclerviewItems_1.size()>maxListSize) {
+            for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_1.get(i));
             }
         }
@@ -461,8 +484,8 @@ public class main_screen extends AppCompatActivity implements
     public void card_2_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_2.size()>300) {
-            for (int i = 0; i < 300; i++) {
+        if(smallR_recyclerviewItems_2.size()>maxListSize) {
+            for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_2.get(i));
             }
         }
@@ -476,8 +499,8 @@ public class main_screen extends AppCompatActivity implements
     public void card_3_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_3.size()>300) {
-            for (int i = 0; i < 300; i++) {
+        if(smallR_recyclerviewItems_3.size()>maxListSize) {
+            for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_3.get(i));
             }
         }
@@ -491,8 +514,8 @@ public class main_screen extends AppCompatActivity implements
     public void card_4_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_4.size()>300) {
-            for (int i = 0; i < 300; i++) {
+        if(smallR_recyclerviewItems_4.size()>maxListSize) {
+            for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_4.get(i));
             }
         }
@@ -506,8 +529,8 @@ public class main_screen extends AppCompatActivity implements
     public void card_5_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_5.size()>300) {
-            for (int i = 0; i < 300; i++) {
+        if(smallR_recyclerviewItems_5.size()>maxListSize) {
+            for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_5.get(i));
             }
         }else {
@@ -520,8 +543,8 @@ public class main_screen extends AppCompatActivity implements
     public void card_6_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
         List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_6.size()>300) {
-            for (int i = 0; i < 300; i++) {
+        if(smallR_recyclerviewItems_6.size()>maxListSize) {
+            for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_6.get(i));
             }
         }else {
@@ -689,6 +712,7 @@ public class main_screen extends AppCompatActivity implements
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
+        saveLikedRecipeFromDB();
 
     }
 
@@ -699,6 +723,15 @@ public class main_screen extends AppCompatActivity implements
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
+        saveLikedRecipeFromDB();
 
+    }
+
+    @Override
+    public void ItemeOnClick(Recipes value) {
+        String id = value.getId();
+        Intent intent = new Intent(getApplicationContext(), recipe_overview.class);
+        intent.putExtra("id_recipe_overview", id);
+        startActivity(intent);
     }
 }

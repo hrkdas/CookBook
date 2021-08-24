@@ -1,4 +1,4 @@
-package com.dasshrkcodes.myapplication;
+package com.dasshrkcodes.myapplication.recipe_screen_activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.dasshrkcodes.myapplication.R;
 import com.squareup.picasso.Picasso;
 
 public class image_overview extends AppCompatActivity {

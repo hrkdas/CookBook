@@ -1,9 +1,10 @@
 package com.dasshrkcodes.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -11,23 +12,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dasshrkcodes.myapplication.Classes.Recipes;
+import com.dasshrkcodes.myapplication.RecyclerCard.Liked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.OnItem_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.RecyclerAdapter;
+import com.dasshrkcodes.myapplication.RecyclerCard.UnLiked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.recipe_screen_activities.recipe_overview;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class searchby_cardtype extends AppCompatActivity implements Liked_click_RecyclerView, UnLiked_click_RecyclerView {
+public class searchby_cardtype extends AppCompatActivity implements Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
 
     private RecyclerView bigR_recyclerview_searchbytype;
     private RecyclerView.LayoutManager layoutManager;
@@ -62,7 +67,8 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
             }
         }
 
-        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this,this);
+        recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this,
+                this,this);
         bigR_recyclerview_searchbytype.setAdapter(recyclerAdapter);
 
 
@@ -92,6 +98,40 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
 
     }
 
+
+    public void saveLikedRecipeList(List<String> list, String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+
+    }
+    public void saveLikedRecipeFromDB() {
+
+        GoogleSignInAccount signInAccount= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(signInAccount.getEmail()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
+                        saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
     @Override
     public void LikeonClick(Recipes value) {
 
@@ -99,6 +139,7 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
+        saveLikedRecipeFromDB();
 
     }
 
@@ -109,6 +150,15 @@ public class searchby_cardtype extends AppCompatActivity implements Liked_click_
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
+        saveLikedRecipeFromDB();
 
+    }
+
+    @Override
+    public void ItemeOnClick(Recipes value) {
+        String id = value.getId();
+        Intent intent = new Intent(getApplicationContext(), recipe_overview.class);
+        intent.putExtra("id_recipe_overview", id);
+        startActivity(intent);
     }
 }

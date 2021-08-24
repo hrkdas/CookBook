@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#70473D"
-    tools:context=".image_overview">
+    tools:context=".recipe_screen_activities.image_overview">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

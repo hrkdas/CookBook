@@ -2,7 +2,9 @@ package com.dasshrkcodes.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -23,16 +25,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.dasshrkcodes.myapplication.Classes.Recipes;
+import com.dasshrkcodes.myapplication.OtherRecyclerViews_adapters.IngredientsRecyclerAdapter;
+import com.dasshrkcodes.myapplication.OtherRecyclerViews_adapters.ingredients_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.Liked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.OnItem_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.RecyclerAdapter;
+import com.dasshrkcodes.myapplication.RecyclerCard.UnLiked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.recipe_screen_activities.recipe_overview;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +57,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView, Liked_click_RecyclerView, UnLiked_click_RecyclerView {
+public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView, Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
 
     Animation searchscreen_anim;
     LinearLayout searchscreen_layout;
@@ -56,7 +66,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     LinearLayout searchscreen_selectIng_layout;
 
     ProgressBar searchscreen_progressbar;
-    LottieAnimationView searchscreen_progressbar_animationView;
+    LottieAnimationView searchscreen_progressbar_animationView,
+            searchscreen_noresult_animationView;
 
     List<String> Ing_nameList = new ArrayList<>();
     List<String> Ing_imageList = new ArrayList<>();
@@ -101,6 +112,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         ingList_recyclerview.setAdapter(recyclerAdapter);
         searchscreen_progressbar = findViewById(R.id.searchscreen_progressbar);
         searchscreen_progressbar_animationView = findViewById(R.id.searchscreen_progressbar_animationView);
+        searchscreen_noresult_animationView = findViewById(R.id.searchscreen_noresult_animationView);
         selected_ingList_TextView = findViewById(R.id.selected_ingList_TextView);
         search_recyclerview = findViewById(R.id.search_recyclerview);
         searchscreen_selectIng_layout = findViewById(R.id.searchscreen_selectIng_layout);
@@ -111,7 +123,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         search_recyclerview.setLayoutManager(linearLayoutManager);
 
         Search_Adapter = new RecyclerAdapter(getApplicationContext(), search_found_recipesList,
-                this, this);
+                this, this,this);
         search_recyclerview.setAdapter(Search_Adapter);
 
 
@@ -190,6 +202,11 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                     search_found_recipesList.clear();
                     break;
                 }
+            }
+            if(search_found_recipesList.size()==0){
+                searchscreen_noresult_animationView.setVisibility(View.VISIBLE);
+            }else {
+                searchscreen_noresult_animationView.setVisibility(View.GONE);
             }
             Search_Adapter.notifyDataSetChanged();
             searchscreen_progressbar_animationView.setVisibility(View.GONE);
@@ -330,8 +347,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                 Collections.shuffle(found_recipesList);
                 Intent intent = new Intent(search_screen.this, searchby_cardtype.class);
                 List<Recipes> recipesList=new ArrayList<>();
-                if(found_recipesList.size()>300) {
-                    for (int i = 0; i < 300; i++) {
+                if(found_recipesList.size()>150) {
+                    for (int i = 0; i < 150; i++) {
                         recipesList.add(found_recipesList.get(i));
                     }
                 }else {
@@ -384,6 +401,41 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     }
 
 
+    public void saveLikedRecipeList(List<String> list, String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+
+    }
+    public void saveLikedRecipeFromDB() {
+
+        GoogleSignInAccount signInAccount= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(signInAccount.getEmail()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
+                        saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+
+
     @Override
     public void LikeonClick(Recipes value) {
 
@@ -391,6 +443,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
+        saveLikedRecipeFromDB();
 
     }
 
@@ -401,6 +454,15 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
+        saveLikedRecipeFromDB();
 
+    }
+
+    @Override
+    public void ItemeOnClick(Recipes value) {
+        String id = value.getId();
+        Intent intent = new Intent(getApplicationContext(), recipe_overview.class);
+        intent.putExtra("id_recipe_overview", id);
+        startActivity(intent);
     }
 }

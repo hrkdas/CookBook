@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFADFBB4"
-    tools:context=".start_cooking_screen">
+    tools:context=".recipe_screen_activities.start_cooking_screen">
 
     <LinearLayout
         android:layout_width="match_parent"

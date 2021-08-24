@@ -1,4 +1,4 @@
-package com.dasshrkcodes.myapplication;
+package com.dasshrkcodes.myapplication.Classes;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.dasshrkcodes.myapplication;
+package com.dasshrkcodes.myapplication.OtherRecyclerViews_adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,23 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dasshrkcodes.myapplication.R;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
-public class CuisinesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE = 1;
     private final Context context;
-    private final List<String> Cuisine_nameList;
-    private final List<String> Cuisine_imageList;
+    private final List<String> Ing_nameList;
+    private final List<String> Ing_imageList;
     private ingredients_click_RecyclerView mCallback;
 
 
-    public CuisinesRecyclerAdapter(Context context, List<String> Cuisine_nameList, List<String> Cuisine_imageList, ingredients_click_RecyclerView mCallback) {
+    public IngredientsRecyclerAdapter(Context context, List<String> Ing_nameList, List<String> Ing_imageList,ingredients_click_RecyclerView mCallback) {
         this.context = context;
-        this.Cuisine_nameList = Cuisine_nameList;
-        this.Cuisine_imageList = Cuisine_imageList;
+        this.Ing_nameList = Ing_nameList;
+        this.Ing_imageList = Ing_imageList;
         this.mCallback = mCallback;
     }
 
@@ -35,15 +36,15 @@ public class CuisinesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         ImageView imageView;
         TextView mTitle;
-        MaterialCardView cuisine_card;
+        MaterialCardView ing_card;
 
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.cuisine_image);
-            mTitle = itemView.findViewById(R.id.cuisine_text);
-            cuisine_card = itemView.findViewById(R.id.cuisine_card);
+            imageView = itemView.findViewById(R.id.ing_image);
+            mTitle = itemView.findViewById(R.id.ing_text);
+            ing_card = itemView.findViewById(R.id.ing_card);
 
         }
     }
@@ -57,7 +58,7 @@ public class CuisinesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             default:
 
                 View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(
-                        R.layout.cuisine_card, viewGroup, false);
+                        R.layout.ingredient_card, viewGroup, false);
 
                 return new ItemViewHolder((layoutView));
         }
@@ -75,8 +76,8 @@ public class CuisinesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
 
-                itemViewHolder.mTitle.setText(Cuisine_nameList.get(i));
-                int res = context.getResources().getIdentifier(Cuisine_imageList.get(i), "drawable",
+                itemViewHolder.mTitle.setText(Ing_nameList.get(i));
+                int res = context.getResources().getIdentifier(Ing_imageList.get(i), "drawable",
                         context.getPackageName());
                 itemViewHolder.imageView.setImageResource(res);
 
@@ -84,26 +85,26 @@ public class CuisinesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     @Override
                     public void onClick(View v) {
 
-                        if (itemViewHolder.cuisine_card.getStrokeWidth() > 0) {
-                            itemViewHolder.cuisine_card.setStrokeWidth(0);
+                        if (itemViewHolder.ing_card.getStrokeWidth() > 0) {
+                            itemViewHolder.ing_card.setStrokeWidth(0);
                         } else {
-                            itemViewHolder.cuisine_card.setStrokeWidth(8);
+                            itemViewHolder.ing_card.setStrokeWidth(5);
                         }
-                        mCallback.onClick(Cuisine_nameList.get(i));
+                        mCallback.onClick(Ing_nameList.get(i));
 
                     }
                 });
 
-                itemViewHolder.cuisine_card.setOnClickListener(new View.OnClickListener() {
+                itemViewHolder.ing_card.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if (itemViewHolder.cuisine_card.getStrokeWidth() > 0) {
-                            itemViewHolder.cuisine_card.setStrokeWidth(0);
+                        if (itemViewHolder.ing_card.getStrokeWidth() > 0) {
+                            itemViewHolder.ing_card.setStrokeWidth(0);
                         } else {
-                            itemViewHolder.cuisine_card.setStrokeWidth(8);
+                            itemViewHolder.ing_card.setStrokeWidth(5);
                         }
-                        mCallback.onClick(Cuisine_nameList.get(i));
+                        mCallback.onClick(Ing_nameList.get(i));
 
                     }
                 });
@@ -114,6 +115,6 @@ public class CuisinesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        return Cuisine_nameList.size();
+        return Ing_nameList.size();
     }
 }

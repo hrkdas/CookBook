@@ -1,4 +1,4 @@
-package com.dasshrkcodes.myapplication;
+package com.dasshrkcodes.myapplication.OtherRecyclerViews_adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dasshrkcodes.myapplication.Classes.Recipes;
+import com.dasshrkcodes.myapplication.R;
 import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 

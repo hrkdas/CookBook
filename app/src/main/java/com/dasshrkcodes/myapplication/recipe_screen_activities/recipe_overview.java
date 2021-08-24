@@ -1,10 +1,11 @@
-package com.dasshrkcodes.myapplication;
+package com.dasshrkcodes.myapplication.recipe_screen_activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,27 +13,39 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.dasshrkcodes.myapplication.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.reflect.TypeToken;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.google.mlkit.common.model.DownloadConditions;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class recipe_overview extends AppCompatActivity {
 
@@ -44,6 +57,7 @@ public class recipe_overview extends AppCompatActivity {
     String id_recipe_overview;
     TextView recipe_overview_difficulty;
     ImageView recipe_ov_veg_icon, recipe_ov_nonveg_icon;
+    LikeButton recipe_overview_likebutton;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String id, name, ingredientsList, totalTime, cuisine, instructions, cleanedIngredients,
@@ -52,6 +66,7 @@ public class recipe_overview extends AppCompatActivity {
     Translator selectedTranslator;
     FloatingActionButton google_translate_btn;
     String translated_ingredientsList, translated_instructions,selectedLang;
+    List<String> likedRecipe_test=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +91,7 @@ public class recipe_overview extends AppCompatActivity {
         recipe_ov_veg_icon = findViewById(R.id.recipe_ov_veg_icon);
         recipe_ov_nonveg_icon = findViewById(R.id.recipe_ov_nonveg_icon);
         google_translate_btn = findViewById(R.id.google_translate_btn);
+        recipe_overview_likebutton = findViewById(R.id.recipe_overview_likebutton);
 
         id_recipe_overview = getIntent().getStringExtra("id_recipe_overview");
         displayRecipeFromDB();
@@ -171,12 +187,84 @@ public class recipe_overview extends AppCompatActivity {
         });
 
 
+
+        likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
+
+        if(likedRecipe_test.contains(id_recipe_overview)){
+            recipe_overview_likebutton.setLiked(true);
+        }else{
+            recipe_overview_likebutton.setLiked(false);
+        }
+
+        recipe_overview_likebutton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+
+                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+                docRef.update("likedRecipe", FieldValue.arrayUnion(id_recipe_overview));
+                saveLikedRecipeFromDB();
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+                docRef.update("likedRecipe", FieldValue.arrayRemove(id_recipe_overview));
+                saveLikedRecipeFromDB();
+            }
+        });
+
+
     }
+
+    public List<String> getLikedRecipeList(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        return gson.fromJson(json, type);
+    }
+
+    public void saveLikedRecipeList(List<String> list, String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+
+    }
+    public void saveLikedRecipeFromDB() {
+
+        GoogleSignInAccount signInAccount= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
+        db.collection("users").document(signInAccount.getEmail()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
+                        saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
 
     private void displayRecipeFromDB() {
         db.collection("Recipes").whereEqualTo("id", Integer.parseInt(id_recipe_overview))
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {

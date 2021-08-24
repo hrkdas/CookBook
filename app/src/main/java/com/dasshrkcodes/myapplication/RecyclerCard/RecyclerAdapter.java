@@ -1,7 +1,8 @@
-package com.dasshrkcodes.myapplication;
+package com.dasshrkcodes.myapplication.RecyclerCard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dasshrkcodes.myapplication.R;
+import com.dasshrkcodes.myapplication.Classes.Recipes;
 import com.google.android.material.card.MaterialCardView;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -29,21 +32,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final List<Recipes> listRecyclerItem;
     private Liked_click_RecyclerView liked_mCallback;
     private UnLiked_click_RecyclerView unliked_mCallback;
+    private OnItem_click_RecyclerView onItemclick_mCallback;
 
 
     public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem,
-                           Liked_click_RecyclerView liked_mCallback,UnLiked_click_RecyclerView unliked_mCallback) {
+                           Liked_click_RecyclerView liked_mCallback,
+                           UnLiked_click_RecyclerView unliked_mCallback,
+                           OnItem_click_RecyclerView onItemclick_mCallback) {
         this.context = context;
         this.listRecyclerItem = listRecyclerItem;
         this.liked_mCallback = liked_mCallback;
         this.unliked_mCallback = unliked_mCallback;
+        this.onItemclick_mCallback = onItemclick_mCallback;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView, bigR_veg_icon, bigR_nonveg_icon;
         LikeButton bigR_likebutton;
-        TextView mTitle, mDescription, mTime,bigR_difficulty,bigR_ratingcount;
+        TextView mTitle, mDescription, mTime, bigR_difficulty, bigR_ratingcount;
         MaterialCardView big_card;
         RatingBar bigR_ratingbar;
 
@@ -93,9 +100,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-
-
-
+    public List<String> getLikedRecipeList(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        return gson.fromJson(json, type);
+    }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
@@ -112,27 +124,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemViewHolder.mTitle.setText(recipes.getRName());
                 itemViewHolder.mTime.setText(recipes.getTotalTime() + "min");
                 itemViewHolder.mDescription.setText(recipes.getInstructions());
-                itemViewHolder.bigR_ratingcount.setText(recipes.getRatingCount()+"");
-                itemViewHolder.big_card.setTag(recipes.getId());
+                itemViewHolder.bigR_ratingcount.setText(recipes.getRatingCount() + "");
+                itemViewHolder.big_card.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemclick_mCallback.ItemeOnClick(recipes);
+                    }
+                });
                 itemViewHolder.bigR_ratingbar.setRating(Float.parseFloat(recipes.getRating()));
 
 //                    itemViewHolder.bigR_likebutton.setTag(recipes.getId());
-                Picasso.get().load(recipes.getImgUrl()).resize(300,200).into(itemViewHolder.imageView);
+                Picasso.get().load(recipes.getImgUrl()).resize(300, 200).into(itemViewHolder.imageView);
 
 
                 String ingredientsList = recipes.getIngredientsList();
                 String cleanedIngredients = recipes.getCleanedIngredients();
                 String instructions = recipes.getInstructions();
-                String s = ingredientsList + cleanedIngredients ;
+                String s = ingredientsList + cleanedIngredients;
                 String[] card1 = {"chicken", "egg", "mutton", "fish", "shrimp", "prawns", "pomphret",
                         "surmai", "beef", "goat"};
 
-                if(instructions.length()<750){//easy
+                if (instructions.length() < 750) {//easy
                     itemViewHolder.bigR_difficulty.setText("Easy");
 
-                }else if(instructions.length()>1400){//hard
+                } else if (instructions.length() > 1400) {//hard
                     itemViewHolder.bigR_difficulty.setText("Hard");
-                }else{
+                } else {
                     itemViewHolder.bigR_difficulty.setText("Medium");
                 }
 
@@ -144,7 +161,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     itemViewHolder.bigR_veg_icon.setVisibility(View.VISIBLE);
                     itemViewHolder.bigR_nonveg_icon.setVisibility(View.GONE);
                 }
-//                itemViewHolder.bigR_likebutton.setLiked(true);
+
+
+                List<String> likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
+
+               if(likedRecipe_test.contains(recipes.getId())){
+                   itemViewHolder.bigR_likebutton.setLiked(true);
+               }else{
+                   itemViewHolder.bigR_likebutton.setLiked(false);
+               }
 
 
                 itemViewHolder.bigR_likebutton.setOnLikeListener(new OnLikeListener() {

@@ -1,43 +1,47 @@
 package com.dasshrkcodes.myapplication.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.dasshrkcodes.myapplication.HorizontalRecyclerAdapter;
-import com.dasshrkcodes.myapplication.Liked_click_RecyclerView;
+import com.airbnb.lottie.LottieAnimationView;
+import com.dasshrkcodes.myapplication.RecyclerCard.Liked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.RecyclerCard.OnItem_click_RecyclerView;
 import com.dasshrkcodes.myapplication.R;
-import com.dasshrkcodes.myapplication.Recipes;
-import com.dasshrkcodes.myapplication.RecyclerAdapter;
-import com.dasshrkcodes.myapplication.UnLiked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.Classes.Recipes;
+import com.dasshrkcodes.myapplication.RecyclerCard.RecyclerAdapter;
+import com.dasshrkcodes.myapplication.RecyclerCard.UnLiked_click_RecyclerView;
+import com.dasshrkcodes.myapplication.recipe_screen_activities.recipe_overview;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.card.MaterialCardView;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +51,7 @@ import java.util.List;
  * Use the {@link wishlist_screen#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class wishlist_screen extends Fragment implements Liked_click_RecyclerView, UnLiked_click_RecyclerView {
+public class wishlist_screen extends Fragment implements Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,6 +90,8 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
     List<String> likedRecipeListIds;
     GoogleSignInAccount signInAccount;
     FirebaseFirestore db;
+    LottieAnimationView wishlistscreen_noresult_animationView;
+    TextView CooklistEmptyText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,12 +107,14 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myInflatedView = inflater.inflate(R.layout.fragment_wishlist_screen, container,false);
+        View myInflatedView = inflater.inflate(R.layout.fragment_wishlist_screen, container, false);
 
 
-        recyclerview_wishlistScreen=myInflatedView.findViewById(R.id.recyclerview_wishlistScreen);
+        recyclerview_wishlistScreen = myInflatedView.findViewById(R.id.recyclerview_wishlistScreen);
+        CooklistEmptyText = myInflatedView.findViewById(R.id.CooklistEmptyText);
+        wishlistscreen_noresult_animationView = myInflatedView.findViewById(R.id.wishlistscreen_noresult_animationView);
 
-        recyclerAdapter = new RecyclerAdapter(getContext(), viewItems, this,this);
+        recyclerAdapter = new RecyclerAdapter(getContext(), viewItems, this, this,this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL,
                 false);
         recyclerview_wishlistScreen.setLayoutManager(linearLayoutManager);
@@ -114,48 +122,34 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
 
         db = FirebaseFirestore.getInstance();
         signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-//        printItems();
+        printItems();
 
         return myInflatedView;
     }
 
-    public void printItems(){
+
+
+
+    public void saveLikedRecipeList(List<String> list, String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+
+    }
+    public void saveLikedRecipeFromDB() {
+
+        GoogleSignInAccount signInAccount= GoogleSignIn.getLastSignedInAccount(getContext());
 
         db.collection("users").document(signInAccount.getEmail()).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                        final List<String> likedRecipe= (List<String>) documentSnapshot.get("likedRecipe");
-                        likedRecipeListIds=likedRecipe;
-                        Toast.makeText(getContext(), likedRecipeListIds.size()+"", Toast.LENGTH_SHORT).show();
-
-                        db.collection("Recipes").whereEqualTo("id", likedRecipeListIds.get(0)).get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        for (QueryDocumentSnapshot itemObj : task.getResult()) {
-
-                                            String id = itemObj.getLong("id").toString();
-                                            String name = itemObj.getString("name");
-                                            String ingredientsList = itemObj.getString("ingredientsList");
-                                            String totalTime = itemObj.getLong("totalTime").toString();
-                                            String cuisine = itemObj.getString("cuisine");
-                                            String instructions = itemObj.getString("instructions");
-                                            String cleanedIngredients = itemObj.getString("cleanedIngredients");
-                                            String imageUrl = itemObj.getString("imageUrl");
-                                            String ingredientCount = itemObj.getLong("ingredientCount").toString();
-                                            String rating = itemObj.getLong("rating").toString();
-                                            String ratingCount = itemObj.getLong("ratingCount").toString();
-                                            Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                                    cuisine, instructions, cleanedIngredients, imageUrl,
-                                                    ingredientCount, rating, ratingCount, id);
-                                            viewItems.add(recipes);
-                                        }
-                                        recyclerAdapter.notifyDataSetChanged();
-
-                                    }
-                                });
+                        final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
+                        saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
 
                     }
                 })
@@ -167,7 +161,85 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
                 });
 
     }
+    public List<String> getLikedRecipeList(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        return gson.fromJson(json, type);
+    }
 
+    public void printItems() {
+        likedRecipeListIds = getLikedRecipeList("likedRecipeListIds");
+
+        for (int i = 0; i < likedRecipeListIds.size(); i++)
+            addRecipeOfCurrentId(Integer.parseInt(likedRecipeListIds.get(i)) - 1);
+        recyclerAdapter.notifyDataSetChanged();
+        if(likedRecipeListIds.size()==0){
+            wishlistscreen_noresult_animationView.setVisibility(View.VISIBLE);
+            CooklistEmptyText.setVisibility(View.VISIBLE);
+        }else {
+            wishlistscreen_noresult_animationView.setVisibility(View.GONE);
+            CooklistEmptyText.setVisibility(View.GONE);
+        }
+
+    }
+
+
+    private void addRecipeOfCurrentId(Integer currentId) {
+        try {
+
+            String jsonDataString = readJSONDataFromFile();
+            JSONArray jsonArray = new JSONArray(jsonDataString);
+
+            JSONObject itemObj = jsonArray.getJSONObject(currentId);
+
+            String id = itemObj.getString("id");
+            String name = itemObj.getString("name");
+            String ingredientsList = itemObj.getString("ingredientsList");
+            String totalTime = itemObj.getString("totalTime");
+            String cuisine = itemObj.getString("cuisine");
+            String instructions = itemObj.getString("instructions");
+            String cleanedIngredients = itemObj.getString("cleanedIngredients");
+            String imageUrl = itemObj.getString("imageUrl");
+            String ingredientCount = itemObj.getString("ingredientCount");
+            String rating = itemObj.getString("rating");
+            String ratingCount = itemObj.getString("ratingCount");
+            Recipes recipes = new Recipes(name, ingredientsList, totalTime,
+                    cuisine, instructions, cleanedIngredients, imageUrl,
+                    ingredientCount, rating, ratingCount, id);
+
+            viewItems.add(recipes);
+
+        } catch (JSONException | IOException e) {
+        }
+    }
+
+
+    private String readJSONDataFromFile() throws IOException {
+
+        InputStream inputStream = null;
+        StringBuilder builder = new StringBuilder();
+
+        try {
+
+            String jsonString = null;
+            inputStream = getResources().openRawResource(R.raw.recipes);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(inputStream, "UTF-8"));
+
+            while ((jsonString = bufferedReader.readLine()) != null) {
+                builder.append(jsonString);
+            }
+
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return new String(builder);
+    }
 
     @Override
     public void LikeonClick(Recipes value) {
@@ -176,6 +248,7 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
+        saveLikedRecipeFromDB();
 
     }
 
@@ -186,6 +259,15 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
         docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
+        saveLikedRecipeFromDB();
 
+    }
+
+    @Override
+    public void ItemeOnClick(Recipes value) {
+        String id = value.getId();
+        Intent intent = new Intent(getActivity(), recipe_overview.class);
+        intent.putExtra("id_recipe_overview", id);
+        startActivity(intent);
     }
 }
