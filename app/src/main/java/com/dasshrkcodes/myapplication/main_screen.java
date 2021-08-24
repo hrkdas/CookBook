@@ -445,37 +445,89 @@ public class main_screen extends AppCompatActivity implements
 
     public void card_1_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_1);
+        List<Recipes> recipesList=new ArrayList<>();
+        if(smallR_recyclerviewItems_1.size()>300) {
+            for (int i = 0; i < 300; i++) {
+                recipesList.add(smallR_recyclerviewItems_1.get(i));
+            }
+        }
+        else {
+            recipesList=smallR_recyclerviewItems_1;
+        }
+        intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
     }
 
     public void card_2_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_2);
+        List<Recipes> recipesList=new ArrayList<>();
+        if(smallR_recyclerviewItems_2.size()>300) {
+            for (int i = 0; i < 300; i++) {
+                recipesList.add(smallR_recyclerviewItems_2.get(i));
+            }
+        }
+        else {
+            recipesList=smallR_recyclerviewItems_2;
+        }
+        intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
     }
 
     public void card_3_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_3);
+        List<Recipes> recipesList=new ArrayList<>();
+        if(smallR_recyclerviewItems_3.size()>300) {
+            for (int i = 0; i < 300; i++) {
+                recipesList.add(smallR_recyclerviewItems_3.get(i));
+            }
+        }
+        else {
+            recipesList=smallR_recyclerviewItems_3;
+        }
+        intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
     }
 
     public void card_4_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_4);
+        List<Recipes> recipesList=new ArrayList<>();
+        if(smallR_recyclerviewItems_4.size()>300) {
+            for (int i = 0; i < 300; i++) {
+                recipesList.add(smallR_recyclerviewItems_4.get(i));
+            }
+        }
+        else {
+            recipesList=smallR_recyclerviewItems_4;
+        }
+        intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
     }
 
     public void card_5_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_5);
+        List<Recipes> recipesList=new ArrayList<>();
+        if(smallR_recyclerviewItems_5.size()>300) {
+            for (int i = 0; i < 300; i++) {
+                recipesList.add(smallR_recyclerviewItems_5.get(i));
+            }
+        }else {
+            recipesList=smallR_recyclerviewItems_5;
+        }
+        intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
     }
 
     public void card_6_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        intent.putExtra("selected_recipes", (Serializable) smallR_recyclerviewItems_6);
+        List<Recipes> recipesList=new ArrayList<>();
+        if(smallR_recyclerviewItems_6.size()>300) {
+            for (int i = 0; i < 300; i++) {
+                recipesList.add(smallR_recyclerviewItems_6.get(i));
+            }
+        }else {
+            recipesList=smallR_recyclerviewItems_6;
+        }
+        intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
     }
 

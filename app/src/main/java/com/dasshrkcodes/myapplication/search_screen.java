@@ -110,14 +110,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                 RecyclerView.VERTICAL, false);
         search_recyclerview.setLayoutManager(linearLayoutManager);
 
-//        Query query = db.collection("Recipes").orderBy("id",Query.Direction.ASCENDING);
-//        FirestoreRecyclerOptions<Recipes> recipes = new FirestoreRecyclerOptions.Builder<Recipes>()
-//                .setQuery(query, Recipes.class)
-//                .build();
-//        Search_Adapter = new search_rAdapter(recipes);
-
         Search_Adapter = new RecyclerAdapter(getApplicationContext(), search_found_recipesList,
-                this,this);
+                this, this);
         search_recyclerview.setAdapter(Search_Adapter);
 
 
@@ -143,7 +137,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                     search_found_recipesList.clear();
                     searchscreen_progressbar_animationView.setVisibility(View.VISIBLE);
 
-                    addItemsFromJSON(editable);
+                    afterTextChangedAddItemsFromJSON(editable);
 
                 } else {
                     searchscreen_progressbar_animationView.setVisibility(View.GONE);
@@ -160,13 +154,14 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
             }
         });
     }
-    private void addItemsFromJSON(Editable editable) {
+
+    private void afterTextChangedAddItemsFromJSON(Editable editable) {
         try {
 
             String jsonDataString = readJSONDataFromFile();
             JSONArray jsonArray = new JSONArray(jsonDataString);
 
-            for (int i=0; i<jsonArray.length(); ++i) {
+            for (int i = 0; i < jsonArray.length(); ++i) {
 
                 JSONObject itemObj = jsonArray.getJSONObject(i);
 
@@ -184,7 +179,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
 
                 Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions,
-                        cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount,id);
+                        cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount, id);
 
 
                 if (name.toLowerCase().contains(editable.toString().toLowerCase().trim())) {
@@ -226,6 +221,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         }
         return new String(builder);
     }
+
     public void search_recyclerview_refresh(View view) {
     }
 
@@ -299,6 +295,56 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         return String.valueOf(chars);
     }
 
+    private void AddItemsFromJSONcheckItems(String[] cardtype, Boolean search_by_ingInBtn_click) {
+        try {
+
+            String jsonDataString = readJSONDataFromFile();
+            JSONArray jsonArray = new JSONArray(jsonDataString);
+
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                JSONObject itemObj = jsonArray.getJSONObject(i);
+
+                String id = itemObj.getString("id");
+                String name = itemObj.getString("name");
+                String ingredientsList = itemObj.getString("ingredientsList");
+                String totalTime = itemObj.getString("totalTime");
+                String cuisine = itemObj.getString("cuisine");
+                String instructions = itemObj.getString("instructions");
+                String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                String imageUrl = itemObj.getString("imageUrl");
+                String ingredientCount = itemObj.getString("ingredientCount");
+                String rating = itemObj.getString("rating");
+                String ratingCount = itemObj.getString("ratingCount");
+                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
+                        cuisine, instructions, cleanedIngredients, imageUrl,
+                        ingredientCount, rating, ratingCount, id);
+                if (checkIngredients(cleanedIngredients, cardtype, search_by_ingInBtn_click)) {
+                    found_recipesList.add(recipes);
+                }
+
+            }
+
+            if (found_recipesList.size() == 0) {
+                Toast.makeText(search_screen.this, "No Combination Found", Toast.LENGTH_SHORT).show();
+            } else {
+                Collections.shuffle(found_recipesList);
+                Intent intent = new Intent(search_screen.this, searchby_cardtype.class);
+                List<Recipes> recipesList=new ArrayList<>();
+                if(found_recipesList.size()>300) {
+                    for (int i = 0; i < 300; i++) {
+                        recipesList.add(found_recipesList.get(i));
+                    }
+                }else {
+                    recipesList=found_recipesList;
+                }
+                intent.putExtra("selected_recipes", (Serializable) recipesList);
+                startActivity(intent);
+            }
+            searchscreen_progressbar.setVisibility(View.INVISIBLE);
+
+        } catch (JSONException | IOException e) {
+        }
+    }
 
 
     private boolean checkIngredients(String cleanedIngredients, String[] cardtype, Boolean search_by_ingInBtn_click) {
@@ -320,56 +366,13 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
     }
 
-    private void checkItems(String[] cardtype, Boolean search_by_ingInBtn_click) {
-        db.collection("Recipes").orderBy("id").limit(400).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot itemObj : task.getResult()) {
-
-                                String id = itemObj.getLong("id").toString();
-                                String name = itemObj.getString("name");
-                                String ingredientsList = itemObj.getString("ingredientsList");
-                                String totalTime = itemObj.getLong("totalTime").toString();
-                                String cuisine = itemObj.getString("cuisine");
-                                String instructions = itemObj.getString("instructions");
-                                String cleanedIngredients = itemObj.getString("cleanedIngredients");
-                                String imageUrl = itemObj.getString("imageUrl");
-                                String ingredientCount = itemObj.getLong("ingredientCount").toString();
-                                String rating = itemObj.getLong("rating").toString();
-                                String ratingCount = itemObj.getLong("ratingCount").toString();
-                                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                        cuisine, instructions, cleanedIngredients, imageUrl,
-                                        ingredientCount, rating, ratingCount, id);
-                                if (checkIngredients(cleanedIngredients, cardtype, search_by_ingInBtn_click)) {
-                                    found_recipesList.add(recipes);
-                                }
-
-                            }
-                            if (found_recipesList.size() == 0) {
-                                Toast.makeText(search_screen.this, "No Combination Found", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Collections.shuffle(found_recipesList);
-                                Intent intent = new Intent(search_screen.this, searchby_cardtype.class);
-                                intent.putExtra("selected_recipes", (Serializable) found_recipesList);
-                                startActivity(intent);
-                            }
-                            searchscreen_progressbar.setVisibility(View.INVISIBLE);
-
-                        } else {
-                            Toast.makeText(search_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
 
     public void search_by_ingInBtn_clicked(View view) {
         search_by_ingInBtn_click = true;
         searchscreen_progressbar.setVisibility(View.VISIBLE);
         String[] stringArray = Selected_Ing_List.toArray(new String[0]);
         found_recipesList.clear();
-        checkItems(stringArray, search_by_ingInBtn_click);
+        AddItemsFromJSONcheckItems(stringArray, search_by_ingInBtn_click);
     }
 
     public void search_by_ingExBtn_clicked(View view) {
@@ -377,7 +380,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         searchscreen_progressbar.setVisibility(View.VISIBLE);
         String[] stringArray = Selected_Ing_List.toArray(new String[0]);
         found_recipesList.clear();
-        checkItems(stringArray, search_by_ingInBtn_click);
+        AddItemsFromJSONcheckItems(stringArray, search_by_ingInBtn_click);
     }
 
 
