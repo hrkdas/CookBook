@@ -97,7 +97,6 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-//        printItems();
     }
 
     @Override
@@ -115,10 +114,9 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
         recyclerview_wishlistScreen.setLayoutManager(linearLayoutManager);
         recyclerview_wishlistScreen.setAdapter(recyclerAdapter);
 
-
         db = FirebaseFirestore.getInstance();
         signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-
+//        printItems();
 
         return myInflatedView;
     }
@@ -132,6 +130,34 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
 
                         final List<String> likedRecipe= (List<String>) documentSnapshot.get("likedRecipe");
                         likedRecipeListIds=likedRecipe;
+                        Toast.makeText(getContext(), likedRecipeListIds.size()+"", Toast.LENGTH_SHORT).show();
+
+                        db.collection("Recipes").whereEqualTo("id", likedRecipeListIds.get(0)).get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        for (QueryDocumentSnapshot itemObj : task.getResult()) {
+
+                                            String id = itemObj.getLong("id").toString();
+                                            String name = itemObj.getString("name");
+                                            String ingredientsList = itemObj.getString("ingredientsList");
+                                            String totalTime = itemObj.getLong("totalTime").toString();
+                                            String cuisine = itemObj.getString("cuisine");
+                                            String instructions = itemObj.getString("instructions");
+                                            String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                                            String imageUrl = itemObj.getString("imageUrl");
+                                            String ingredientCount = itemObj.getLong("ingredientCount").toString();
+                                            String rating = itemObj.getLong("rating").toString();
+                                            String ratingCount = itemObj.getLong("ratingCount").toString();
+                                            Recipes recipes = new Recipes(name, ingredientsList, totalTime,
+                                                    cuisine, instructions, cleanedIngredients, imageUrl,
+                                                    ingredientCount, rating, ratingCount, id);
+                                            viewItems.add(recipes);
+                                        }
+                                        recyclerAdapter.notifyDataSetChanged();
+
+                                    }
+                                });
 
                     }
                 })
@@ -142,34 +168,6 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
                     }
                 });
 
-//        Toast.makeText(getContext(), likedRecipeListIds.size()+"", Toast.LENGTH_SHORT).show();
-//
-//        db.collection("Recipes").whereEqualTo("id", likedRecipeListIds.get(0)).get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        for (QueryDocumentSnapshot itemObj : task.getResult()) {
-//
-//                            String id = itemObj.getLong("id").toString();
-//                            String name = itemObj.getString("name");
-//                            String ingredientsList = itemObj.getString("ingredientsList");
-//                            String totalTime = itemObj.getLong("totalTime").toString();
-//                            String cuisine = itemObj.getString("cuisine");
-//                            String instructions = itemObj.getString("instructions");
-//                            String cleanedIngredients = itemObj.getString("cleanedIngredients");
-//                            String imageUrl = itemObj.getString("imageUrl");
-//                            String ingredientCount = itemObj.getLong("ingredientCount").toString();
-//                            String rating = itemObj.getLong("rating").toString();
-//                            String ratingCount = itemObj.getLong("ratingCount").toString();
-//                            Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-//                                    cuisine, instructions, cleanedIngredients, imageUrl,
-//                                    ingredientCount, rating, ratingCount, id);
-//                            viewItems.add(recipes);
-//                        }
-//                        recyclerAdapter.notifyDataSetChanged();
-//
-//                    }
-//                });
     }
 
 

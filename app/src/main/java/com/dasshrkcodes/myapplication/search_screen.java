@@ -34,6 +34,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,49 +142,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                     searchscreen_selectIng_layout.setVisibility(View.GONE);
                     search_found_recipesList.clear();
                     searchscreen_progressbar_animationView.setVisibility(View.VISIBLE);
-                    db.collection("Recipes").orderBy("id").limit(2000).get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot itemObj : task.getResult()) {
 
-                                            String id = itemObj.getLong("id").toString();
-                                            String name = itemObj.getString("name");
-                                            String ingredientsList = itemObj.getString("ingredientsList");
-                                            String totalTime = itemObj.getLong("totalTime").toString();
-                                            String cuisine = itemObj.getString("cuisine");
-                                            String instructions = itemObj.getString("instructions");
-                                            String cleanedIngredients = itemObj.getString("cleanedIngredients");
-                                            String imageUrl = itemObj.getString("imageUrl");
-                                            String ingredientCount = itemObj.getLong("ingredientCount").toString();
-                                            String rating = itemObj.getLong("rating").toString();
-                                            String ratingCount = itemObj.getLong("ratingCount").toString();
-                                            Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                                    cuisine, instructions, cleanedIngredients, imageUrl,
-                                                    ingredientCount, rating, ratingCount, id);
-
-                                            if (name.toLowerCase().contains(editable.toString().toLowerCase().trim())) {
-                                                search_found_recipesList.add(recipes);
-                                            }
-
-                                            if (editable.toString().trim().equals("")) {
-                                                search_found_recipesList.clear();
-                                                break;
-                                            }
-
-                                        }
-                                        Search_Adapter.notifyDataSetChanged();
-                                        searchscreen_progressbar_animationView.setVisibility(View.GONE);
-
-                                    } else {
-                                        Toast.makeText(search_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            });
-
-
+                    addItemsFromJSON(editable);
 
                 } else {
                     searchscreen_progressbar_animationView.setVisibility(View.GONE);
@@ -193,18 +160,73 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
             }
         });
     }
+    private void addItemsFromJSON(Editable editable) {
+        try {
 
-    public void search_recyclerview_refresh(View view) {
-        Toast.makeText(this, "yo", Toast.LENGTH_SHORT).show();
-        List<Recipes> new_search_found_recipesList=new ArrayList<>();
-        for (Recipes element : search_found_recipesList) {
-            if (!new_search_found_recipesList.contains(element)) {
-                new_search_found_recipesList.add(element);
+            String jsonDataString = readJSONDataFromFile();
+            JSONArray jsonArray = new JSONArray(jsonDataString);
+
+            for (int i=0; i<jsonArray.length(); ++i) {
+
+                JSONObject itemObj = jsonArray.getJSONObject(i);
+
+                String id = itemObj.getString("id");
+                String name = itemObj.getString("name");
+                String ingredientsList = itemObj.getString("ingredientsList");
+                String totalTime = itemObj.getString("totalTime");
+                String cuisine = itemObj.getString("cuisine");
+                String instructions = itemObj.getString("instructions");
+                String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                String imageUrl = itemObj.getString("imageUrl");
+                String ingredientCount = itemObj.getString("ingredientCount");
+                String rating = itemObj.getString("rating");
+                String ratingCount = itemObj.getString("ratingCount");
+
+
+                Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions,
+                        cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount,id);
+
+
+                if (name.toLowerCase().contains(editable.toString().toLowerCase().trim())) {
+                    search_found_recipesList.add(recipes);
+                }
+
+                if (editable.toString().trim().equals("")) {
+                    search_found_recipesList.clear();
+                    break;
+                }
+            }
+            Search_Adapter.notifyDataSetChanged();
+            searchscreen_progressbar_animationView.setVisibility(View.GONE);
+
+        } catch (JSONException | IOException e) {
+        }
+    }
+
+    private String readJSONDataFromFile() throws IOException {
+
+        InputStream inputStream = null;
+        StringBuilder builder = new StringBuilder();
+
+        try {
+
+            String jsonString = null;
+            inputStream = getResources().openRawResource(R.raw.recipes);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(inputStream, "UTF-8"));
+
+            while ((jsonString = bufferedReader.readLine()) != null) {
+                builder.append(jsonString);
+            }
+
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
             }
         }
-        search_found_recipesList=new_search_found_recipesList;
-        new_search_found_recipesList.clear();
-        Search_Adapter.notifyDataSetChanged();
+        return new String(builder);
+    }
+    public void search_recyclerview_refresh(View view) {
     }
 
     public void clearFocus_search(View view) {

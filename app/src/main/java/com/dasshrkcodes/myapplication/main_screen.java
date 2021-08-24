@@ -196,7 +196,7 @@ public class main_screen extends AppCompatActivity implements
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
         mainscreen_progressbar_animationView.setVisibility(View.VISIBLE);
-        checkItems();
+        addItemsFromJSON();
 
         mPrefs = getPreferences(MODE_PRIVATE);
 //        viewItemsEmpty.clear();
@@ -207,6 +207,128 @@ public class main_screen extends AppCompatActivity implements
 
 
     }
+
+
+    private void addItemsFromJSON() {
+        try {
+
+            String jsonDataString = readJSONDataFromFile();
+            JSONArray jsonArray = new JSONArray(jsonDataString);
+
+            for (int i=0; i<jsonArray.length(); ++i) {
+
+                JSONObject itemObj = jsonArray.getJSONObject(i);
+
+                String id = itemObj.getString("id");
+                String name = itemObj.getString("name");
+                String ingredientsList = itemObj.getString("ingredientsList");
+                String totalTime = itemObj.getString("totalTime");
+                String cuisine = itemObj.getString("cuisine");
+                String instructions = itemObj.getString("instructions");
+                String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                String imageUrl = itemObj.getString("imageUrl");
+                String ingredientCount = itemObj.getString("ingredientCount");
+                String rating = itemObj.getString("rating");
+                String ratingCount = itemObj.getString("ratingCount");
+
+
+                Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions,
+                        cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount,id);
+                if (checkIngredients(cleanedIngredients, card1)) {
+                    smallR_recyclerviewItems_1.add(recipes);
+                }
+                if (checkIngredients(cleanedIngredients, card2)) {
+                    smallR_recyclerviewItems_2.add(recipes);
+                }
+                if (checkIngredients(cleanedIngredients, card3)) {
+                    smallR_recyclerviewItems_3.add(recipes);
+                }
+                if (checkIngredients(cleanedIngredients, card4)) {
+                    smallR_recyclerviewItems_4.add(recipes);
+                }
+                if (checkIngredients(cleanedIngredients, card5)) {
+                    smallR_recyclerviewItems_5.add(recipes);
+                }
+                if (checkIngredients(cleanedIngredients, card6)) {
+                    smallR_recyclerviewItems_6.add(recipes);
+                }
+
+
+                viewItems.add(recipes);
+            }
+
+            Collections.shuffle(smallR_recyclerviewItems_1);
+            Collections.shuffle(smallR_recyclerviewItems_2);
+            Collections.shuffle(smallR_recyclerviewItems_3);
+            Collections.shuffle(smallR_recyclerviewItems_4);
+            Collections.shuffle(smallR_recyclerviewItems_5);
+            Collections.shuffle(smallR_recyclerviewItems_6);
+
+            for (int i = 0; i < 10; i++) {
+                if (smallR_recyclerviewItems_1.size() > i)
+                    smallR_recyclerviewItems_1_10.add(smallR_recyclerviewItems_1.get(i));
+                if (smallR_recyclerviewItems_2.size() > i)
+                    smallR_recyclerviewItems_2_10.add(smallR_recyclerviewItems_2.get(i));
+                if (smallR_recyclerviewItems_3.size() > i)
+                    smallR_recyclerviewItems_3_10.add(smallR_recyclerviewItems_3.get(i));
+                if (smallR_recyclerviewItems_4.size() > i)
+                    smallR_recyclerviewItems_4_10.add(smallR_recyclerviewItems_4.get(i));
+                if (smallR_recyclerviewItems_5.size() > i)
+                    smallR_recyclerviewItems_5_10.add(smallR_recyclerviewItems_5.get(i));
+                if (smallR_recyclerviewItems_6.size() > i)
+                    smallR_recyclerviewItems_6_10.add(smallR_recyclerviewItems_6.get(i));
+            }
+
+            Collections.shuffle(viewItems);
+            for (int i = 0; i < 10; i++) {
+                if (viewItems.size() > i)
+                    viewItems_10.add(viewItems.get(i));
+            }
+            recyclerAdapter.notifyDataSetChanged();
+
+
+            horizontalRecyclerAdapter_1.notifyDataSetChanged();
+            horizontalRecyclerAdapter_2.notifyDataSetChanged();
+            horizontalRecyclerAdapter_3.notifyDataSetChanged();
+            horizontalRecyclerAdapter_4.notifyDataSetChanged();
+            horizontalRecyclerAdapter_5.notifyDataSetChanged();
+            horizontalRecyclerAdapter_6.notifyDataSetChanged();
+
+            mainscreen_progressbar_animationView.setVisibility(View.GONE);
+            menuIcon.playAnimation();
+            profile_icon.playAnimation();
+
+        } catch (JSONException | IOException e) {
+        }
+    }
+
+    private String readJSONDataFromFile() throws IOException {
+
+        InputStream inputStream = null;
+        StringBuilder builder = new StringBuilder();
+
+        try {
+
+            String jsonString = null;
+            inputStream = getResources().openRawResource(R.raw.recipes);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(inputStream, "UTF-8"));
+
+            while ((jsonString = bufferedReader.readLine()) != null) {
+                builder.append(jsonString);
+            }
+
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return new String(builder);
+    }
+
+
+
+
 
 
     private boolean checkIngredients(String cleanedIngredients, String[] cardtype) {
