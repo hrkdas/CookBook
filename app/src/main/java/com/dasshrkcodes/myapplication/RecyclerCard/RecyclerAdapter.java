@@ -2,6 +2,7 @@ package com.dasshrkcodes.myapplication.RecyclerCard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Liked_click_RecyclerView liked_mCallback;
     private UnLiked_click_RecyclerView unliked_mCallback;
     private OnItem_click_RecyclerView onItemclick_mCallback;
+
+
 
 
     public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem,
@@ -165,23 +168,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 List<String> likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
 
-               if(likedRecipe_test.contains(recipes.getId())){
-                   itemViewHolder.bigR_likebutton.setLiked(true);
-               }else{
-                   itemViewHolder.bigR_likebutton.setLiked(false);
-               }
+                if (likedRecipe_test.contains(recipes.getId())) {
+                    itemViewHolder.bigR_likebutton.setLiked(true);
+                } else {
+                    itemViewHolder.bigR_likebutton.setLiked(false);
+                }
 
 
+                 Vibrator myVib = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
                 itemViewHolder.bigR_likebutton.setOnLikeListener(new OnLikeListener() {
                     @Override
                     public void liked(LikeButton likeButton) {
 //                            Toast.makeText(context, "liked"+i, Toast.LENGTH_SHORT).show();
                         liked_mCallback.LikeonClick(listRecyclerItem.get(i));
+                        myVib.vibrate(50);
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
                         unliked_mCallback.UnLikeonClick(listRecyclerItem.get(i));
+                        myVib.vibrate(100);
                     }
                 });
 

@@ -67,6 +67,8 @@ public class recipe_overview extends AppCompatActivity {
     FloatingActionButton google_translate_btn;
     String translated_ingredientsList, translated_instructions,selectedLang;
     List<String> likedRecipe_test=new ArrayList<>();
+    GoogleSignInAccount signInAccount;
+    DocumentReference docRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,12 +198,11 @@ public class recipe_overview extends AppCompatActivity {
             recipe_overview_likebutton.setLiked(false);
         }
 
+        signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
         recipe_overview_likebutton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-
-                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
                 docRef.update("likedRecipe", FieldValue.arrayUnion(id_recipe_overview));
                 saveLikedRecipeFromDB();
@@ -209,15 +210,14 @@ public class recipe_overview extends AppCompatActivity {
 
             @Override
             public void unLiked(LikeButton likeButton) {
-                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
-
                 docRef.update("likedRecipe", FieldValue.arrayRemove(id_recipe_overview));
                 saveLikedRecipeFromDB();
             }
         });
 
-
+        //save history
+        docRef.update("history", FieldValue.arrayUnion(id_recipe_overview));
+        saveLikedRecipeFromDB();
     }
 
     public List<String> getLikedRecipeList(String key) {
@@ -248,7 +248,9 @@ public class recipe_overview extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                         final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
+                        final List<String> historyRecipe = (List<String>) documentSnapshot.get("history");
                         saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
+                        saveLikedRecipeList(historyRecipe,"historyRecipeListIds");
 
                     }
                 })
@@ -363,10 +365,6 @@ public class recipe_overview extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void play_yt_buttonClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dlw-PG5EFIE"));
-        startActivity(intent);
-    }
 
     public void go_to_imageOverview(View view) {
 

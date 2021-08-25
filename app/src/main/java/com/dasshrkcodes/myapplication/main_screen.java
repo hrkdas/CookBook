@@ -3,6 +3,7 @@ package com.dasshrkcodes.myapplication;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
@@ -192,7 +193,13 @@ public class main_screen extends AppCompatActivity implements
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
         mainscreen_progressbar_animationView.setVisibility(View.VISIBLE);
-        addItemsFromJSON();
+
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                addItemsFromJSON();
+            }
+        }, (long) 1500);
 
         mPrefs = getPreferences(MODE_PRIVATE);
         saveLikedRecipeFromDB();
@@ -452,7 +459,9 @@ public class main_screen extends AppCompatActivity implements
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                         final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
+                        final List<String> historyRecipe = (List<String>) documentSnapshot.get("history");
                         saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
+                        saveLikedRecipeList(historyRecipe,"historyRecipeListIds");
 
                     }
                 })

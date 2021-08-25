@@ -15,14 +15,12 @@
         android:background="@drawable/overview_bg">
 
         <RelativeLayout
-            android:id="@+id/wishlist_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
 
 
             <TextView
-                android:id="@+id/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -44,6 +42,15 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/empty_box" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/wishlistscreen_loading_animationView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading" />
+
         <TextView
             android:id="@+id/CooklistEmptyText"
             android:layout_width="wrap_content"
@@ -51,6 +58,7 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/amiko"
             android:text="Cooklist is Empty"
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -68,7 +76,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wishlist_header"
             tools:layout_editor_absoluteY="80dp">
 
             <androidx.core.widget.NestedScrollView

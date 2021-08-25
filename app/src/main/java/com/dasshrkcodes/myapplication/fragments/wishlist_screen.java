@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,7 +91,7 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
     List<String> likedRecipeListIds;
     GoogleSignInAccount signInAccount;
     FirebaseFirestore db;
-    LottieAnimationView wishlistscreen_noresult_animationView;
+    LottieAnimationView wishlistscreen_noresult_animationView,wishlistscreen_loading_animationView;
     TextView CooklistEmptyText;
 
     @Override
@@ -112,6 +113,7 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
 
         recyclerview_wishlistScreen = myInflatedView.findViewById(R.id.recyclerview_wishlistScreen);
         CooklistEmptyText = myInflatedView.findViewById(R.id.CooklistEmptyText);
+        wishlistscreen_loading_animationView = myInflatedView.findViewById(R.id.wishlistscreen_loading_animationView);
         wishlistscreen_noresult_animationView = myInflatedView.findViewById(R.id.wishlistscreen_noresult_animationView);
 
         recyclerAdapter = new RecyclerAdapter(getContext(), viewItems, this, this,this);
@@ -122,12 +124,14 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
 
         db = FirebaseFirestore.getInstance();
         signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-        printItems();
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                printItems();
+            }
+        }, (long) 1500);
 
         return myInflatedView;
     }
-
-
 
 
     public void saveLikedRecipeList(List<String> list, String key) {
@@ -183,6 +187,7 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
             wishlistscreen_noresult_animationView.setVisibility(View.GONE);
             CooklistEmptyText.setVisibility(View.GONE);
         }
+        wishlistscreen_loading_animationView.setVisibility(View.GONE);
 
     }
 

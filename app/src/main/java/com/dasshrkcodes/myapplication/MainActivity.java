@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int SPLASH_SCREEN = 800;
+    private static int SPLASH_SCREEN = 900;
     Animation bottomAnim,topAnim;
     TextView logoText,main_appInfo_curren_verion;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
