@@ -33,6 +33,39 @@
 
         </RelativeLayout>
 
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/clear_history_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#F1F1F1"
+                android:clickable="true"
+                android:elevation="30dp"
+                app:cardCornerRadius="30dp"
+                app:rippleColor="@color/grey">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:text="Clear History"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </RelativeLayout>
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/historyscreen_noresult_animationView"
             android:layout_width="match_parent"
@@ -86,7 +119,7 @@
                     android:id="@+id/recyclerview_historyscreen"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:paddingBottom="150dp" />
+                    android:paddingBottom="240dp" />
 
             </androidx.core.widget.NestedScrollView>
         </com.google.android.material.card.MaterialCardView>

@@ -199,7 +199,7 @@ public class main_screen extends AppCompatActivity implements
             public void run() {
                 addItemsFromJSON();
             }
-        }, (long) 1500);
+        }, (long) 1000);
 
         mPrefs = getPreferences(MODE_PRIVATE);
         saveLikedRecipeFromDB();

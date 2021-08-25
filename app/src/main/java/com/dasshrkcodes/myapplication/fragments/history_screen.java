@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.dasshrkcodes.myapplication.Classes.Recipes;
@@ -28,6 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.card.MaterialCardView;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -45,6 +47,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -93,6 +96,7 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
     FirebaseFirestore db;
     LottieAnimationView historyscreen_noresult_animationView,historyscreen_loading_animationView;
     TextView HistoryEmptyText;
+    MaterialCardView clear_history_btn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,7 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
 
         recyclerview_historyscreen = myInflatedView.findViewById(R.id.recyclerview_historyscreen);
         HistoryEmptyText = myInflatedView.findViewById(R.id.HistoryEmptyText);
+        clear_history_btn = myInflatedView.findViewById(R.id.clear_history_btn);
         historyscreen_loading_animationView = myInflatedView.findViewById(R.id.historyscreen_loading_animationView);
         historyscreen_noresult_animationView = myInflatedView.findViewById(R.id.historyscreen_noresult_animationView);
 
@@ -131,6 +136,28 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
                 printItems();
             }
         }, (long) 1500);
+
+
+        clear_history_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+
+                viewItems.clear();
+                DocumentReference docRef = FirebaseFirestore.getInstance()
+                        .collection("users").document(signInAccount.getEmail());
+                docRef.update("history", viewItems);
+                recyclerAdapter.notifyDataSetChanged();
+
+                historyscreen_noresult_animationView.setVisibility(View.VISIBLE);
+                HistoryEmptyText.setVisibility(View.VISIBLE);
+                clear_history_btn.setVisibility(View.GONE);
+
+                final List<String> RecipeList = new ArrayList<>();
+                saveLikedRecipeList(RecipeList,"historyRecipeListIds");
+
+            }
+        });
 
         return myInflatedView;
         
@@ -182,15 +209,20 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
     public void printItems() {
         historyRecipeListIds = getLikedRecipeList("historyRecipeListIds");
 
-        for (int i = 0; i < historyRecipeListIds.size(); i++)
-            addRecipeOfCurrentId(Integer.parseInt(historyRecipeListIds.get(i)) - 1);
-        recyclerAdapter.notifyDataSetChanged();
         if(historyRecipeListIds.size()==0){
             historyscreen_noresult_animationView.setVisibility(View.VISIBLE);
             HistoryEmptyText.setVisibility(View.VISIBLE);
+            clear_history_btn.setVisibility(View.GONE);
+
         }else {
+            Collections.reverse(historyRecipeListIds);
+            for (int i = 0; i < historyRecipeListIds.size(); i++)
+                addRecipeOfCurrentId(Integer.parseInt(historyRecipeListIds.get(i)) - 1);
+            recyclerAdapter.notifyDataSetChanged();
+
             historyscreen_noresult_animationView.setVisibility(View.GONE);
             HistoryEmptyText.setVisibility(View.GONE);
+            clear_history_btn.setVisibility(View.VISIBLE);
         }
         historyscreen_loading_animationView.setVisibility(View.GONE);
 
@@ -277,6 +309,6 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
         intent.putExtra("id_recipe_overview", id);
         startActivity(intent);
     }
-
+    
 
 }
