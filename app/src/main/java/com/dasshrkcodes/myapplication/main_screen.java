@@ -325,10 +325,6 @@ public class main_screen extends AppCompatActivity implements
     }
 
 
-
-
-
-
     private boolean checkIngredients(String cleanedIngredients, String[] cardtype) {
         boolean result = false;
         int count = 0;
@@ -344,101 +340,6 @@ public class main_screen extends AppCompatActivity implements
             return false;
 
     }
-
-    private void checkItems() {
-        db.collection("Recipes").orderBy("id").limit(1000).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot itemObj : task.getResult()) {
-
-                                String id = itemObj.getLong("id").toString();
-                                String name = itemObj.getString("name");
-                                String ingredientsList = itemObj.getString("ingredientsList");
-                                String totalTime = itemObj.getLong("totalTime").toString();
-                                String cuisine = itemObj.getString("cuisine");
-                                String instructions = itemObj.getString("instructions");
-                                String cleanedIngredients = itemObj.getString("cleanedIngredients");
-                                String imageUrl = itemObj.getString("imageUrl");
-                                String ingredientCount = itemObj.getLong("ingredientCount").toString();
-                                String rating = itemObj.getLong("rating").toString();
-                                String ratingCount = itemObj.getLong("ratingCount").toString();
-                                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
-                                        cuisine, instructions, cleanedIngredients, imageUrl,
-                                        ingredientCount, rating, ratingCount, id);
-                                if (checkIngredients(cleanedIngredients, card1)) {
-                                    smallR_recyclerviewItems_1.add(recipes);
-                                }
-                                if (checkIngredients(cleanedIngredients, card2)) {
-                                    smallR_recyclerviewItems_2.add(recipes);
-                                }
-                                if (checkIngredients(cleanedIngredients, card3)) {
-                                    smallR_recyclerviewItems_3.add(recipes);
-                                }
-                                if (checkIngredients(cleanedIngredients, card4)) {
-                                    smallR_recyclerviewItems_4.add(recipes);
-                                }
-                                if (checkIngredients(cleanedIngredients, card5)) {
-                                    smallR_recyclerviewItems_5.add(recipes);
-                                }
-                                if (checkIngredients(cleanedIngredients, card6)) {
-                                    smallR_recyclerviewItems_6.add(recipes);
-                                }
-
-                                viewItems.add(recipes);
-
-                            }
-                            Collections.shuffle(smallR_recyclerviewItems_1);
-                            Collections.shuffle(smallR_recyclerviewItems_2);
-                            Collections.shuffle(smallR_recyclerviewItems_3);
-                            Collections.shuffle(smallR_recyclerviewItems_4);
-                            Collections.shuffle(smallR_recyclerviewItems_5);
-                            Collections.shuffle(smallR_recyclerviewItems_6);
-
-                            for (int i = 0; i < 10; i++) {
-                                if (smallR_recyclerviewItems_1.size() > i)
-                                    smallR_recyclerviewItems_1_10.add(smallR_recyclerviewItems_1.get(i));
-                                if (smallR_recyclerviewItems_2.size() > i)
-                                    smallR_recyclerviewItems_2_10.add(smallR_recyclerviewItems_2.get(i));
-                                if (smallR_recyclerviewItems_3.size() > i)
-                                    smallR_recyclerviewItems_3_10.add(smallR_recyclerviewItems_3.get(i));
-                                if (smallR_recyclerviewItems_4.size() > i)
-                                    smallR_recyclerviewItems_4_10.add(smallR_recyclerviewItems_4.get(i));
-                                if (smallR_recyclerviewItems_5.size() > i)
-                                    smallR_recyclerviewItems_5_10.add(smallR_recyclerviewItems_5.get(i));
-                                if (smallR_recyclerviewItems_6.size() > i)
-                                    smallR_recyclerviewItems_6_10.add(smallR_recyclerviewItems_6.get(i));
-                            }
-
-                            Collections.shuffle(viewItems);
-                            for (int i = 0; i < 10; i++) {
-                                if (viewItems.size() > i)
-                                    viewItems_10.add(viewItems.get(i));
-                            }
-                            recyclerAdapter.notifyDataSetChanged();
-
-
-                            horizontalRecyclerAdapter_1.notifyDataSetChanged();
-                            horizontalRecyclerAdapter_2.notifyDataSetChanged();
-                            horizontalRecyclerAdapter_3.notifyDataSetChanged();
-                            horizontalRecyclerAdapter_4.notifyDataSetChanged();
-                            horizontalRecyclerAdapter_5.notifyDataSetChanged();
-                            horizontalRecyclerAdapter_6.notifyDataSetChanged();
-//                            Toast.makeText(search_screen.this, selected_recipes.size()+"", Toast.LENGTH_SHORT).show();
-
-                        }
-
-                          else {
-                            Toast.makeText(main_screen.this, "Failed to Load", Toast.LENGTH_SHORT).show();
-                        }
-                        mainscreen_progressbar_animationView.setVisibility(View.GONE);
-                        menuIcon.playAnimation();
-                        profile_icon.playAnimation();
-                    }
-                });
-    }
-
 
     public void saveLikedRecipeList(List<String> list, String key){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

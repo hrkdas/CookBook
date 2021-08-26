@@ -82,7 +82,6 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
     private static final String TAG = "FirestoreSearchActivity";
 
-
     public void makeList() {
         Collections.addAll(Ing_nameList, "Bread", "Broccoli", "Carrot", "Cheese", "Chicken", "Chilli", "Corn",
                 "Dal", "Egg", "Fish", "Bhindi", "Mushroom", "Noodles", "Onion", "Paneer", "Potato", "Rice", "Prawn",
@@ -125,7 +124,6 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
         Search_Adapter = new RecyclerAdapter(getApplicationContext(), search_found_recipesList,
                 this, this,this);
         search_recyclerview.setAdapter(Search_Adapter);
-
 
         searchBox = findViewById(R.id.searchBox);
         searchBox.addTextChangedListener(new TextWatcher() {

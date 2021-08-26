@@ -6,9 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,8 +20,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dasshrkcodes.myapplication.Classes.user;
 import com.dasshrkcodes.myapplication.R;
+import com.dasshrkcodes.myapplication.login_screen;
+import com.dasshrkcodes.myapplication.main_screen;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,7 +53,9 @@ import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class recipe_overview extends AppCompatActivity {
 
@@ -65,8 +75,8 @@ public class recipe_overview extends AppCompatActivity {
     Spinner recipe_overview_lang_spinner;
     Translator selectedTranslator;
     FloatingActionButton google_translate_btn;
-    String translated_ingredientsList, translated_instructions,selectedLang;
-    List<String> likedRecipe_test=new ArrayList<>();
+    String translated_ingredientsList, translated_instructions, selectedLang;
+    List<String> likedRecipe_test = new ArrayList<>();
     GoogleSignInAccount signInAccount;
     DocumentReference docRef;
 
@@ -98,15 +108,15 @@ public class recipe_overview extends AppCompatActivity {
         id_recipe_overview = getIntent().getStringExtra("id_recipe_overview");
         displayRecipeFromDB();
 
-        selectedLang= PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getString("selecteLang","English" );
+        selectedLang = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getString("selecteLang", "English");
         recipe_overview_lang_spinner = findViewById(R.id.recipe_overview_lang_spinner);
         String[] items = new String[]{"English", "Hindi", "Marathi", "Gujarati", "Bengali", "Telugu", "Malayalam"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, items);
         recipe_overview_lang_spinner.setAdapter(adapter);
-        for(int i=0;i<items.length;i++){
-            if(items[i].toUpperCase().equals(selectedLang.toUpperCase())){
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].toUpperCase().equals(selectedLang.toUpperCase())) {
                 recipe_overview_lang_spinner.setSelection(i);
             }
         }
@@ -118,7 +128,7 @@ public class recipe_overview extends AppCompatActivity {
 
                     case 1://Hindi
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                                .putString("selecteLang","Hindi" ).apply();
+                                .putString("selecteLang", "Hindi").apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -127,7 +137,7 @@ public class recipe_overview extends AppCompatActivity {
                         break;
                     case 2://Marathi
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                                .putString("selecteLang","Marathi" ).apply();
+                                .putString("selecteLang", "Marathi").apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -136,7 +146,7 @@ public class recipe_overview extends AppCompatActivity {
                         break;
                     case 3://Gujarati
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                                .putString("selecteLang","Gujarati" ).apply();
+                                .putString("selecteLang", "Gujarati").apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -145,7 +155,7 @@ public class recipe_overview extends AppCompatActivity {
                         break;
                     case 4://Bengali
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                                .putString("selecteLang","Bengali" ).apply();
+                                .putString("selecteLang", "Bengali").apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -154,7 +164,7 @@ public class recipe_overview extends AppCompatActivity {
                         break;
                     case 5://Telugu
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                                .putString("selecteLang","Telugu" ).apply();
+                                .putString("selecteLang", "Telugu").apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -163,7 +173,7 @@ public class recipe_overview extends AppCompatActivity {
                         break;
                     case 6://Malayalam
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                                .putString("selecteLang","Malayalam" ).apply();
+                                .putString("selecteLang", "Malayalam").apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -172,7 +182,7 @@ public class recipe_overview extends AppCompatActivity {
                         break;
                     default://English
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
-                                .putString("selecteLang","English" ).apply();
+                                .putString("selecteLang", "English").apply();
                         google_translate_btn.setVisibility(View.VISIBLE);
                         selectedTranslator = Translation.getClient(new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -189,12 +199,11 @@ public class recipe_overview extends AppCompatActivity {
         });
 
 
-
         likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
 
-        if(likedRecipe_test.contains(id_recipe_overview)){
+        if (likedRecipe_test.contains(id_recipe_overview)) {
             recipe_overview_likebutton.setLiked(true);
-        }else{
+        } else {
             recipe_overview_likebutton.setLiked(false);
         }
 
@@ -203,7 +212,6 @@ public class recipe_overview extends AppCompatActivity {
         recipe_overview_likebutton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-
                 docRef.update("likedRecipe", FieldValue.arrayUnion(id_recipe_overview));
                 saveLikedRecipeFromDB();
             }
@@ -218,6 +226,96 @@ public class recipe_overview extends AppCompatActivity {
         //save history
         docRef.update("history", FieldValue.arrayUnion(id_recipe_overview));
         saveLikedRecipeFromDB();
+
+        final RatingBar recipe_overview_rating_display = (RatingBar) findViewById(R.id.recipe_overview_rating_display);
+
+        final ExtendedFloatingActionButton Rating_submit_btn = findViewById(R.id.Rating_submit_btn);
+        Rating_submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float Stars = recipe_overview_rating_display.getRating();
+                uploadRating(id_recipe_overview, Float.toString(Stars));
+            }
+        });
+
+    }
+
+
+    public void uploadRating(String recipeId, String rating) {
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(signInAccount.getEmail()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        Map<String, Object> userRatings = new HashMap<>();
+                        userRatings = (Map<String, Object>) documentSnapshot.get("UserRating");
+                        userRatings.put(recipeId, rating);
+                        db.collection("users").document(signInAccount.getEmail())
+                                .update("UserRating", userRatings);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+
+        db.collection("recipes").document("ratings").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        Map<String, Object> userRatings = new HashMap<>();
+                        userRatings = (Map<String, Object>) documentSnapshot.getData();
+
+                        float f_userRating, f_newRating, f_rating;
+                        int f_ratingCount=1;
+                        boolean f_rated;
+                        if (userRatings.containsKey(recipeId)) {
+                            f_newRating = Float.parseFloat(rating);
+                            f_ratingCount = 1;
+                            f_rating=Float.parseFloat(String.valueOf(userRatings.get(recipeId)));
+                            float total= ratingAvg(f_newRating, f_ratingCount, f_rating);
+                            userRatings.put(recipeId,Float.toString(total));
+                        } else {
+                            userRatings.put(recipeId, rating);
+                        }
+
+                        db.collection("recipes").document("ratings")
+                                .update(userRatings);
+                        Map<String, Object> userRatingcount = new HashMap<>();
+                        userRatingcount.put(recipeId,Integer.toString(f_ratingCount));
+                        db.collection("recipes").document("ratingcount")
+                                .update(userRatings);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+    public static float ratingAvg(float newRating, int ratingCount, float rating) {
+
+//        float total = rating * (float) ratingCount;
+        float total = (rating * (ratingCount - 1)) + newRating / ratingCount;
+//
+//        ratingCount = ratingCount + 1;
+//        total = total + newRating;
+//        rating = total / ratingCount;
+//
+//        total = total - userRating + newRating;
+//        rating = total / ratingCount;
+
+        return total;
     }
 
     public List<String> getLikedRecipeList(String key) {
@@ -229,7 +327,7 @@ public class recipe_overview extends AppCompatActivity {
         return gson.fromJson(json, type);
     }
 
-    public void saveLikedRecipeList(List<String> list, String key){
+    public void saveLikedRecipeList(List<String> list, String key) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
@@ -238,9 +336,10 @@ public class recipe_overview extends AppCompatActivity {
         editor.apply();
 
     }
+
     public void saveLikedRecipeFromDB() {
 
-        GoogleSignInAccount signInAccount= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
 
         db.collection("users").document(signInAccount.getEmail()).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -249,8 +348,8 @@ public class recipe_overview extends AppCompatActivity {
 
                         final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
                         final List<String> historyRecipe = (List<String>) documentSnapshot.get("history");
-                        saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
-                        saveLikedRecipeList(historyRecipe,"historyRecipeListIds");
+                        saveLikedRecipeList(likedRecipe, "likedRecipeListIds");
+                        saveLikedRecipeList(historyRecipe, "historyRecipeListIds");
 
                     }
                 })
@@ -267,34 +366,34 @@ public class recipe_overview extends AppCompatActivity {
     private void displayRecipeFromDB() {
         db.collection("Recipes").whereEqualTo("id", Integer.parseInt(id_recipe_overview))
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot itemObj : task.getResult()) {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot itemObj : task.getResult()) {
 
-                                id = itemObj.getLong("id").toString();
-                                name = itemObj.getString("name");
-                                ingredientsList = itemObj.getString("ingredientsList");
-                                totalTime = itemObj.getLong("totalTime").toString();
-                                cuisine = itemObj.getString("cuisine");
-                                instructions = itemObj.getString("instructions");
-                                cleanedIngredients = itemObj.getString("cleanedIngredients");
-                                imageUrl = itemObj.getString("imageUrl");
-                                ingredientCount = itemObj.getLong("ingredientCount").toString();
-                                rating = itemObj.getLong("rating").toString();
-                                ratingCount = itemObj.getLong("ratingCount").toString();
+                        id = itemObj.getLong("id").toString();
+                        name = itemObj.getString("name");
+                        ingredientsList = itemObj.getString("ingredientsList");
+                        totalTime = itemObj.getLong("totalTime").toString();
+                        cuisine = itemObj.getString("cuisine");
+                        instructions = itemObj.getString("instructions");
+                        cleanedIngredients = itemObj.getString("cleanedIngredients");
+                        imageUrl = itemObj.getString("imageUrl");
+                        ingredientCount = itemObj.getLong("ingredientCount").toString();
+                        rating = itemObj.getLong("rating").toString();
+                        ratingCount = itemObj.getLong("ratingCount").toString();
 //
 //                                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
 //                                        cuisine, instructions, cleanedIngredients, imageUrl,
 //                                        ingredientCount, rating, ratingCount,id);
 
-                            }
-                            setValues();
-                        } else {
-
-                        }
                     }
-                });
+                    setValues();
+                } else {
+
+                }
+            }
+        });
     }
 
     public static String split(String s) {
@@ -360,8 +459,8 @@ public class recipe_overview extends AppCompatActivity {
         String[] myStrings = toArray(instructions);
         intent.putExtra("instructions_StringArray", myStrings);
 
-        intent.putExtra("selectedLanguage",  PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getString("selecteLang","English" ));
+        intent.putExtra("selectedLanguage", PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getString("selecteLang", "English"));
         startActivity(intent);
     }
 

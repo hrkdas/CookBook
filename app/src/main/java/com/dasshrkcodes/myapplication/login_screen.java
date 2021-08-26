@@ -47,7 +47,9 @@ import com.google.mlkit.nl.translate.TranslatorOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class login_screen extends AppCompatActivity implements ingredients_click_RecyclerView {
 
@@ -349,8 +351,9 @@ public class login_screen extends AppCompatActivity implements ingredients_click
         downloadLang();
 
         List<String> c = new ArrayList<>();
+        Map<String,String> userRatings=new HashMap<>();
         user u = new user(username, email, cuisines,
-                c, c, c, c, selectedLanguage);
+                c, c, c, selectedLanguage,userRatings);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("users").document(email)

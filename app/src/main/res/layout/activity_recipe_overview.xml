@@ -507,13 +507,26 @@
 
                     <RatingBar
                         android:id="@+id/recipe_overview_rating_display"
-                        style="@style/Widget.AppCompat.RatingBar.Indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:progressBackgroundTint="@color/black"
                         android:progressTint="#FFCC80"
-                        android:rating="4" />
+                        android:stepSize=".5"/>
+
+                    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                        android:id="@+id/Rating_submit_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:backgroundTint="#FFFFFF"
+                        android:text="Submit"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
 
                 </LinearLayout>
 

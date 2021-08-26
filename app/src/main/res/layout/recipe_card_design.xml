@@ -223,19 +223,36 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:gravity="right">
 
-                <com.like.LikeButton
-                    android:id="@+id/bigR_likebutton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:onClick="toggleLiked"
-                    android:padding="2dp"
-                    app:icon_size="25dp"
-                    app:icon_type="heart" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.like.LikeButton
+                        android:id="@+id/bigR_likebutton"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:onClick="toggleLiked"
+                        android:padding="2dp"
+                        app:icon_size="25dp"
+                        app:icon_type="heart" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:layout_gravity="center"
+                        android:text="20"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
 
@@ -248,8 +265,8 @@
             android:maxLines="1"
             android:text="asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"
             android:textColor="#7A7979"
-            android:visibility="gone"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:visibility="gone" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

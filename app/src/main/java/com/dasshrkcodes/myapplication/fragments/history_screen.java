@@ -50,35 +50,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link history_screen#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class history_screen extends Fragment implements Liked_click_RecyclerView, OnItem_click_RecyclerView, UnLiked_click_RecyclerView {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public history_screen() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment history_screen.
-     */
-    // TODO: Rename and change types and number of parameters
     public static history_screen newInstance(String param1, String param2) {
         history_screen fragment = new history_screen();
         Bundle args = new Bundle();
@@ -110,11 +92,8 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
 
         View myInflatedView = inflater.inflate(R.layout.fragment_history_screen, container, false);
-
 
         recyclerview_historyscreen = myInflatedView.findViewById(R.id.recyclerview_historyscreen);
         HistoryEmptyText = myInflatedView.findViewById(R.id.HistoryEmptyText);
@@ -136,7 +115,6 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
                 printItems();
             }
         }, (long) 1500);
-
 
         clear_history_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +138,6 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
         });
 
         return myInflatedView;
-        
     }
 
     public void saveLikedRecipeList(List<String> list, String key) {
