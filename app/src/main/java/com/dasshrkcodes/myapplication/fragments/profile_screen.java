@@ -65,6 +65,7 @@ public class profile_screen extends Fragment {
 
     TextView profile_username,profile_email,help_page_contactText,help_page_aboutText;
     ImageView profile_pic;
+    TextView help_page_contactText3;
     ExtendedFloatingActionButton profile_Logout,profile_Login,help_about_Button,help_app_info_Button,
             help_contact_Button;
 
@@ -183,6 +184,13 @@ public class profile_screen extends Fragment {
             }
         });
 
+         help_page_contactText3 = (TextView) myInflatedView.findViewById(R.id.help_page_contactText3);
+        help_page_contactText3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                help_page_contactText3.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        });
 
         return myInflatedView;
     }

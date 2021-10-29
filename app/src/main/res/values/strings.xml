@@ -11,10 +11,14 @@
     <string name="s_logout">Logout</string>
     <string name="s_share">Share</string>
     <string name="s_rating">Rate Us</string>
-    <string name="about_text">About text In a large, heavy saucepan, heat the oil. Add the onion, garlic, green chilli, ginger and some seasoning. Fry on a medium heat for 10 mins or until soft.
+    <string name="about_text">Cookbook is an android application designed to give the users their desired recipes with the click of a button. The objective is to make searching for recipes as easy as possible. A new feed will be generated for the user with a variety of recipes to choose from. According to the ingredients provided by the user, the filtered recipes will be shown by the application thus making the selection of recipes easier and convenient for the user.
+\n
+Users will be able to create their own profiles and add their own recipes which will be recommended to other users if liked by majority, just like music apps such as Spotify, where users can create a playlist of their own of all the available songs, similarly users will be able to create their own recipelist of their own among the all the available recipes.
+
+
 </string>
     <string name="contact_text">• <a href="mailto:hashhrks@gmail.com">Contact by email</a></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="tnCText">• <a href="https://terabox.com/s/1v22ywUIZjXIW4ubv5m7lyg">Report and PowerPoint</a></string>
 </resources>
