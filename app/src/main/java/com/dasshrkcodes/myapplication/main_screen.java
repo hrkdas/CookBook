@@ -63,7 +63,7 @@ public class main_screen extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
 
     //    Variables
-    LottieAnimationView menuIcon,profile_icon;
+    LottieAnimationView menuIcon, profile_icon;
     static final float END_SCALE = 0.7f;
 
     //Drawer Menu
@@ -105,9 +105,6 @@ public class main_screen extends AppCompatActivity implements
     LottieAnimationView mainscreen_progressbar_animationView;
 
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    SharedPreferences mPrefs;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,15 +124,6 @@ public class main_screen extends AppCompatActivity implements
 
         navigationDrawer();
 
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-
-        if (signInAccount != null) {
-            navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
-
-        } else {
-            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
-            navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
-        }
 
         //big_Recycler View
         bigR_recyclerview = (RecyclerView) findViewById(R.id.bigR_recyclerview);
@@ -189,7 +177,7 @@ public class main_screen extends AppCompatActivity implements
 
 
         recyclerAdapter = new RecyclerAdapter(this, viewItems_10, this,
-                this,this);
+                this, this);
         bigR_recyclerview.setAdapter(recyclerAdapter);
 
         mainscreen_progressbar_animationView.setVisibility(View.VISIBLE);
@@ -201,11 +189,30 @@ public class main_screen extends AppCompatActivity implements
             }
         }, (long) 1000);
 
-        mPrefs = getPreferences(MODE_PRIVATE);
-        saveLikedRecipeFromDB();
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (signInAccount != null) {
+            navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
+            saveLikedRecipeFromDB();
+
+        } else {
+            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
+            saveTempLikedRecipeFromDB();
+        }
+
 
     }
 
+    public void saveTempLikedRecipeFromDB() {
+
+        final List<String> likedRecipe = (List<String>) null;
+        final List<String> historyRecipe = (List<String>) null;
+        saveLikedRecipeList(likedRecipe, "likedRecipeListIds");
+        saveLikedRecipeList(historyRecipe, "historyRecipeListIds");
+
+    }
 
     private void addItemsFromJSON() {
         try {
@@ -213,7 +220,7 @@ public class main_screen extends AppCompatActivity implements
             String jsonDataString = readJSONDataFromFile();
             JSONArray jsonArray = new JSONArray(jsonDataString);
 
-            for (int i=0; i<jsonArray.length(); ++i) {
+            for (int i = 0; i < jsonArray.length(); ++i) {
 
                 JSONObject itemObj = jsonArray.getJSONObject(i);
 
@@ -231,7 +238,7 @@ public class main_screen extends AppCompatActivity implements
 
 
                 Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions,
-                        cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount,id);
+                        cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount, id);
                 if (checkIngredients(cleanedIngredients, card1)) {
                     smallR_recyclerviewItems_1.add(recipes);
                 }
@@ -341,7 +348,7 @@ public class main_screen extends AppCompatActivity implements
 
     }
 
-    public void saveLikedRecipeList(List<String> list, String key){
+    public void saveLikedRecipeList(List<String> list, String key) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
@@ -350,10 +357,11 @@ public class main_screen extends AppCompatActivity implements
         editor.apply();
 
     }
+
     public void saveLikedRecipeFromDB() {
 
-        GoogleSignInAccount signInAccount= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(signInAccount.getEmail()).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -361,8 +369,8 @@ public class main_screen extends AppCompatActivity implements
 
                         final List<String> likedRecipe = (List<String>) documentSnapshot.get("likedRecipe");
                         final List<String> historyRecipe = (List<String>) documentSnapshot.get("history");
-                        saveLikedRecipeList(likedRecipe,"likedRecipeListIds");
-                        saveLikedRecipeList(historyRecipe,"historyRecipeListIds");
+                        saveLikedRecipeList(likedRecipe, "likedRecipeListIds");
+                        saveLikedRecipeList(historyRecipe, "historyRecipeListIds");
 
                     }
                 })
@@ -375,17 +383,17 @@ public class main_screen extends AppCompatActivity implements
 
     }
 
-    Integer maxListSize=150;
+    Integer maxListSize = 150;
+
     public void card_1_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_1.size()>maxListSize) {
+        List<Recipes> recipesList = new ArrayList<>();
+        if (smallR_recyclerviewItems_1.size() > maxListSize) {
             for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_1.get(i));
             }
-        }
-        else {
-            recipesList=smallR_recyclerviewItems_1;
+        } else {
+            recipesList = smallR_recyclerviewItems_1;
         }
         intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
@@ -393,14 +401,13 @@ public class main_screen extends AppCompatActivity implements
 
     public void card_2_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_2.size()>maxListSize) {
+        List<Recipes> recipesList = new ArrayList<>();
+        if (smallR_recyclerviewItems_2.size() > maxListSize) {
             for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_2.get(i));
             }
-        }
-        else {
-            recipesList=smallR_recyclerviewItems_2;
+        } else {
+            recipesList = smallR_recyclerviewItems_2;
         }
         intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
@@ -408,14 +415,13 @@ public class main_screen extends AppCompatActivity implements
 
     public void card_3_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_3.size()>maxListSize) {
+        List<Recipes> recipesList = new ArrayList<>();
+        if (smallR_recyclerviewItems_3.size() > maxListSize) {
             for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_3.get(i));
             }
-        }
-        else {
-            recipesList=smallR_recyclerviewItems_3;
+        } else {
+            recipesList = smallR_recyclerviewItems_3;
         }
         intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
@@ -423,14 +429,13 @@ public class main_screen extends AppCompatActivity implements
 
     public void card_4_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_4.size()>maxListSize) {
+        List<Recipes> recipesList = new ArrayList<>();
+        if (smallR_recyclerviewItems_4.size() > maxListSize) {
             for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_4.get(i));
             }
-        }
-        else {
-            recipesList=smallR_recyclerviewItems_4;
+        } else {
+            recipesList = smallR_recyclerviewItems_4;
         }
         intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
@@ -438,13 +443,13 @@ public class main_screen extends AppCompatActivity implements
 
     public void card_5_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_5.size()>maxListSize) {
+        List<Recipes> recipesList = new ArrayList<>();
+        if (smallR_recyclerviewItems_5.size() > maxListSize) {
             for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_5.get(i));
             }
-        }else {
-            recipesList=smallR_recyclerviewItems_5;
+        } else {
+            recipesList = smallR_recyclerviewItems_5;
         }
         intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
@@ -452,32 +457,31 @@ public class main_screen extends AppCompatActivity implements
 
     public void card_6_clicked(View view) {
         Intent intent = new Intent(main_screen.this, searchby_cardtype.class);
-        List<Recipes> recipesList=new ArrayList<>();
-        if(smallR_recyclerviewItems_6.size()>maxListSize) {
+        List<Recipes> recipesList = new ArrayList<>();
+        if (smallR_recyclerviewItems_6.size() > maxListSize) {
             for (int i = 0; i < maxListSize; i++) {
                 recipesList.add(smallR_recyclerviewItems_6.get(i));
             }
-        }else {
-            recipesList=smallR_recyclerviewItems_6;
+        } else {
+            recipesList = smallR_recyclerviewItems_6;
         }
         intent.putExtra("selected_recipes", (Serializable) recipesList);
         startActivity(intent);
     }
 
 
+    Integer n = 10;
 
-
-    Integer n=10;
     public void view_more_recipes(View view) {
-        for (int i = n; i < n+10; i++) {
+        for (int i = n; i < n + 10; i++) {
             if (viewItems.size() > i)
                 viewItems_10.add(viewItems.get(i));
             else {
-                MaterialCardView view_more_recipes_mainscreen_btn=findViewById(R.id.view_more_recipes_mainscreen_btn);
+                MaterialCardView view_more_recipes_mainscreen_btn = findViewById(R.id.view_more_recipes_mainscreen_btn);
                 view_more_recipes_mainscreen_btn.setVisibility(View.INVISIBLE);
             }
         }
-        n=n+10;
+        n = n + 10;
         recyclerAdapter.notifyDataSetChanged();
 
     }
@@ -619,10 +623,15 @@ public class main_screen extends AppCompatActivity implements
     public void LikeonClick(Recipes value) {
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
-        docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
-        saveLikedRecipeFromDB();
+
+        if (signInAccount != null) {//user available
+
+            DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+            docRef.update("likedRecipe", FieldValue.arrayUnion(value.getId()));
+            saveLikedRecipeFromDB();
+        }
 
     }
 
@@ -630,10 +639,15 @@ public class main_screen extends AppCompatActivity implements
     public void UnLikeonClick(Recipes value) {
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
 
-        docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
-        saveLikedRecipeFromDB();
+
+        if (signInAccount != null) {//user available
+
+            DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+
+            docRef.update("likedRecipe", FieldValue.arrayRemove(value.getId()));
+            saveLikedRecipeFromDB();
+        }
 
     }
 

@@ -110,11 +110,21 @@ public class history_screen extends Fragment implements Liked_click_RecyclerView
 
         db = FirebaseFirestore.getInstance();
         signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                printItems();
-            }
-        }, (long) 1500);
+
+        if (signInAccount != null) {//user available
+
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    printItems();
+                }
+            }, (long) 1500);
+        }else{
+            historyscreen_noresult_animationView.setVisibility(View.VISIBLE);
+            HistoryEmptyText.setVisibility(View.VISIBLE);
+            clear_history_btn.setVisibility(View.GONE);
+            historyscreen_loading_animationView.setVisibility(View.GONE);
+
+        }
 
         clear_history_btn.setOnClickListener(new View.OnClickListener() {
             @Override

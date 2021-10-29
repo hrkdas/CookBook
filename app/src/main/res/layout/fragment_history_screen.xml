@@ -75,6 +75,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/empty_box" />
 
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/historyscreen_loading_animationView"
             android:layout_width="match_parent"
@@ -83,6 +84,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/loading" />
+
 
         <TextView
             android:id="@+id/HistoryEmptyText"
@@ -97,12 +99,11 @@
             android:visibility="gone" />
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="800dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:visibility="visible"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="15dp"
             app:cardElevation="5dp"
@@ -117,7 +118,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_historyscreen"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="240dp" />
 

@@ -45,6 +45,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -124,12 +125,20 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
 
         db = FirebaseFirestore.getInstance();
         signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                printItems();
-            }
-        }, (long) 1500);
 
+        if (signInAccount != null) {//user available
+
+
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    printItems();
+                }
+            }, (long) 1500);
+        }else{
+            wishlistscreen_noresult_animationView.setVisibility(View.VISIBLE);
+            CooklistEmptyText.setVisibility(View.VISIBLE);
+            wishlistscreen_loading_animationView.setVisibility(View.GONE);
+        }
         return myInflatedView;
     }
 
@@ -176,7 +185,7 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
 
     public void printItems() {
         likedRecipeListIds = getLikedRecipeList("likedRecipeListIds");
-
+        Collections.reverse(likedRecipeListIds);
         for (int i = 0; i < likedRecipeListIds.size(); i++)
             addRecipeOfCurrentId(Integer.parseInt(likedRecipeListIds.get(i)) - 1);
         recyclerAdapter.notifyDataSetChanged();

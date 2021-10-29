@@ -69,8 +69,6 @@ public class login_screen extends AppCompatActivity implements ingredients_click
     Boolean isSetupComplete = false;
     MaterialCardView signUp_card, selectLang_card, select_cuisine_card;
     FirebaseUser currentUser;
-    final Boolean[] isUserPresent = {false};
-
 
     public void makeList() {
         Collections.addAll(Cuisine_nameList, "Bengali", "Punjabi", "Maharashtrian","Gujarati",
@@ -118,7 +116,6 @@ public class login_screen extends AppCompatActivity implements ingredients_click
             select_cuisine_card.setVisibility(View.VISIBLE);
         }
 
-
         findViewById(R.id.google_signIn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +131,6 @@ public class login_screen extends AppCompatActivity implements ingredients_click
 
             }
         });
-
 
         //cuisines
         makeList();
@@ -210,7 +206,7 @@ public class login_screen extends AppCompatActivity implements ingredients_click
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
+
             }
         });
 
@@ -228,16 +224,12 @@ public class login_screen extends AppCompatActivity implements ingredients_click
 
     private void createRequest() {
 
-        // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-
-        // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
 
     }
 

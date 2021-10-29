@@ -199,7 +199,7 @@ public class recipe_overview extends AppCompatActivity {
         });
 
 
-        likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
+
 
         if (likedRecipe_test.contains(id_recipe_overview)) {
             recipe_overview_likebutton.setLiked(true);
@@ -208,24 +208,31 @@ public class recipe_overview extends AppCompatActivity {
         }
 
         signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
-        recipe_overview_likebutton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-                docRef.update("likedRecipe", FieldValue.arrayUnion(id_recipe_overview));
-                saveLikedRecipeFromDB();
-            }
 
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                docRef.update("likedRecipe", FieldValue.arrayRemove(id_recipe_overview));
-                saveLikedRecipeFromDB();
-            }
-        });
+        if (signInAccount != null) {//user available
+            likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
 
-        //save history
-        docRef.update("history", FieldValue.arrayUnion(id_recipe_overview));
-        saveLikedRecipeFromDB();
+            docRef = FirebaseFirestore.getInstance().collection("users").document(signInAccount.getEmail());
+            recipe_overview_likebutton.setOnLikeListener(new OnLikeListener() {
+                @Override
+                public void liked(LikeButton likeButton) {
+                    docRef.update("likedRecipe", FieldValue.arrayUnion(id_recipe_overview));
+                    saveLikedRecipeFromDB();
+                }
+
+                @Override
+                public void unLiked(LikeButton likeButton) {
+                    docRef.update("likedRecipe", FieldValue.arrayRemove(id_recipe_overview));
+                    saveLikedRecipeFromDB();
+                }
+            });
+
+            //save history
+            docRef.update("history", FieldValue.arrayUnion(id_recipe_overview));
+            saveLikedRecipeFromDB();
+        }
+
+
 
         final RatingBar recipe_overview_rating_display = (RatingBar) findViewById(R.id.recipe_overview_rating_display);
 

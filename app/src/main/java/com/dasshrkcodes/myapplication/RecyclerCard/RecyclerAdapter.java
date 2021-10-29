@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dasshrkcodes.myapplication.R;
 import com.dasshrkcodes.myapplication.Classes.Recipes;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.card.MaterialCardView;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -166,13 +168,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
 
 
-                List<String> likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
+                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(context);
+                if (signInAccount != null) {//user available
 
-                if (likedRecipe_test.contains(recipes.getId())) {
-                    itemViewHolder.bigR_likebutton.setLiked(true);
-                } else {
-                    itemViewHolder.bigR_likebutton.setLiked(false);
+                    List<String> likedRecipe_test = getLikedRecipeList("likedRecipeListIds");
+                    if (likedRecipe_test.contains(recipes.getId())) {
+                        itemViewHolder.bigR_likebutton.setLiked(true);
+                    } else {
+                        itemViewHolder.bigR_likebutton.setLiked(false);
+                    }
                 }
+
 
 
                  Vibrator myVib = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);

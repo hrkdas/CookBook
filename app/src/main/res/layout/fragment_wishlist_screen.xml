@@ -64,7 +64,7 @@
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="800dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -84,7 +84,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_wishlistScreen"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="150dp" />
 
