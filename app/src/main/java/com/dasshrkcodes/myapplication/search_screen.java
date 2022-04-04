@@ -224,7 +224,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 //                                    lattitude.setText("Lattitude: "+addresses.get(0).getLatitude());
 //                                    longitude.setText("Longitude: "+addresses.get(0).getLongitude());
 //                                    address.setText("Address: "+addresses.get(0).getAddressLine(0));
-                                    location_city_text.setText("("+addresses.get(0).getLocality()+")");
+//                                    location_city_text.setText("("+addresses.get(0).getLocality()+")");
+                                    location_city_text.setText("("+addresses.get(0).getAdminArea()+")");
 //                                    country.setText("Country: "+addresses.get(0).getCountryName());
 
                                 } catch (IOException e) {
