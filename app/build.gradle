@@ -45,6 +45,7 @@ dependencies {
 
     implementation 'com.google.mlkit:translate:16.1.2'
     implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
     implementation "com.airbnb.android:lottie:4.1.0"
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'

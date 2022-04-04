@@ -3,14 +3,21 @@ package com.dasshrkcodes.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,6 +27,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,11 +42,15 @@ import com.dasshrkcodes.myapplication.RecyclerCard.OnItem_click_RecyclerView;
 import com.dasshrkcodes.myapplication.RecyclerCard.RecyclerAdapter;
 import com.dasshrkcodes.myapplication.RecyclerCard.UnLiked_click_RecyclerView;
 import com.dasshrkcodes.myapplication.recipe_screen_activities.recipe_overview;
+import com.dasshrkcodes.myapplication.recipe_screen_activities.start_cooking_screen;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -56,12 +69,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView, Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
 
     Animation searchscreen_anim;
     LinearLayout searchscreen_layout;
-    TextView selected_ingList_TextView;
+    TextView selected_ingList_TextView,location_city_text;
     EditText searchBox;
     LinearLayout searchscreen_selectIng_layout;
 
@@ -79,6 +93,11 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
     RecyclerView ingList_recyclerview, search_recyclerview;
     RecyclerView.Adapter recyclerAdapter, Search_Adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    FusedLocationProviderClient fusedLocationProviderClient;
+    SwitchMaterial location_toggle_switch;
+
+    private final static int REQUEST_CODE = 100;
 
     private static final String TAG = "FirestoreSearchActivity";
 
@@ -163,7 +182,109 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
             }
         });
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        location_toggle_switch = findViewById(R.id.location_toggle_switch);
+        location_city_text = findViewById(R.id.location_city_text);
+
+        location_toggle_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    getLastLocation();
+
+                } else {
+                    location_city_text.setText("");
+                }
+            }
+        });
+
     }
+
+
+
+
+    private void getLastLocation(){
+
+        if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED){
+
+
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+
+                            if (location != null){
+
+
+
+                                try {
+                                    Geocoder geocoder = new Geocoder(search_screen.this, Locale.getDefault());
+                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+//                                    lattitude.setText("Lattitude: "+addresses.get(0).getLatitude());
+//                                    longitude.setText("Longitude: "+addresses.get(0).getLongitude());
+//                                    address.setText("Address: "+addresses.get(0).getAddressLine(0));
+                                    location_city_text.setText("("+addresses.get(0).getLocality()+")");
+//                                    country.setText("Country: "+addresses.get(0).getCountryName());
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            }
+
+                        }
+                    });
+
+
+        }else {
+
+            askPermission();
+
+
+        }
+
+
+    }
+
+    private void askPermission() {
+        int permissionCheck = ContextCompat.checkSelfPermission(
+                this, "android.permission.ACCESS_FINE_LOCATION");
+        ActivityCompat.requestPermissions(this,new String[]{"android.permission.ACCESS_FINE_LOCATION"}, REQUEST_CODE);
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @org.jetbrains.annotations.NotNull String[] permissions, @NonNull @org.jetbrains.annotations.NotNull int[] grantResults) {
+
+        if (requestCode == REQUEST_CODE){
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+
+                getLastLocation();
+
+            }else {
+
+                Toast.makeText(search_screen.this,"Please provide the required permission",Toast.LENGTH_SHORT).show();
+
+            }
+
+
+
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
+
+
+
+
+
 
     private void afterTextChangedAddItemsFromJSON(Editable editable) {
         try {
