@@ -179,7 +179,6 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                     searchBox.clearFocus();
 
                 }
-
             }
         });
 
@@ -205,9 +204,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
 
     private void getLastLocation(){
-
         if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED){
-
 
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -215,9 +212,6 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                         public void onSuccess(Location location) {
 
                             if (location != null){
-
-
-
                                 try {
                                     Geocoder geocoder = new Geocoder(search_screen.this, Locale.getDefault());
                                     List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -232,51 +226,33 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                                     e.printStackTrace();
                                 }
 
-
                             }
-
                         }
                     });
 
 
         }else {
-
             askPermission();
-
-
         }
-
 
     }
 
     private void askPermission() {
-        int permissionCheck = ContextCompat.checkSelfPermission(
-                this, "android.permission.ACCESS_FINE_LOCATION");
         ActivityCompat.requestPermissions(this,new String[]{"android.permission.ACCESS_FINE_LOCATION"}, REQUEST_CODE);
-
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull @org.jetbrains.annotations.NotNull String[] permissions, @NonNull @org.jetbrains.annotations.NotNull int[] grantResults) {
 
         if (requestCode == REQUEST_CODE){
-
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
 
                 getLastLocation();
 
             }else {
-
                 Toast.makeText(search_screen.this,"Please provide the required permission",Toast.LENGTH_SHORT).show();
-
             }
-
-
-
         }
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
