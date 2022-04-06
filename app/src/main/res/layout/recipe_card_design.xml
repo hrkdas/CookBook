@@ -242,15 +242,6 @@
                         app:icon_size="25dp"
                         app:icon_type="heart" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:layout_gravity="center"
-                        android:text="20"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
 
                 </LinearLayout>
             </RelativeLayout>

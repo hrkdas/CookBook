@@ -102,7 +102,8 @@ public class HorizontalRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                     itemViewHolder.mDescription.setText(recipes.getInstructions());
                     itemViewHolder.small_card.setTag(recipes.getId());
 
-                    Picasso.get().load(recipes.getImgUrl()).resize(420,200).into(itemViewHolder.imageView);
+                    Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
+//                    Picasso.get().load(recipes.getImgUrl()).resize(420,200).into(itemViewHolder.imageView);
 
                     itemViewHolder.smallR_ratingbar.setRating(Float.parseFloat(recipes.getRating()));
 

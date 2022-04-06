@@ -1,18 +1,9 @@
 package com.dasshrkcodes.myapplication.recipe_screen_activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,10 +13,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dasshrkcodes.myapplication.Classes.user;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.dasshrkcodes.myapplication.R;
-import com.dasshrkcodes.myapplication.login_screen;
-import com.dasshrkcodes.myapplication.main_screen;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -252,16 +244,46 @@ public class recipe_overview extends AppCompatActivity {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("users").document(signInAccount.getEmail()).get()
+        //user rating update
+//        db.collection("users").document(signInAccount.getEmail()).get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//
+//                        Map<String, Object> userRatings = new HashMap<>();
+//                        userRatings = (Map<String, Object>) documentSnapshot.get("UserRating");
+//                        userRatings.put(recipeId, rating);
+//                        db.collection("users").document(signInAccount.getEmail())
+//                                .update("UserRating", userRatings);
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//
+//                    }
+//                });
+
+        final int[] ratingCount = new int[1];
+
+        //getting ratingcount of the selected recipe
+        db.collection("recipes").document("ratingcount").get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                        Map<String, Object> userRatings = new HashMap<>();
-                        userRatings = (Map<String, Object>) documentSnapshot.get("UserRating");
-                        userRatings.put(recipeId, rating);
-                        db.collection("users").document(signInAccount.getEmail())
-                                .update("UserRating", userRatings);
+                        Map<String, Object> userRatingcount = new HashMap<>();
+                        userRatingcount = (Map<String, Object>) documentSnapshot.getData();
+
+                        if (userRatingcount.containsKey(recipeId)) {
+                            int oldRatingCount=Integer.parseInt(String.valueOf(userRatingcount.get(recipeId)));
+                             ratingCount[0] =(int)oldRatingCount;
+                            userRatingcount.put(recipeId,Integer.toString(oldRatingCount+1));
+                        } else {
+                            userRatingcount.put(recipeId,Integer.toString(1));
+                        }
+                        db.collection("recipes").document("ratingcount")
+                                .update(userRatingcount);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -272,6 +294,7 @@ public class recipe_overview extends AppCompatActivity {
                 });
 
 
+        //getting oldrating and newrating and sending it to the ratingAvg function
         db.collection("recipes").document("ratings").get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -280,24 +303,18 @@ public class recipe_overview extends AppCompatActivity {
                         Map<String, Object> userRatings = new HashMap<>();
                         userRatings = (Map<String, Object>) documentSnapshot.getData();
 
-                        float f_userRating, f_newRating, f_rating;
-                        int f_ratingCount=1;
-                        boolean f_rated;
+                        float  f_newRating, f_oldRating;
+                        int f_ratingCount= ratingCount[0];
                         if (userRatings.containsKey(recipeId)) {
                             f_newRating = Float.parseFloat(rating);
-                            f_ratingCount = 1;
-                            f_rating=Float.parseFloat(String.valueOf(userRatings.get(recipeId)));
-                            float total= ratingAvg(f_newRating, f_ratingCount, f_rating);
+                            f_oldRating=Float.parseFloat(String.valueOf(userRatings.get(recipeId)));
+
+                            float total= ratingAvg(f_newRating, f_ratingCount, f_oldRating);
                             userRatings.put(recipeId,Float.toString(total));
                         } else {
                             userRatings.put(recipeId, rating);
                         }
-
                         db.collection("recipes").document("ratings")
-                                .update(userRatings);
-                        Map<String, Object> userRatingcount = new HashMap<>();
-                        userRatingcount.put(recipeId,Integer.toString(f_ratingCount));
-                        db.collection("recipes").document("ratingcount")
                                 .update(userRatings);
                     }
                 })
@@ -310,19 +327,14 @@ public class recipe_overview extends AppCompatActivity {
 
     }
 
-    public static float ratingAvg(float newRating, int ratingCount, float rating) {
 
-//        float total = rating * (float) ratingCount;
-        float total = (rating * (ratingCount - 1)) + newRating / ratingCount;
-//
-//        ratingCount = ratingCount + 1;
-//        total = total + newRating;
-//        rating = total / ratingCount;
-//
-//        total = total - userRating + newRating;
-//        rating = total / ratingCount;
+    public static float ratingAvg(float newRating, int ratingCount, float oldRating) {
 
-        return total;
+        float total = oldRating * ratingCount;
+        ratingCount=ratingCount+1;
+        total = total + newRating;
+        oldRating = total / ratingCount;
+        return oldRating;
     }
 
     public List<String> getLikedRecipeList(String key) {
@@ -486,16 +498,14 @@ public class recipe_overview extends AppCompatActivity {
     public void translate() {
         final Translator Translator = selectedTranslator;
         DownloadConditions conditions = new DownloadConditions.Builder()
-                .requireWifi()
-                .build();
+                .requireWifi().build();
         Translator.downloadModelIfNeeded(conditions)
                 .addOnSuccessListener(
                         new OnSuccessListener() {
 
                             @Override
                             public void onSuccess(Object o) {
-
-//                                Toast.makeText(recipe_overview.this, "Language will be Downloaded", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(recipe_overview.this, "Check notification language will be downloaded", Toast.LENGTH_SHORT).show();
                             }
                         })
                 .addOnFailureListener(

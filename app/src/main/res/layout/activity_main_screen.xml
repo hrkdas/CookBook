@@ -186,14 +186,14 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="5dp"
                                     android:backgroundTint="#FFFFFF"
-                                    android:text="View All"
                                     android:onClick="card_1_clicked"
+                                    android:text="View All"
                                     android:textAlignment="center"
+                                    android:textAllCaps="false"
+                                    android:textStyle="bold"
                                     app:icon="@drawable/next_icon"
                                     app:iconGravity="end"
-                                    tools:ignore="RtlCompat"
-                                    android:textAllCaps="false"
-                                    android:textStyle="bold" />
+                                    tools:ignore="RtlCompat" />
 
                             </LinearLayout>
 

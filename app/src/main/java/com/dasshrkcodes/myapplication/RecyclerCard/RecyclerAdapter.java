@@ -38,8 +38,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private OnItem_click_RecyclerView onItemclick_mCallback;
 
 
-
-
     public RecyclerAdapter(Context context, List<Recipes> listRecyclerItem,
                            Liked_click_RecyclerView liked_mCallback,
                            UnLiked_click_RecyclerView unliked_mCallback,
@@ -139,7 +137,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemViewHolder.bigR_ratingbar.setRating(Float.parseFloat(recipes.getRating()));
 
 //                    itemViewHolder.bigR_likebutton.setTag(recipes.getId());
-                Picasso.get().load(recipes.getImgUrl()).resize(300, 200).into(itemViewHolder.imageView);
+                Picasso.get().load(recipes.getImgUrl()).into(itemViewHolder.imageView);
+//                Picasso.get().load(recipes.getImgUrl()).resize(300, 200).into(itemViewHolder.imageView);
 
 
                 String ingredientsList = recipes.getIngredientsList();

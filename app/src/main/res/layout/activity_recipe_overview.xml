@@ -336,7 +336,7 @@
 
                         <ImageView
                             android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_height="match_parent"
                             android:adjustViewBounds="true"
                             android:background="#00ffffff"
                             android:padding="3dp"
@@ -538,14 +538,14 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/google_translate_btn"
+        android:layout_width="56dp"
+        android:layout_height="54dp"
         android:layout_gravity="end"
         android:layout_marginLeft="40dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="#4BC4FF"
         android:onClick="translate_buttonClick"
-        android:id="@+id/google_translate_btn"
         android:src="@drawable/google_translate_icon"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
