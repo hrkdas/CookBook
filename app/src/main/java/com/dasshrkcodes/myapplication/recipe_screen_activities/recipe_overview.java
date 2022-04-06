@@ -237,8 +237,45 @@ public class recipe_overview extends AppCompatActivity {
             }
         });
 
+//        RatingAndRcFromDB();
     }
 
+//    Map<String, Object> userRatingcount_1 = new HashMap<>();
+//    Map<String, Object> userRatings_1 = new HashMap<>();
+//    private void RatingAndRcFromDB() {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("recipes").document("ratingcount").get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//
+//                        userRatingcount_1 = (Map<String, Object>) documentSnapshot.getData();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//
+//                    }
+//                });
+//
+//
+//        db.collection("recipes").document("ratings").get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//
+//                        userRatings_1 = (Map<String, Object>) documentSnapshot.getData();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//
+//                    }
+//                });
+//
+//    }
 
     public void uploadRating(String recipeId, String rating) {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());

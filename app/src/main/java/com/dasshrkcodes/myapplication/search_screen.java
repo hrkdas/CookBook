@@ -68,8 +68,10 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class search_screen extends AppCompatActivity implements ingredients_click_RecyclerView, Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
 
@@ -201,6 +203,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
             }
         });
 
+        RatingAndRcFromDB();
     }
 
 
@@ -324,7 +327,42 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
 
 
+    Map<String, Object> userRatingcount = new HashMap<>();
+    Map<String, Object> userRatings = new HashMap<>();
+    private void RatingAndRcFromDB() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("recipes").document("ratingcount").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
 
+                        userRatingcount = (Map<String, Object>) documentSnapshot.getData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+
+        db.collection("recipes").document("ratings").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        userRatings = (Map<String, Object>) documentSnapshot.getData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
 
 
 
@@ -351,6 +389,13 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                 String rating = itemObj.getString("rating");
                 String ratingCount = itemObj.getString("ratingCount");
 
+
+                if (userRatingcount.containsKey(id)) {
+                    ratingCount=  String.valueOf(userRatingcount.get(id));
+                }
+                if (userRatings.containsKey(id)) {
+                    rating=  String.valueOf(userRatings.get(id));
+                }
 
                 Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions,
                         cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount, id);

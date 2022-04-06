@@ -51,13 +51,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class main_screen extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, Liked_click_RecyclerView, UnLiked_click_RecyclerView, OnItem_click_RecyclerView {
@@ -202,6 +208,7 @@ public class main_screen extends AppCompatActivity implements
             saveTempLikedRecipeFromDB();
         }
 
+        RatingAndRcFromDB();
 
     }
 
@@ -213,6 +220,50 @@ public class main_screen extends AppCompatActivity implements
         saveLikedRecipeList(historyRecipe, "historyRecipeListIds");
 
     }
+
+
+    Map<String, Object> userRatingcount = new HashMap<>();
+    Map<String, Object> userRatings = new HashMap<>();
+    private void RatingAndRcFromDB() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("recipes").document("ratingcount").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        userRatingcount = (Map<String, Object>) documentSnapshot.getData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+
+        db.collection("recipes").document("ratings").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        userRatings = (Map<String, Object>) documentSnapshot.getData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+
+
+
+
+
 
     private void addItemsFromJSON() {
         try {
@@ -236,6 +287,12 @@ public class main_screen extends AppCompatActivity implements
                 String rating = itemObj.getString("rating");
                 String ratingCount = itemObj.getString("ratingCount");
 
+                if (userRatingcount.containsKey(id)) {
+                    ratingCount=  String.valueOf(userRatingcount.get(id));
+                }
+                if (userRatings.containsKey(id)) {
+                    rating=  String.valueOf(userRatings.get(id));
+                }
 
                 Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions,
                         cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount, id);

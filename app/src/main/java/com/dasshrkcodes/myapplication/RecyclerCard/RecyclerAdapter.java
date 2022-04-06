@@ -180,7 +180,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
-                 Vibrator myVib = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
+                Vibrator myVib = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
                 itemViewHolder.bigR_likebutton.setOnLikeListener(new OnLikeListener() {
                     @Override
                     public void liked(LikeButton likeButton) {

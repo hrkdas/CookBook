@@ -46,7 +46,9 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -128,7 +130,6 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
 
         if (signInAccount != null) {//user available
 
-
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     printItems();
@@ -139,7 +140,45 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
             CooklistEmptyText.setVisibility(View.VISIBLE);
             wishlistscreen_loading_animationView.setVisibility(View.GONE);
         }
+        RatingAndRcFromDB();
         return myInflatedView;
+    }
+
+    Map<String, Object> userRatingcount = new HashMap<>();
+    Map<String, Object> userRatings = new HashMap<>();
+    private void RatingAndRcFromDB() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("recipes").document("ratingcount").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        userRatingcount = (Map<String, Object>) documentSnapshot.getData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+
+        db.collection("recipes").document("ratings").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        userRatings = (Map<String, Object>) documentSnapshot.getData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
     }
 
 
@@ -220,6 +259,14 @@ public class wishlist_screen extends Fragment implements Liked_click_RecyclerVie
             String ingredientCount = itemObj.getString("ingredientCount");
             String rating = itemObj.getString("rating");
             String ratingCount = itemObj.getString("ratingCount");
+
+            if (userRatingcount.containsKey(id)) {
+                ratingCount=  String.valueOf(userRatingcount.get(id));
+            }
+            if (userRatings.containsKey(id)) {
+                rating=  String.valueOf(userRatings.get(id));
+            }
+
             Recipes recipes = new Recipes(name, ingredientsList, totalTime,
                     cuisine, instructions, cleanedIngredients, imageUrl,
                     ingredientCount, rating, ratingCount, id);
