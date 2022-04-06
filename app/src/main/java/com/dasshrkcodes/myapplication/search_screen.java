@@ -194,6 +194,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
                     getLastLocation();
 
                 } else {
+                    searchscreen_noresult_animationView.setVisibility(View.GONE);
+                    searchscreen_progressbar_animationView.setVisibility(View.GONE);
                     location_city_text.setText("");
                 }
             }
@@ -216,6 +218,7 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
                             if (location != null){
 
+                                searchscreen_progressbar_animationView.setVisibility(View.GONE);
                                 try {
                                     Geocoder geocoder = new Geocoder(search_screen.this, Locale.getDefault());
                                     List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -224,6 +227,58 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 //                                    address.setText("Address: "+addresses.get(0).getAddressLine(0));
                                     location_city_text.setText("("+addresses.get(0).getAdminArea()+")");
 //                                    country.setText("Country: "+addresses.get(0).getCountryName());
+
+
+
+
+
+                                    try {
+
+                                        String jsonDataString = readJSONDataFromFile();
+                                        JSONArray jsonArray = new JSONArray(jsonDataString);
+
+                                        for (int i = 0; i < jsonArray.length(); ++i) {
+
+                                            JSONObject itemObj = jsonArray.getJSONObject(i);
+
+                                            String id = itemObj.getString("id");
+                                            String name = itemObj.getString("name");
+                                            String ingredientsList = itemObj.getString("ingredientsList");
+                                            String totalTime = itemObj.getString("totalTime");
+                                            String cuisine = itemObj.getString("cuisine");
+                                            String instructions = itemObj.getString("instructions");
+                                            String cleanedIngredients = itemObj.getString("cleanedIngredients");
+                                            String imageUrl = itemObj.getString("imageUrl");
+                                            String ingredientCount = itemObj.getString("ingredientCount");
+                                            String rating = itemObj.getString("rating");
+                                            String ratingCount = itemObj.getString("ratingCount");
+
+
+                                            Recipes recipes = new Recipes(name, ingredientsList, totalTime, cuisine, instructions,
+                                                    cleanedIngredients, imageUrl, ingredientCount, rating, ratingCount, id);
+
+
+                                            if (cuisine.trim().equals("Maharashtrian Recipes")) {
+                                                search_found_recipesList.add(recipes);
+                                            }
+                                        }
+                                        if(search_found_recipesList.size()==0){
+                                            searchscreen_noresult_animationView.setVisibility(View.VISIBLE);
+                                        }else {
+                                            searchscreen_noresult_animationView.setVisibility(View.GONE);
+                                        }
+                                        Search_Adapter.notifyDataSetChanged();
+                                        searchscreen_progressbar_animationView.setVisibility(View.GONE);
+
+                                    } catch (JSONException | IOException e) {
+                                    }
+
+
+
+
+
+
+
 
                                 }catch (IOException e) {
                                     e.printStackTrace();
@@ -234,7 +289,8 @@ public class search_screen extends AppCompatActivity implements ingredients_clic
 
 
         }else {
-
+            searchscreen_noresult_animationView.setVisibility(View.GONE);
+            searchscreen_progressbar_animationView.setVisibility(View.GONE);
             askPermission();
 
 
