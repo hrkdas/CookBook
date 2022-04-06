@@ -191,8 +191,6 @@ public class recipe_overview extends AppCompatActivity {
         });
 
 
-
-
         if (likedRecipe_test.contains(id_recipe_overview)) {
             recipe_overview_likebutton.setLiked(true);
         } else {
@@ -223,7 +221,6 @@ public class recipe_overview extends AppCompatActivity {
             docRef.update("history", FieldValue.arrayUnion(id_recipe_overview));
             saveLikedRecipeFromDB();
         }
-
 
 
         final RatingBar recipe_overview_rating_display = (RatingBar) findViewById(R.id.recipe_overview_rating_display);
@@ -313,11 +310,11 @@ public class recipe_overview extends AppCompatActivity {
                         userRatingcount = (Map<String, Object>) documentSnapshot.getData();
 
                         if (userRatingcount.containsKey(recipeId)) {
-                            int oldRatingCount=Integer.parseInt(String.valueOf(userRatingcount.get(recipeId)));
-                             ratingCount[0] =(int)oldRatingCount;
-                            userRatingcount.put(recipeId,Integer.toString(oldRatingCount+1));
+                            int oldRatingCount = Integer.parseInt(String.valueOf(userRatingcount.get(recipeId)));
+                            ratingCount[0] = (int) oldRatingCount;
+                            userRatingcount.put(recipeId, Integer.toString(oldRatingCount + 1));
                         } else {
-                            userRatingcount.put(recipeId,Integer.toString(1));
+                            userRatingcount.put(recipeId, Integer.toString(1));
                         }
                         db.collection("recipes").document("ratingcount")
                                 .update(userRatingcount);
@@ -340,14 +337,14 @@ public class recipe_overview extends AppCompatActivity {
                         Map<String, Object> userRatings = new HashMap<>();
                         userRatings = (Map<String, Object>) documentSnapshot.getData();
 
-                        float  f_newRating, f_oldRating;
-                        int f_ratingCount= ratingCount[0];
+                        float f_newRating, f_oldRating;
+                        int f_ratingCount = ratingCount[0];
                         if (userRatings.containsKey(recipeId)) {
                             f_newRating = Float.parseFloat(rating);
-                            f_oldRating=Float.parseFloat(String.valueOf(userRatings.get(recipeId)));
+                            f_oldRating = Float.parseFloat(String.valueOf(userRatings.get(recipeId)));
 
-                            float total= ratingAvg(f_newRating, f_ratingCount, f_oldRating);
-                            userRatings.put(recipeId,Float.toString(total));
+                            float total = ratingAvg(f_newRating, f_ratingCount, f_oldRating);
+                            userRatings.put(recipeId, Float.toString(total));
                         } else {
                             userRatings.put(recipeId, rating);
                         }
@@ -368,7 +365,7 @@ public class recipe_overview extends AppCompatActivity {
     public static float ratingAvg(float newRating, int ratingCount, float oldRating) {
 
         float total = oldRating * ratingCount;
-        ratingCount=ratingCount+1;
+        ratingCount = ratingCount + 1;
         total = total + newRating;
         oldRating = total / ratingCount;
         return oldRating;
@@ -438,13 +435,59 @@ public class recipe_overview extends AppCompatActivity {
                         ingredientCount = itemObj.getLong("ingredientCount").toString();
                         rating = itemObj.getLong("rating").toString();
                         ratingCount = itemObj.getLong("ratingCount").toString();
+
+
+                        db.collection("recipes").document("ratingcount").get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Map<String, Object> userRatingcount_1 = new HashMap<>();
+                                        userRatingcount_1 = (Map<String, Object>) documentSnapshot.getData();
+                                        if (userRatingcount_1.containsKey(id)) {
+                                            ratingCount=  String.valueOf(userRatingcount_1.get(id));
+                                            db.collection("recipes").document("ratings").get()
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                            Map<String, Object> userRatings_1 = new HashMap<>();
+
+                                                            userRatings_1 = (Map<String, Object>) documentSnapshot.getData();
+                                                            if (userRatings_1.containsKey(id)) {
+                                                                rating=  String.valueOf(userRatings_1.get(id));
+                                                                setValues();
+                                                            }
+                                                            Toast.makeText(recipe_overview.this, rating, Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            setValues();
+                                                        }
+                                                    });
+                                        }setValues();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        setValues();
+                                    }
+                                });
+
+
+
+
+
+
 //
 //                                Recipes recipes = new Recipes(name, ingredientsList, totalTime,
 //                                        cuisine, instructions, cleanedIngredients, imageUrl,
 //                                        ingredientCount, rating, ratingCount,id);
 
                     }
-                    setValues();
+
                 } else {
 
                 }
